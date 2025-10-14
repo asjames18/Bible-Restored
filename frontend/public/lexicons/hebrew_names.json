@@ -1,0 +1,119 @@
+{
+  "meta": {
+    "title": "Hebrew Names Lexicon",
+    "version": "1.0.0",
+    "description": "Restored Hebrew divine names and titles with Hebrew text, transliterations, and meanings"
+  },
+  "names": [
+    {
+      "id": "yahuah-elohiym",
+      "label": "Yahuah Elohiym",
+      "hebrew": "יהוה אֱלֹהִים",
+      "transliteration": "Yahuah Elohiym",
+      "meaning": "The LORD God",
+      "context": "Compound divine name combining the personal name Yahuah with the general term for God",
+      "references": ["Genesis 2:7", "Exodus 3:15"],
+      "category": "compound"
+    },
+    {
+      "id": "adonai-yahuah",
+      "label": "Adonai Yahuah",
+      "hebrew": "אֲדֹנָי יְהוִה",
+      "transliteration": "Adonai Yahuah",
+      "meaning": "Lord GOD",
+      "context": "Compound title combining 'Lord' with the divine name",
+      "references": ["Isaiah 1:24"],
+      "category": "compound"
+    },
+    {
+      "id": "el-shaddai",
+      "label": "El Shaddai",
+      "hebrew": "אֵל שַׁדַּי",
+      "transliteration": "El Shaddai",
+      "meaning": "God Almighty",
+      "context": "Ancient divine title emphasizing God's power and sufficiency",
+      "references": ["Genesis 17:1", "Exodus 6:3"],
+      "category": "title"
+    },
+    {
+      "id": "el-elyon",
+      "label": "El Elyon",
+      "hebrew": "אֵל עֶלְיוֹן",
+      "transliteration": "El Elyon",
+      "meaning": "Most High God",
+      "context": "Divine title emphasizing God's supremacy",
+      "references": ["Genesis 14:18", "Psalm 91:1"],
+      "category": "title"
+    },
+    {
+      "id": "ruach-ha-qodesh",
+      "label": "Ruach Ha'Qodesh",
+      "hebrew": "רוּחַ הַקֹּדֶשׁ",
+      "transliteration": "Ruach Ha'Qodesh",
+      "meaning": "Holy Spirit",
+      "context": "The Spirit of God, the third person of the Trinity",
+      "references": ["Matthew 1:18", "Luke 1:35"],
+      "category": "spirit"
+    },
+    {
+      "id": "ruach-elohiym",
+      "label": "Ruach Elohiym",
+      "hebrew": "רוּחַ אֱלֹהִים",
+      "transliteration": "Ruach Elohiym",
+      "meaning": "Spirit of God",
+      "context": "The Spirit of God, emphasizing divine origin",
+      "references": ["Genesis 1:2", "Job 33:4"],
+      "category": "spirit"
+    },
+    {
+      "id": "yahusha-ha-mashiach",
+      "label": "Yahusha Ha'Mashiach",
+      "hebrew": "יֵשׁוּעַ הַמָּשִׁיחַ",
+      "transliteration": "Yahusha Ha'Mashiach",
+      "meaning": "Jesus Christ",
+      "context": "The Messiah, the anointed one, Savior",
+      "references": ["Matthew 1:1", "John 1:41"],
+      "category": "messiah"
+    },
+    {
+      "id": "mashiach",
+      "label": "Mashiach",
+      "hebrew": "מָשִׁיחַ",
+      "transliteration": "Mashiach",
+      "meaning": "Anointed One, Messiah",
+      "context": "The anointed one, the promised deliverer",
+      "references": ["Daniel 9:25", "John 4:25"],
+      "category": "messiah"
+    },
+    {
+      "id": "yah",
+      "label": "Yah",
+      "hebrew": "יָהּ",
+      "transliteration": "Yah",
+      "meaning": "LORD (short form)",
+      "context": "Shortened form of Yahuah, used in praise and poetry",
+      "references": ["Psalm 68:4", "Isaiah 12:2"],
+      "category": "name"
+    },
+    {
+      "id": "yahuah",
+      "label": "Yahuah",
+      "hebrew": "יהוה",
+      "transliteration": "Yahuah",
+      "meaning": "LORD",
+      "context": "The personal name of God, the covenant name",
+      "references": ["Exodus 3:15", "Psalm 23:1"],
+      "category": "name"
+    },
+    {
+      "id": "elohiym",
+      "label": "Elohiym",
+      "hebrew": "אֱלֹהִים",
+      "transliteration": "Elohiym",
+      "meaning": "God",
+      "context": "The general term for God, emphasizing divine power and authority",
+      "references": ["Genesis 1:1", "Psalm 19:1"],
+      "category": "name"
+    }
+  ]
+}

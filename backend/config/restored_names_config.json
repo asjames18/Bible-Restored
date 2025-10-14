@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "Restored Names (Focused)",
+    "version": "3.0.0",
+    "notes": [
+      "Apply compound titles before single words.",
+      "Keep Elohiym for GOD/God. Use Yah only where Hebrew has Yah (via overrides)."
+    ]
+  },
+  "rules": [
+    {
+      "pattern": "\\bLORD\\s+GOD\\b",
+      "replacement": "Yahuah Elohiym",
+      "description": "LORD GOD"
+    },
+    {
+      "pattern": "\\bLORD\\s+God\\b",
+      "replacement": "Yahuah Elohiym",
+      "description": "LORD God"
+    },
+    {
+      "pattern": "\\bLord\\s+GOD\\b",
+      "replacement": "Adonai Yahuah",
+      "description": "Lord GOD"
+    },
+    {
+      "pattern": "\\bGod\\s+Almighty\\b",
+      "replacement": "El Shaddai",
+      "description": "God Almighty"
+    },
+    {
+      "pattern": "\\bthe\\s+Almighty\\b",
+      "replacement": "El Shaddai",
+      "description": "the Almighty"
+    },
+    {
+      "pattern": "\\bthe\\s+Most\\s+High\\b",
+      "replacement": "El Elyon",
+      "description": "the Most High"
+    },
+    {
+      "pattern": "\\bMost\\s+High\\b",
+      "replacement": "El Elyon",
+      "description": "Most High"
+    },
+    {
+      "pattern": "\\bHoly\\s+Ghost\\b",
+      "replacement": "Ruach Ha'Qodesh",
+      "description": "Holy Ghost"
+    },
+    {
+      "pattern": "\\bHoly\\s+Spirit\\b",
+      "replacement": "Ruach Ha'Qodesh",
+      "description": "Holy Spirit"
+    },
+    {
+      "pattern": "\\b[Ss]pirit\\s+of\\s+God\\b",
+      "replacement": "Ruach Elohiym",
+      "description": "Spirit of God"
+    },
+    {
+      "pattern": "\\bJesus\\s+Christ\\b",
+      "replacement": "Yahusha Ha'Mashiach",
+      "description": "Jesus Christ"
+    },
+    {
+      "pattern": "\\bChrist\\s+Jesus\\b",
+      "replacement": "Yahusha Ha'Mashiach",
+      "description": "Christ Jesus"
+    },
+    {
+      "pattern": "\\bCHRIST\\b",
+      "replacement": "MASHIACH",
+      "description": "CHRIST"
+    },
+    {
+      "pattern": "\\bChrist\\b",
+      "replacement": "Mashiach",
+      "description": "Christ"
+    },
+    {
+      "pattern": "\\bLORD\\b",
+      "replacement": "Yahuah",
+      "description": "LORD"
+    },
+    {
+      "pattern": "\\bGOD\\b",
+      "replacement": "Elohiym",
+      "description": "GOD"
+    },
+    {
+      "pattern": "\\bGod\\b",
+      "replacement": "Elohiym",
+      "description": "God"
+    }
+  ]
+}

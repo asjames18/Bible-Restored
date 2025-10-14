@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "notes": [
+      "Yah-specific overrides only. These apply AFTER global rules.",
+      "Yah appears only where Hebrew has יָהּ (JAH) or in LORD JEHOVAH contexts."
+    ]
+  },
+  "overrides": [
+    {
+      "id": "Psalms 68:4",
+      "actions": [
+        {
+          "type": "replace",
+          "pattern": "\\bJAH\\b",
+          "replacement": "Yah"
+        }
+      ]
+    },
+    {
+      "id": "Isaiah 12:2",
+      "actions": [
+        {
+          "type": "replace",
+          "pattern": "(?i)\\bYahuah\\s+JEHOVAH\\b",
+          "replacement": "Yah Yahuah"
+        }
+      ]
+    },
+    {
+      "id": "Isaiah 26:4",
+      "actions": [
+        {
+          "type": "replace",
+          "pattern": "(?i)\\bYahuah\\s+JEHOVAH\\b",
+          "replacement": "Yah Yahuah"
+        }
+      ]
+    }
+  ]
+}
