@@ -44,7 +44,7 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
   };
 
   const getHebrewNameData = (nameLabel: string) => {
-    if (!hebrewLexicon) return null;
+    if (!hebrewLexicon || !hebrewLexicon.names || !nameLabel) return null;
     return hebrewLexicon.names.find((name: any) => 
       name.label.toLowerCase() === nameLabel.toLowerCase()
     );
@@ -55,7 +55,7 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
     navigator.clipboard.writeText(`${number} ${plainText}`);
   };
 
-  const hebrewNameData = getHebrewNameData(popoverName);
+  const hebrewNameData = popoverName ? getHebrewNameData(popoverName) : null;
 
   return (
     <>
