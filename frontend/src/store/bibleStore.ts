@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { type BibleData, loadTranslation } from '../lib/data';
+import { type BibleData, loadTranslation, loadFullBible, preloadPriorityBooks, getBibleStats } from '../lib/data';
 
 interface BibleState {
   translationId: string;
@@ -9,6 +9,7 @@ interface BibleState {
   chapter: string;
   verse?: string;
   isLoading: boolean;
+  loadingProgress: number;
   error: string | null;
 }
 
@@ -20,6 +21,7 @@ interface BibleActions {
   prevChapter: () => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  getBibleStats: () => { books: number; verses: number } | null;
 }
 
 export const useBibleStore = create<BibleState & BibleActions>()(
@@ -31,17 +33,21 @@ export const useBibleStore = create<BibleState & BibleActions>()(
       chapter: '1',
       verse: undefined,
       isLoading: false,
+      loadingProgress: 0,
       error: null,
 
       setTranslation: async (id: string) => {
-        set({ translationId: id, isLoading: true, error: null });
+        set({ translationId: id, isLoading: true, loadingProgress: 0, error: null });
         try {
-          const bible = await loadTranslation(id);
-          set({ bible, isLoading: false });
+          const bible = await loadFullBible(id, (progress) => {
+            set({ loadingProgress: progress });
+          });
+          set({ bible, isLoading: false, loadingProgress: 100 });
         } catch (error) {
           set({ 
             error: error instanceof Error ? error.message : 'Failed to load translation',
-            isLoading: false 
+            isLoading: false,
+            loadingProgress: 0
           });
         }
       },
@@ -52,14 +58,17 @@ export const useBibleStore = create<BibleState & BibleActions>()(
 
       loadCurrentBible: async () => {
         const { translationId } = get();
-        set({ isLoading: true, error: null });
+        set({ isLoading: true, loadingProgress: 0, error: null });
         try {
-          const bible = await loadTranslation(translationId);
-          set({ bible, isLoading: false });
+          const bible = await loadFullBible(translationId, (progress) => {
+            set({ loadingProgress: progress });
+          });
+          set({ bible, isLoading: false, loadingProgress: 100 });
         } catch (error) {
           set({ 
             error: error instanceof Error ? error.message : 'Failed to load translation',
-            isLoading: false 
+            isLoading: false,
+            loadingProgress: 0
           });
         }
       },
@@ -92,6 +101,12 @@ export const useBibleStore = create<BibleState & BibleActions>()(
 
       setError: (error: string | null) => {
         set({ error });
+      },
+
+      getBibleStats: () => {
+        const { bible } = get();
+        if (!bible) return null;
+        return getBibleStats(bible);
       },
     }),
     {

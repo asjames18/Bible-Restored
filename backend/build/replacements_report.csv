@@ -1,18 +1,18 @@
 Rule Description,Matches/Replacements
 LORD GOD,0
-LORD God,1
-Lord GOD,0
-God Almighty,0
-the Almighty,1
+LORD God,228
+Lord GOD,302
+God Almighty,11
+the Almighty,46
 the Most High,0
 Most High,0
-Holy Ghost,1
-Holy Spirit,0
-Spirit of God,1
-Jesus Christ,1
-Christ Jesus,0
+Holy Ghost,90
+Holy Spirit,1
+Spirit of God,26
+Jesus Christ,199
+Christ Jesus,58
 CHRIST,0
-Christ,0
-LORD,5
-GOD,0
-God,3
+Christ,329
+LORD,6413
+GOD,8
+God,3929

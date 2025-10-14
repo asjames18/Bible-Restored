@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useBibleStore } from '../store/bibleStore';
 import NavPanel from './NavPanel';
 import TranslationPicker from './TranslationPicker';
+import { 
+  Home, 
+  BookOpen, 
+  ChevronLeft, 
+  ChevronRight, 
+  Search, 
+  RotateCcw, 
+  Settings,
+  Menu
+} from 'lucide-react';
 
 export default function TopBar() {
   const navigate = useNavigate();
@@ -14,62 +25,106 @@ export default function TopBar() {
 
   return (
     <>
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-theme-surface border-b border-theme-border sticky top-0 z-40 shadow-sm"
+      >
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setShowNav(true)}
-                className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 px-3 py-2 rounded text-sm"
+            <div className="flex items-center space-x-3">
+              <motion.button
+                onClick={() => navigate('/')}
+                className="flex items-center space-x-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-theme-border"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title="Go to Home"
               >
-                📖 Navigate
-              </button>
+                <Home className="w-4 h-4" />
+                <span>Home</span>
+              </motion.button>
               
-              <div className="flex items-center space-x-2">
-                <button
+              <motion.button
+                onClick={() => setShowNav(true)}
+                className="flex items-center space-x-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-3 py-2 rounded-lg text-sm transition-all duration-200 border border-theme-border"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title="Navigate to different books and chapters"
+              >
+                <Menu className="w-4 h-4" />
+                <span>Navigate</span>
+              </motion.button>
+              
+              <div className="flex items-center space-x-1">
+                <motion.button
                   onClick={prevChapter}
-                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 px-2 py-1 rounded text-sm"
+                  className="p-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text rounded-lg transition-all duration-200 border border-theme-border"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  title="Previous Chapter"
                 >
-                  ←
-                </button>
-                <button
+                  <ChevronLeft className="w-4 h-4" />
+                </motion.button>
+                <motion.button
                   onClick={nextChapter}
-                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 px-2 py-1 rounded text-sm"
+                  className="p-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text rounded-lg transition-all duration-200 border border-theme-border"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  title="Next Chapter"
                 >
-                  →
-                </button>
+                  <ChevronRight className="w-4 h-4" />
+                </motion.button>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
-              <h1 className="text-lg font-semibold">
+              <motion.h1 
+                className="text-lg font-semibold text-theme-text"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
                 {book} {chapter}
-              </h1>
+              </motion.h1>
               
               <div className="flex items-center space-x-2">
-                <button
+                <motion.button
                   onClick={() => navigate('/search')}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm"
+                  className="flex items-center space-x-2 bg-theme-accent hover:bg-theme-accent-dark text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title="Search Scripture"
                 >
-                  🔍 Search
-                </button>
-                <button
+                  <Search className="w-4 h-4" />
+                  <span>Search</span>
+                </motion.button>
+                
+                <motion.button
                   onClick={() => setShowTranslation(true)}
-                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 px-3 py-2 rounded text-sm"
+                  className="flex items-center space-x-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-3 py-2 rounded-lg text-sm transition-all duration-200 border border-theme-border"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title="Change Translation"
                 >
-                  🔄 Translation
-                </button>
-                <button
+                  <RotateCcw className="w-4 h-4" />
+                  <span>Translation</span>
+                </motion.button>
+                
+                <motion.button
                   onClick={() => navigate('/settings')}
-                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 px-3 py-2 rounded text-sm"
+                  className="flex items-center space-x-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-3 py-2 rounded-lg text-sm transition-all duration-200 border border-theme-border"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title="Settings"
                 >
-                  ⚙️ Settings
-                </button>
+                  <Settings className="w-4 h-4" />
+                  <span>Settings</span>
+                </motion.button>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <NavPanel isOpen={showNav} onClose={() => setShowNav(false)} />
       <TranslationPicker isOpen={showTranslation} onClose={() => setShowTranslation(false)} />

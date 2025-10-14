@@ -7,13 +7,21 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prebuild": "cd ../backend && python fetch_kjv.py && python restore_names.py --json data/kjv.json --config config/restored_names_config.json --overrides config/restored_overrides.json --out_json build/restored_kjv.json && python split_bible.py build/restored_kjv.json ../frontend/public/translations/",
+    "sync-bible": "cd ../backend && python split_bible.py build/restored_kjv.json ../frontend/public/translations/",
+    "fetch-bible": "cd ../backend && python fetch_kjv.py",
+    "restore-names": "cd ../backend && python restore_names.py --json data/kjv.json --config config/restored_names_config.json --overrides config/restored_overrides.json --out_json build/restored_kjv.json"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
     "@tailwindcss/typography": "^0.5.19",
     "autoprefixer": "^10.4.21",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.24",
     "fuse.js": "^7.1.0",
     "idb-keyval": "^6.2.2",
+    "lucide-react": "^0.545.0",
     "postcss": "^8.5.6",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

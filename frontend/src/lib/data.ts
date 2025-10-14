@@ -116,4 +116,125 @@ export function booksOrder(): string[] {
   return BOOKS_ORDER;
 }
 
+// Progressive loading with progress callback
+export async function loadFullBible(
+  id: string = 'restored_kjv',
+  onProgress?: (percent: number) => void
+): Promise<BibleData> {
+  try {
+    // Check cache first
+    const cached = await get(`bible-${id}`);
+    if (cached) {
+      const bookCount = Object.keys(cached).length;
+      console.log(`Loaded ${id} from cache (${bookCount} books)`);
+      
+      // If cached data is incomplete (less than 66 books), force reload
+      if (bookCount < 66) {
+        console.warn(`Cached data incomplete (${bookCount}/66 books), reloading...`);
+        await set(`bible-${id}`, null); // Clear bad cache
+      } else {
+        onProgress?.(100);
+        return cached;
+      }
+    }
+
+    // Fetch with progress tracking
+    const response = await fetch(`/translations/${id}.json`);
+    if (!response.ok) {
+      throw new Error(`Failed to load translation: ${response.statusText}`);
+    }
+
+    const reader = response.body?.getReader();
+    const contentLength = +(response.headers.get('Content-Length') ?? 0);
+    
+    if (!reader || !contentLength) {
+      // Fallback to simple load
+      const data = await response.json();
+      await set(`bible-${id}`, data);
+      onProgress?.(100);
+      return data;
+    }
+
+    let receivedLength = 0;
+    const chunks: Uint8Array[] = [];
+    
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      
+      chunks.push(value);
+      receivedLength += value.length;
+      
+      // Update progress
+      const percent = Math.round((receivedLength / contentLength) * 100);
+      onProgress?.(Math.min(percent, 95)); // Cap at 95% until parsing is done
+    }
+    
+    // Combine chunks
+    const chunksAll = new Uint8Array(receivedLength);
+    let position = 0;
+    for (const chunk of chunks) {
+      chunksAll.set(chunk, position);
+      position += chunk.length;
+    }
+    
+    // Decode and parse
+    const text = new TextDecoder('utf-8').decode(chunksAll);
+    console.log(`Parsing Bible data... size: ${text.length} chars`);
+    const data = JSON.parse(text);
+    
+    const bookCount = Object.keys(data).length;
+    console.log(`Parsed Bible data: ${bookCount} books`);
+    
+    // Cache the data
+    await set(`bible-${id}`, data);
+    console.log(`Cached ${id} for offline use (${bookCount} books)`);
+    
+    onProgress?.(100);
+    return data;
+    
+  } catch (error) {
+    console.error(`Failed to load full Bible ${id}:`, error);
+    throw error;
+  }
+}
+
+// Preload priority books (Genesis + Matthew)
+export async function preloadPriorityBooks(_id: string): Promise<Partial<BibleData>> {
+  try {
+    const priorityBooks = ['Genesis', 'Matthew'];
+    const result: Partial<BibleData> = {};
+    
+    for (const book of priorityBooks) {
+      try {
+        const response = await fetch(`/translations/${book}.json`);
+        if (response.ok) {
+          const bookData = await response.json();
+          result[book] = bookData;
+          console.log(`Preloaded ${book}`);
+        }
+      } catch (error) {
+        console.warn(`Failed to preload ${book}:`, error);
+      }
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('Failed to preload priority books:', error);
+    return {};
+  }
+}
+
+// Get Bible statistics
+export function getBibleStats(bible: BibleData): { books: number; verses: number } {
+  const books = Object.keys(bible).length;
+  const verses = Object.values(bible).reduce((total, book) => {
+    return total + Object.values(book).reduce((bookTotal, chapter) => {
+      return bookTotal + Object.keys(chapter).length;
+    }, 0);
+  }, 0);
+  
+  return { books, verses };
+}
+
 

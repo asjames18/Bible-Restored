@@ -1,138 +1,138 @@
-import { useState, useRef, useEffect } from 'react';
-import { getHebrewName, type HebrewName } from '../lib/nameHighlighter';
+import { Fragment, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Popover, Transition } from '@headlessui/react';
+import { X } from 'lucide-react';
+import clsx from 'clsx';
 
 interface NamePopoverProps {
-  nameLabel: string;
-  isOpen: boolean;
-  onClose: () => void;
-  position: { x: number; y: number };
+  children: React.ReactNode;
+  name: {
+    id: string;
+    label: string;
+    hebrew: string;
+    transliteration: string;
+    meaning: string;
+    context: string;
+    references: string[];
+    category: string;
+  };
 }
 
-export default function NamePopover({ nameLabel, isOpen, onClose, position }: NamePopoverProps) {
-  const [name, setName] = useState<HebrewName | null>(null);
-  const popoverRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const hebrewName = getHebrewName(nameLabel);
-    setName(hebrewName || null);
-  }, [nameLabel]);
-
-  useEffect(() => {
-    if (isOpen && popoverRef.current) {
-      const rect = popoverRef.current.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      
-      // Adjust position if popover would go off screen
-      let adjustedX = position.x;
-      let adjustedY = position.y;
-      
-      if (position.x + rect.width > viewportWidth) {
-        adjustedX = viewportWidth - rect.width - 10;
-      }
-      
-      if (position.y + rect.height > viewportHeight) {
-        adjustedY = position.y - rect.height - 10;
-      }
-      
-      popoverRef.current.style.left = `${Math.max(10, adjustedX)}px`;
-      popoverRef.current.style.top = `${Math.max(10, adjustedY)}px`;
-    }
-  }, [isOpen, position]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleEscape);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, onClose]);
-
-  if (!isOpen || !name) {
-    return null;
-  }
+export default function NamePopover({ children, name }: NamePopoverProps) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div
-      ref={popoverRef}
-      className="fixed z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 max-w-sm"
-      style={{
-        left: position.x,
-        top: position.y,
-      }}
-    >
-      <div className="space-y-3">
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
-              {name.label}
-            </h3>
-            <div className="text-2xl text-blue-600 dark:text-blue-400 mt-1">
-              {name.hebrew}
-            </div>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 ml-2"
+    <Popover className="relative inline-block">
+      {({ open }) => (
+        <>
+          <Popover.Button
+            as="div"
+            className="inline-block"
+            onMouseEnter={() => setIsOpen(true)}
+            onMouseLeave={() => setIsOpen(false)}
           >
-            ✕
-          </button>
-        </div>
+            {children}
+          </Popover.Button>
 
-        <div className="space-y-2 text-sm">
-          <div>
-            <span className="font-medium text-gray-700 dark:text-gray-300">Transliteration:</span>
-            <span className="ml-2 text-gray-900 dark:text-gray-100">{name.transliteration}</span>
-          </div>
-          
-          <div>
-            <span className="font-medium text-gray-700 dark:text-gray-300">Meaning:</span>
-            <span className="ml-2 text-gray-900 dark:text-gray-100">{name.meaning}</span>
-          </div>
-          
-          <div>
-            <span className="font-medium text-gray-700 dark:text-gray-300">Category:</span>
-            <span className="ml-2 text-gray-900 dark:text-gray-100 capitalize">{name.category}</span>
-          </div>
-        </div>
+          <Transition
+            as={Fragment}
+            show={open || isOpen}
+            enter="transition ease-out duration-200"
+            enterFrom="opacity-0 scale-95 translate-y-1"
+            enterTo="opacity-100 scale-100 translate-y-0"
+            leave="transition ease-in duration-150"
+            leaveFrom="opacity-100 scale-100 translate-y-0"
+            leaveTo="opacity-0 scale-95 translate-y-1"
+          >
+            <Popover.Panel
+              className="absolute z-50 mt-2 w-80 max-w-sm"
+              onMouseEnter={() => setIsOpen(true)}
+              onMouseLeave={() => setIsOpen(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                transition={{ duration: 0.2 }}
+                className="glass rounded-xl p-6 shadow-xl border border-theme-border"
+              >
+                {/* Header */}
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-theme-text mb-1">
+                      {name.label}
+                    </h3>
+                    <div className="flex items-center space-x-2">
+                      <span className="hebrew-text text-xl">{name.hebrew}</span>
+                      <span className="text-sm text-theme-accent font-medium">
+                        {name.transliteration}
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="text-theme-text hover:text-theme-accent transition-colors"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
 
-        <div className="text-sm">
-          <div className="font-medium text-gray-700 dark:text-gray-300 mb-1">Context:</div>
-          <div className="text-gray-900 dark:text-gray-100">{name.context}</div>
-        </div>
+                {/* Meaning */}
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-theme-text mb-2">
+                    Meaning
+                  </h4>
+                  <p className="text-sm text-theme-text leading-relaxed">
+                    {name.meaning}
+                  </p>
+                </div>
 
-        {name.references.length > 0 && (
-          <div className="text-sm">
-            <div className="font-medium text-gray-700 dark:text-gray-300 mb-1">References:</div>
-            <div className="text-gray-900 dark:text-gray-100">
-              {name.references.slice(0, 3).join(', ')}
-              {name.references.length > 3 && ` +${name.references.length - 3} more`}
-            </div>
-          </div>
-        )}
+                {/* Context */}
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-theme-text mb-2">
+                    Context
+                  </h4>
+                  <p className="text-sm text-theme-text leading-relaxed">
+                    {name.context}
+                  </p>
+                </div>
 
-        <div className="pt-2 border-t border-gray-200 dark:border-gray-600">
-          <div className="text-xs text-gray-500 dark:text-gray-400">
-            Click outside to close • Press Esc to close
-          </div>
-        </div>
-      </div>
-    </div>
+                {/* References */}
+                {name.references && name.references.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-theme-text mb-2">
+                      References
+                    </h4>
+                    <div className="flex flex-wrap gap-1">
+                      {name.references.map((ref, index) => (
+                        <span
+                          key={index}
+                          className="text-xs bg-theme-accent/10 text-theme-accent px-2 py-1 rounded"
+                        >
+                          {ref}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Category */}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-theme-text/60">
+                    Category: {name.category}
+                  </span>
+                  <div className="flex items-center space-x-1">
+                    <div className="w-2 h-2 bg-theme-accent rounded-full animate-glow-pulse"></div>
+                    <span className="text-xs text-theme-accent font-medium">
+                      Sacred Name
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            </Popover.Panel>
+          </Transition>
+        </>
+      )}
+    </Popover>
   );
 }

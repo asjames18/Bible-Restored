@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { highlightNames, loadHebrewLexicon, stripHighlighting } from '../lib/nameHighlighter';
 import NamePopover from './NamePopover';
 
@@ -12,11 +13,12 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
   const [highlightedText, setHighlightedText] = useState(text);
   const [showPopover, setShowPopover] = useState(false);
   const [popoverName, setPopoverName] = useState('');
-  const [popoverPosition, setPopoverPosition] = useState({ x: 0, y: 0 });
+  const [hebrewLexicon, setHebrewLexicon] = useState<any>(null);
   const verseRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    loadHebrewLexicon().then(() => {
+    loadHebrewLexicon().then((lexicon) => {
+      setHebrewLexicon(lexicon);
       // Get settings from localStorage
       const savedSettings = localStorage.getItem('bible-settings');
       const settings = savedSettings ? JSON.parse(savedSettings) : {};
@@ -34,16 +36,18 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
     const target = event.target as HTMLElement;
     if (target.classList.contains('name-token')) {
       const nameLabel = target.getAttribute('data-name-label');
-      if (nameLabel) {
-        const rect = target.getBoundingClientRect();
-        setPopoverPosition({
-          x: rect.left,
-          y: rect.bottom + 5
-        });
+      if (nameLabel && hebrewLexicon) {
         setPopoverName(nameLabel);
         setShowPopover(true);
       }
     }
+  };
+
+  const getHebrewNameData = (nameLabel: string) => {
+    if (!hebrewLexicon) return null;
+    return hebrewLexicon.names.find((name: any) => 
+      name.label.toLowerCase() === nameLabel.toLowerCase()
+    );
   };
 
   const handleCopyVerse = () => {
@@ -51,14 +55,16 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
     navigator.clipboard.writeText(`${number} ${plainText}`);
   };
 
+  const hebrewNameData = getHebrewNameData(popoverName);
+
   return (
     <>
-      <div 
+      <motion.div 
         ref={verseRef}
-        className={`mb-4 p-3 rounded-lg cursor-pointer ${
+        className={`mb-4 p-4 rounded-lg cursor-pointer transition-all duration-200 ${
           isHighlighted 
-            ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500' 
-            : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+            ? 'bg-theme-accent/10 border-l-4 border-theme-accent' 
+            : 'hover:bg-theme-surface-hover'
         }`}
         onClick={handleNameClick}
         role="button"
@@ -70,34 +76,39 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
             handleNameClick(e as any);
           }
         }}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
       >
         <div className="flex justify-between items-start">
           <div className="flex-1">
-            <span className="verse-number">{number}</span>
+            <span className="verse-number text-theme-accent font-medium">{number}</span>
             <span 
-              className="text-gray-900 dark:text-gray-100"
+              className="text-theme-text leading-relaxed"
               dangerouslySetInnerHTML={{ __html: highlightedText }}
             />
           </div>
-          <button
+          <motion.button
             onClick={(e) => {
               e.stopPropagation();
               handleCopyVerse();
             }}
-            className="ml-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 text-sm"
+            className="ml-2 text-theme-text/60 hover:text-theme-accent text-sm transition-colors"
             title="Copy verse"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             📋
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
 
-      <NamePopover
-        nameLabel={popoverName}
-        isOpen={showPopover}
-        onClose={() => setShowPopover(false)}
-        position={popoverPosition}
-      />
+      {hebrewNameData && (
+        <NamePopover
+          name={hebrewNameData}
+        >
+          <div></div>
+        </NamePopover>
+      )}
     </>
   );
 }

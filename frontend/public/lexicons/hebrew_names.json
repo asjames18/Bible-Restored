@@ -10,8 +10,8 @@
       "label": "Yahuah Elohiym",
       "hebrew": "יהוה אֱלֹהִים",
       "transliteration": "Yahuah Elohiym",
-      "meaning": "The LORD God",
-      "context": "Compound divine name combining the personal name Yahuah with the general term for God",
+      "meaning": "Lord God / Lord the Mighty One",
+      "context": "The covenant name joined with the title of divine power, often used in creation and covenant passages",
       "references": ["Genesis 2:7", "Exodus 3:15"],
       "category": "compound"
     },
@@ -20,9 +20,9 @@
       "label": "Adonai Yahuah",
       "hebrew": "אֲדֹנָי יְהוִה",
       "transliteration": "Adonai Yahuah",
-      "meaning": "Lord GOD",
-      "context": "Compound title combining 'Lord' with the divine name",
-      "references": ["Isaiah 1:24"],
+      "meaning": "Master Yahuah / Sovereign Yahuah",
+      "context": "A reverent title combining Adonai (“Master, Lord”) with the divine name, often translated “Lord GOD",
+      "references": ["Isaiah 1:24, Ezekiel 39:25"],
       "category": "compound"
     },
     {
@@ -30,8 +30,8 @@
       "label": "El Shaddai",
       "hebrew": "אֵל שַׁדַּי",
       "transliteration": "El Shaddai",
-      "meaning": "God Almighty",
-      "context": "Ancient divine title emphasizing God's power and sufficiency",
+      "meaning": "The All-Sufficient God / Almighty One",
+      "context": "Ancient divine title emphasizing God's power and sufficiency. Reveals God’s nurturing yet powerful nature—the One who provides, protects, and sustains",
       "references": ["Genesis 17:1", "Exodus 6:3"],
       "category": "title"
     },
@@ -41,7 +41,7 @@
       "hebrew": "אֵל עֶלְיוֹן",
       "transliteration": "El Elyon",
       "meaning": "Most High God",
-      "context": "Divine title emphasizing God's supremacy",
+      "context": "Divine title emphasizing God's supremacy above all heavenly beings and powers",
       "references": ["Genesis 14:18", "Psalm 91:1"],
       "category": "title"
     },
@@ -50,8 +50,8 @@
       "label": "Ruach Ha'Qodesh",
       "hebrew": "רוּחַ הַקֹּדֶשׁ",
       "transliteration": "Ruach Ha'Qodesh",
-      "meaning": "Holy Spirit",
-      "context": "The Spirit of God, the third person of the Trinity",
+      "meaning": "The Set-Apart Spirit",
+      "context": "The holy, consecrating Spirit of God that empowers, convicts, and guides",
       "references": ["Matthew 1:18", "Luke 1:35"],
       "category": "spirit"
     },
@@ -61,7 +61,7 @@
       "hebrew": "רוּחַ אֱלֹהִים",
       "transliteration": "Ruach Elohiym",
       "meaning": "Spirit of God",
-      "context": "The Spirit of God, emphasizing divine origin",
+      "context": "The Spirit of God, emphasizing divine origin. The divine breath or Spirit moving in creation and revelation; the power and presence of God in motion",
       "references": ["Genesis 1:2", "Job 33:4"],
       "category": "spirit"
     },
@@ -70,9 +70,9 @@
       "label": "Yahusha Ha'Mashiach",
       "hebrew": "יֵשׁוּעַ הַמָּשִׁיחַ",
       "transliteration": "Yahusha Ha'Mashiach",
-      "meaning": "Jesus Christ",
-      "context": "The Messiah, the anointed one, Savior",
-      "references": ["Matthew 1:1", "John 1:41"],
+      "meaning": "God is Salvation, the Anointed One / Jesus Christ",
+      "context": "The Messiah, the anointed one, Savior. Derived from Yah (Yahuah) + Yasha (“to save”). Reveals that salvation comes from the Lord Himself",
+      "references": ["John 1:41","John 17:11", "Acts 4:12"],
       "category": "messiah"
     },
     {
@@ -81,7 +81,7 @@
       "hebrew": "מָשִׁיחַ",
       "transliteration": "Mashiach",
       "meaning": "Anointed One, Messiah",
-      "context": "The anointed one, the promised deliverer",
+      "context": "The anointed one, the promised deliverer. The one chosen, consecrated, and empowered by Yahuah for redemption and kingship—fulfilled in Yahusha",
       "references": ["Daniel 9:25", "John 4:25"],
       "category": "messiah"
     },
@@ -90,8 +90,8 @@
       "label": "Yah",
       "hebrew": "יָהּ",
       "transliteration": "Yah",
-      "meaning": "LORD (short form)",
-      "context": "Shortened form of Yahuah, used in praise and poetry",
+      "meaning": "'He Who Is' — 'God the Most High'",
+      "context": "The shortened form of the divine name, used in praise and poetry. Seen in “HalleluYah” (Praise God). Expresses the eternal existence of the Most High",
       "references": ["Psalm 68:4", "Isaiah 12:2"],
       "category": "name"
     },
@@ -100,8 +100,8 @@
       "label": "Yahuah",
       "hebrew": "יהוה",
       "transliteration": "Yahuah",
-      "meaning": "LORD",
-      "context": "The personal name of God, the covenant name",
+      "meaning": "'Lord', 'The Eternal, Self-Existent One (“He Who Is, Was, and Will Be”)'",
+      "context": "The personal name of God revealed to Moses in Exodus 3:14–15. Derived from hayah (“to exist”). Represents the eternal covenant name of the Most High",
       "references": ["Exodus 3:15", "Psalm 23:1"],
       "category": "name"
     },
@@ -110,8 +110,8 @@
       "label": "Elohiym",
       "hebrew": "אֱלֹהִים",
       "transliteration": "Elohiym",
-      "meaning": "God",
-      "context": "The general term for God, emphasizing divine power and authority",
+      "meaning": "'God', 'Mighty One(s), Judge, Ruler'",
+      "context": "A plural form used for majesty, describing the divine power and authority of God",
       "references": ["Genesis 1:1", "Psalm 19:1"],
       "category": "name"
     }

@@ -1,0 +1,204 @@
+/* Modern Bible Reader Theme System */
+
+/* CSS Custom Properties for Theme Variables */
+:root {
+  /* Classic Theme (Default) */
+  --theme-bg: #f9f9f9;
+  --theme-text: #121212;
+  --theme-accent: #F5C542;
+  --theme-accent-light: #F7D06A;
+  --theme-accent-dark: #E6B53A;
+  --theme-surface: #ffffff;
+  --theme-surface-hover: #f5f5f5;
+  --theme-border: #e5e5e5;
+  --theme-shadow: rgba(0, 0, 0, 0.1);
+  --theme-shadow-lg: rgba(0, 0, 0, 0.15);
+  
+  /* Hebrew text colors */
+  --hebrew-text: #8B4513;
+  --hebrew-glow: #F5C542;
+  
+  /* Animation durations */
+  --transition-fast: 150ms;
+  --transition-normal: 250ms;
+  --transition-slow: 350ms;
+}
+
+/* Midnight Theme */
+[data-theme="midnight"] {
+  --theme-bg: #0A0A0A;
+  --theme-text: #EDEDED;
+  --theme-accent: #0FF0B3;
+  --theme-accent-light: #3FF3C3;
+  --theme-accent-dark: #0BD99A;
+  --theme-surface: #1A1A1A;
+  --theme-surface-hover: #2A2A2A;
+  --theme-border: #333333;
+  --theme-shadow: rgba(0, 0, 0, 0.3);
+  --theme-shadow-lg: rgba(0, 0, 0, 0.5);
+  
+  --hebrew-text: #0FF0B3;
+  --hebrew-glow: #0FF0B3;
+}
+
+/* Scroll Theme (Parchment) */
+[data-theme="scroll"] {
+  --theme-bg: #F4F1E8;
+  --theme-text: #2C1810;
+  --theme-accent: #8B4513;
+  --theme-accent-light: #A0522D;
+  --theme-accent-dark: #654321;
+  --theme-surface: #FDFCF8;
+  --theme-surface-hover: #F8F5F0;
+  --theme-border: #D4C4A8;
+  --theme-shadow: rgba(139, 69, 19, 0.1);
+  --theme-shadow-lg: rgba(139, 69, 19, 0.2);
+  
+  --hebrew-text: #8B4513;
+  --hebrew-glow: #D4A574;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color var(--transition-normal) ease,
+              color var(--transition-normal) ease,
+              border-color var(--transition-normal) ease,
+              box-shadow var(--transition-normal) ease;
+}
+
+/* Custom animations */
+@keyframes glow-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 5px var(--hebrew-glow);
+  }
+  50% { 
+    box-shadow: 0 0 20px var(--hebrew-glow), 0 0 30px var(--hebrew-glow);
+  }
+}
+
+@keyframes underline-sweep {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  100% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Utility classes */
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-underline-sweep {
+  animation: underline-sweep 0.3s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out;
+}
+
+/* Hebrew text styling */
+.hebrew-text {
+  font-family: 'Noto Serif Hebrew', serif;
+  font-weight: 700;
+  color: var(--hebrew-text);
+}
+
+.hebrew-glow {
+  text-shadow: 0 0 10px var(--hebrew-glow);
+}
+
+/* Glassmorphism utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Focus mode styles */
+.focus-mode {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: var(--theme-bg);
+}
+
+/* Parallax effect */
+.parallax {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Reading area enhancements */
+.reading-area {
+  max-width: 65ch;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.reading-area p {
+  margin-bottom: 1.5rem;
+}
+
+/* Verse hover effects */
+.verse-hover {
+  position: relative;
+  transition: all var(--transition-fast) ease;
+}
+
+.verse-hover:hover {
+  background: var(--theme-surface-hover);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: -0.5rem;
+}
+
+.verse-hover:hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--theme-accent), transparent);
+  animation: underline-sweep 0.3s ease-out;
+}
+
