@@ -1,7 +1,6 @@
 backend
 src
 frontend/node_modules
-frontend/src
 .git
 .gitignore
 *.md
