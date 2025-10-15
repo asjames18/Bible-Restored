@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:vercel": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "prebuild": "cd ../backend && python fetch_kjv.py && python restore_names.py --json data/kjv.json --config config/restored_names_config.json --overrides config/restored_overrides.json --out_json build/restored_kjv.json && python split_bible.py build/restored_kjv.json ../frontend/public/translations/",

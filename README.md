@@ -147,6 +147,24 @@ python restore_names.py \
 - `Ctrl+D` - Toggle dark mode
 - `Ctrl+,` - Open settings
 
+## 🚀 Deployment
+
+### Deploy to Vercel
+
+This project is configured for easy deployment to Vercel:
+
+1. Push your code to GitHub
+2. Import the repository in [Vercel Dashboard](https://vercel.com)
+3. Click "Deploy" - Vercel will automatically use the `vercel.json` configuration
+
+Or use the Vercel CLI:
+```bash
+npm install -g vercel
+vercel --prod
+```
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ## 🤝 Contributing
 
 1. Fork the repository
