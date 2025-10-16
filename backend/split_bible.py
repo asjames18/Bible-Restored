@@ -10,6 +10,13 @@ import os
 import sys
 from typing import Dict, Any
 
+# Fix Windows console encoding issues
+if sys.platform == 'win32':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 def split_bible_json(input_file: str, output_dir: str) -> None:
     """Split Bible JSON into per-book files"""
     

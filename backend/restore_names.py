@@ -13,6 +13,13 @@ import re
 import sys
 from typing import Dict, Iterable, List, Sequence, Tuple, Union
 
+# Fix Windows console encoding issues
+if sys.platform == 'win32':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 
 Rule = Tuple[re.Pattern, str, str]
 

@@ -7,8 +7,16 @@ Downloads the complete Bible and saves to data/kjv.json
 
 import json
 import os
+import sys
 import requests
 from typing import Dict, Any
+
+# Fix Windows console encoding issues
+if sys.platform == 'win32':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 # Direct download URL for complete KJV Bible JSON
 KJV_JSON_URL = "https://raw.githubusercontent.com/thiagobodruk/bible/master/json/en_kjv.json"
