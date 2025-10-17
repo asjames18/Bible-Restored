@@ -69,6 +69,11 @@
       "description": "Christ Jesus"
     },
     {
+      "pattern": "\\bJesus\\b",
+      "replacement": "Yahusha",
+      "description": "Jesus"
+    },
+    {
       "pattern": "\\bCHRIST\\b",
       "replacement": "MASHIACH",
       "description": "CHRIST"
@@ -77,6 +82,11 @@
       "pattern": "\\bChrist\\b",
       "replacement": "Mashiach",
       "description": "Christ"
+    },
+    {
+      "pattern": "\\bLORD'S\\b",
+      "replacement": "Yahuah's",
+      "description": "LORD'S (possessive)"
     },
     {
       "pattern": "\\bLORD\\b",
@@ -92,6 +102,16 @@
       "pattern": "\\bGod\\b",
       "replacement": "Elohiym",
       "description": "God"
+    },
+    {
+      "pattern": "\\ba Elohiym\\b",
+      "replacement": "an Elohiym",
+      "description": "Grammar fix: a → an before Elohiym"
+    },
+    {
+      "pattern": "\\ba El\\b",
+      "replacement": "an El",
+      "description": "Grammar fix: a → an before El"
     }
   ]
 }

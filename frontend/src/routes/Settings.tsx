@@ -12,6 +12,7 @@ interface Settings {
   showHebrewBadges: boolean;
   showTranslitBadges: boolean;
   enableNamePopovers: boolean;
+  showTranslatorNotes: boolean;
 }
 
 export default function Settings() {
@@ -25,6 +26,7 @@ export default function Settings() {
     showHebrewBadges: false,
     showTranslitBadges: false,
     enableNamePopovers: true,
+    showTranslatorNotes: true,
   });
   
   const stats = getBibleStats();
@@ -83,17 +85,17 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-theme-bg text-theme-text">
-      <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-theme-bg text-theme-text page-content-mobile">
+      <div className="max-w-2xl mx-auto container-mobile py-4 md:py-8">
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-3xl font-bold mb-8 text-theme-text"
+          className="text-mobile-title md:text-3xl font-bold mb-6 md:mb-8 text-theme-text"
         >
           Settings
         </motion.h1>
 
-        <div className="space-y-6">
+        <div className="space-y-5 md:space-y-6">
           {/* Theme Setting */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -140,11 +142,11 @@ export default function Settings() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h2 className="text-lg font-semibold mb-3 flex items-center">
+            <h2 className="text-base md:text-lg font-semibold mb-3 flex items-center">
               <Star className="w-5 h-5 mr-2 text-theme-accent" />
               Theme Preset
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
               {[
                 { 
                   value: 'classic', 
@@ -292,6 +294,36 @@ export default function Settings() {
                   <div className="text-sm text-gray-600 dark:text-gray-400">Click restored names to see Hebrew details</div>
                 </div>
               </label>
+            </div>
+          </div>
+
+          {/* Translator Notes */}
+          <div>
+            <h2 className="text-lg font-semibold mb-3">Translator Notes</h2>
+            <div className="space-y-3">
+              <label className="flex items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                <input
+                  type="checkbox"
+                  checked={settings.showTranslatorNotes}
+                  onChange={(e) => saveSettings({ ...settings, showTranslatorNotes: e.target.checked })}
+                  className="mr-3"
+                />
+                <div>
+                  <div className="font-medium">Show translator notes</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Display KJV translator notes in curly braces {'{...}'} with helpful icons and tooltips
+                  </div>
+                </div>
+              </label>
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <p className="text-xs text-blue-800 dark:text-blue-200 leading-relaxed">
+                  <strong>What are translator notes?</strong> These are KJV marginal notes showing:
+                  <br/>• Words added for English clarity (e.g., "{'{it was}'}")
+                  <br/>• Literal Hebrew translations
+                  <br/>• Alternative renderings
+                  <br/>Hover over the ℹ️ icon to see explanations.
+                </p>
+              </div>
             </div>
           </div>
 

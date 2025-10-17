@@ -37,6 +37,14 @@ export const useBibleStore = create<BibleState & BibleActions>()(
       error: null,
 
       setTranslation: async (id: string) => {
+        const { translationId, bible } = get();
+        
+        // If already loading this translation and Bible exists, don't reload
+        if (translationId === id && bible) {
+          console.log(`Translation ${id} already loaded`);
+          return;
+        }
+        
         set({ translationId: id, isLoading: true, loadingProgress: 0, error: null });
         try {
           const bible = await loadFullBible(id, (progress) => {
@@ -44,6 +52,7 @@ export const useBibleStore = create<BibleState & BibleActions>()(
           });
           set({ bible, isLoading: false, loadingProgress: 100 });
         } catch (error) {
+          console.error('Error loading translation:', error);
           set({ 
             error: error instanceof Error ? error.message : 'Failed to load translation',
             isLoading: false,
@@ -80,7 +89,7 @@ export const useBibleStore = create<BibleState & BibleActions>()(
         const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
         const currentIndex = chapters.indexOf(chapter);
         if (currentIndex < chapters.length - 1) {
-          set({ chapter: chapters[currentIndex + 1] });
+          set({ chapter: chapters[currentIndex + 1], verse: undefined });
         }
       },
 
@@ -91,7 +100,7 @@ export const useBibleStore = create<BibleState & BibleActions>()(
         const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
         const currentIndex = chapters.indexOf(chapter);
         if (currentIndex > 0) {
-          set({ chapter: chapters[currentIndex - 1] });
+          set({ chapter: chapters[currentIndex - 1], verse: undefined });
         }
       },
 

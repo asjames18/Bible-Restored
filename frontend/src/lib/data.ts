@@ -121,6 +121,8 @@ export async function loadFullBible(
   id: string = 'restored_kjv',
   onProgress?: (percent: number) => void
 ): Promise<BibleData> {
+  const LOAD_TIMEOUT = 30000; // 30 second timeout
+  
   try {
     // Check cache first
     const cached = await get(`bible-${id}`);
@@ -138,10 +140,26 @@ export async function loadFullBible(
       }
     }
 
-    // Fetch with progress tracking
-    const response = await fetch(`/translations/${id}.json`);
-    if (!response.ok) {
-      throw new Error(`Failed to load translation: ${response.statusText}`);
+    // Fetch with progress tracking and timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), LOAD_TIMEOUT);
+    
+    let response;
+    try {
+      response = await fetch(`/translations/${id}.json`, { 
+        signal: controller.signal 
+      });
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to load translation: ${response.statusText}`);
+      }
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+        throw new Error('Loading timeout - please check your connection and try again');
+      }
+      throw fetchError;
     }
 
     const reader = response.body?.getReader();
@@ -181,10 +199,30 @@ export async function loadFullBible(
     // Decode and parse
     const text = new TextDecoder('utf-8').decode(chunksAll);
     console.log(`Parsing Bible data... size: ${text.length} chars`);
-    const data = JSON.parse(text);
+    
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseError) {
+      console.error('Failed to parse Bible JSON:', parseError);
+      throw new Error('Bible data is corrupted - please try clearing cache and reloading');
+    }
+    
+    // Validate the data structure
+    if (!data || typeof data !== 'object') {
+      throw new Error('Invalid Bible data format');
+    }
     
     const bookCount = Object.keys(data).length;
     console.log(`Parsed Bible data: ${bookCount} books`);
+    
+    if (bookCount === 0) {
+      throw new Error('Bible data is empty - please try reloading');
+    }
+    
+    if (bookCount < 66) {
+      console.warn(`Bible data incomplete: only ${bookCount} books loaded`);
+    }
     
     // Cache the data
     await set(`bible-${id}`, data);

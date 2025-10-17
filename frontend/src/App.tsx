@@ -8,6 +8,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import UpdatePrompt from './components/UpdatePrompt';
 import OfflineIndicator from './components/OfflineIndicator';
 import { LoadingProgress } from './components/LoadingProgress';
+import BottomNav from './components/BottomNav';
 import Reader from './routes/Reader';
 import Home from './routes/Home';
 import Search from './routes/Search';
@@ -32,6 +33,44 @@ function AppContent() {
   const location = useLocation();
   const { loadCurrentBible, isLoading, loadingProgress } = useBibleStore();
   const { isOnline, updateAvailable, handleUpdate, handleDismiss } = usePWA();
+
+  // Load and apply saved settings on app start
+  useEffect(() => {
+    const savedSettings = localStorage.getItem('bible-settings');
+    if (savedSettings) {
+      try {
+        const settings = JSON.parse(savedSettings);
+        
+        // Apply theme preset
+        if (settings.themePreset) {
+          document.documentElement.setAttribute('data-theme', settings.themePreset);
+        }
+        
+        // Apply theme (dark/light/system)
+        if (settings.theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else if (settings.theme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          // System theme
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        }
+        
+        // Apply font size
+        if (settings.fontSize) {
+          document.documentElement.style.fontSize = 
+            settings.fontSize === 'small' ? '14px' :
+            settings.fontSize === 'large' ? '18px' : '16px';
+        }
+      } catch (error) {
+        console.error('Failed to load settings:', error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     loadCurrentBible();
@@ -67,6 +106,9 @@ function AppContent() {
       {isLoading && loadingProgress < 100 && (
         <LoadingProgress percent={loadingProgress} />
       )}
+      
+      {/* Mobile Bottom Navigation */}
+      <BottomNav />
       
       {/* PWA Components */}
       <OfflineIndicator isOnline={isOnline} />

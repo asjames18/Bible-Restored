@@ -6,27 +6,71 @@ import { Focus, X } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import Verse from '../components/Verse';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { useSwipeGesture } from '../hooks/useSwipeGesture';
 
 export default function Reader() {
   const { translation, book, chapter, verse } = useParams();
   const navigate = useNavigate();
   const [isFocusMode, setIsFocusMode] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
   const { 
     bible, 
-    isLoading, 
     error, 
+    isLoading,
+    loadCurrentBible,
     setTranslation, 
     setRef, 
     nextChapter, 
-    prevChapter 
+    prevChapter,
+    book: storeBook,
+    chapter: storeChapter,
+    verse: storeVerse,
+    translationId
   } = useBibleStore();
 
+  // Swipe gestures for mobile navigation
+  useSwipeGesture({
+    onSwipeLeft: () => nextChapter(),
+    onSwipeRight: () => prevChapter(),
+    threshold: 75,
+  });
+
+  // Initialize Bible on mount
   useEffect(() => {
-    if (translation && book && chapter) {
-      setTranslation(translation);
+    const initializeBible = async () => {
+      try {
+        if (!bible) {
+          console.log('Bible not loaded, loading current Bible...');
+          await loadCurrentBible();
+        }
+        if (translation && translationId !== translation) {
+          console.log(`Translation mismatch: ${translationId} vs ${translation}, loading ${translation}...`);
+          await setTranslation(translation);
+        }
+      } catch (err) {
+        console.error('Failed to initialize Bible:', err);
+      } finally {
+        setIsInitializing(false);
+      }
+    };
+    
+    initializeBible();
+  }, [bible, translation, translationId, loadCurrentBible, setTranslation]);
+
+  // Update ref when navigating
+  useEffect(() => {
+    if (translation && book && chapter && bible) {
       setRef(book, chapter, verse);
     }
-  }, [translation, book, chapter, verse, setTranslation, setRef]);
+  }, [translation, book, chapter, verse, bible, setRef]);
+
+  // Navigate when store chapter/book changes (from nextChapter/prevChapter)
+  useEffect(() => {
+    if (storeBook && storeChapter && (storeBook !== book || storeChapter !== chapter || storeVerse !== verse)) {
+      const newPath = `/${translation}/${storeBook}/${storeChapter}${storeVerse ? `/${storeVerse}` : ''}`;
+      navigate(newPath);
+    }
+  }, [storeBook, storeChapter, storeVerse, book, chapter, verse, translation, navigate]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -47,26 +91,45 @@ export default function Reader() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [prevChapter, nextChapter, navigate, isFocusMode]);
 
-  // Show loading if Bible is being loaded OR if Bible isn't available yet
-  if (isLoading || !bible) {
+  // Show loading screen during initialization or when Bible is loading
+  if (isInitializing || isLoading || !bible) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner size="lg" text="Loading Bible..." />
+      <div className="min-h-screen flex items-center justify-center bg-theme-bg">
+        <div className="text-center">
+          <LoadingSpinner size="lg" text="Loading Bible..." />
+          {isLoading && (
+            <p className="mt-4 text-sm text-theme-text/60">
+              Please wait, this may take a moment...
+            </p>
+          )}
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-theme-bg">
         <div className="text-center">
-          <p className="text-red-600 mb-4">Error: {error}</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-          >
-            Retry
-          </button>
+          <p className="text-red-600 dark:text-red-400 mb-4 text-lg">Error loading Bible</p>
+          <p className="text-theme-text/70 mb-6 text-sm">{error}</p>
+          <div className="space-y-3">
+            <button 
+              onClick={() => {
+                setIsInitializing(true);
+                loadCurrentBible().finally(() => setIsInitializing(false));
+              }}
+              className="block w-full bg-theme-accent hover:bg-theme-accent-dark text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              Retry Loading
+            </button>
+            <button 
+              onClick={() => navigate('/')}
+              className="block w-full bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 rounded-lg font-medium transition-colors border border-theme-border"
+            >
+              Go to Home
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -96,27 +159,27 @@ export default function Reader() {
   const verses = bible[book!][chapter!];
   const verseNumbers = Object.keys(verses).sort((a, b) => parseInt(a) - parseInt(b));
 
-  // Chapter transition variants
+  // Chapter transition variants - faster and smoother
   const chapterVariants = {
-    initial: { opacity: 0, y: 20 },
-    in: { opacity: 1, y: 0 },
-    out: { opacity: 0, y: -20 }
+    initial: { opacity: 0, x: 30 },
+    in: { opacity: 1, x: 0 },
+    out: { opacity: 0, x: -30 }
   };
 
   const chapterTransition = {
     type: 'tween' as const,
-    ease: 'anticipate' as const,
-    duration: 0.3
+    ease: 'easeInOut' as const,
+    duration: 0.2
   };
 
   return (
-    <div className={`min-h-screen bg-theme-bg text-theme-text ${isFocusMode ? 'focus-mode' : ''}`}>
+    <div className={`min-h-screen bg-theme-bg text-theme-text page-content-mobile ${isFocusMode ? 'focus-mode' : ''}`}>
       {!isFocusMode && <TopBar />}
       
-      {/* Focus Mode Toggle */}
+      {/* Focus Mode Toggle - Repositioned for mobile thumb reach */}
       <motion.button
         onClick={() => setIsFocusMode(!isFocusMode)}
-        className={`fixed top-4 right-4 z-50 p-3 rounded-full bg-theme-surface hover:bg-theme-surface-hover shadow-lg transition-all duration-200 ${
+        className={`fixed md:top-4 md:right-4 bottom-24 right-4 md:bottom-auto z-50 btn-touch p-3 rounded-full shadow-lg transition-all duration-200 ${
           isFocusMode ? 'bg-theme-accent text-white' : 'bg-theme-surface text-theme-text'
         }`}
         whileHover={{ scale: 1.05 }}
@@ -126,19 +189,20 @@ export default function Reader() {
         {isFocusMode ? <X size={20} /> : <Focus size={20} />}
       </motion.button>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="swipe-container max-w-4xl mx-auto container-mobile py-4 md:py-8">
         {/* Chapter Title with Animation */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="mb-8 text-center"
+          key={`title-${book}-${chapter}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.15 }}
+          className="mb-6 md:mb-8 text-center"
         >
-          <h1 className="text-3xl font-bold text-theme-text mb-2">
+          <h1 className="text-mobile-title md:text-3xl font-bold text-theme-text mb-2">
             {book} {chapter}
           </h1>
           {verse && (
-            <p className="text-theme-accent font-medium">Verse {verse}</p>
+            <p className="text-theme-accent font-medium text-sm md:text-base">Verse {verse}</p>
           )}
         </motion.div>
 
@@ -151,15 +215,15 @@ export default function Reader() {
             exit="out"
             variants={chapterVariants}
             transition={chapterTransition}
-            className="prose prose-lg max-w-none reading-area"
+            className="prose prose-sm md:prose-lg max-w-none reading-area"
           >
             {verseNumbers.map((verseNum, index) => (
               <motion.div
                 key={verseNum}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.02 }}
-                className="verse-hover"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.15, delay: index * 0.01 }}
+                className="verse-hover mb-3 md:mb-4"
               >
                 <Verse
                   number={verseNum}
@@ -171,16 +235,16 @@ export default function Reader() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Navigation with Enhanced Styling */}
+        {/* Navigation with Enhanced Styling - Stacked on mobile */}
         <motion.div 
-          className="mt-8 flex justify-between"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mt-8 flex flex-col md:flex-row gap-3 md:gap-0 md:justify-between"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
         >
           <motion.button
             onClick={prevChapter}
-            className="bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent"
+            className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto"
             whileHover={{ scale: 1.02, x: -2 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -188,12 +252,22 @@ export default function Reader() {
           </motion.button>
           <motion.button
             onClick={nextChapter}
-            className="bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent"
+            className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto"
             whileHover={{ scale: 1.02, x: 2 }}
             whileTap={{ scale: 0.98 }}
           >
             Next Chapter →
           </motion.button>
+        </motion.div>
+        
+        {/* Mobile swipe hint */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.5 }}
+          className="md:hidden mt-4 text-center text-xs text-theme-text/40"
+        >
+          Swipe left or right to navigate chapters
         </motion.div>
       </div>
     </div>

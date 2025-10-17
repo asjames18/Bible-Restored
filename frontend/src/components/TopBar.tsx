@@ -30,7 +30,8 @@ export default function TopBar() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-theme-surface border-b border-theme-border sticky top-0 z-40 shadow-sm"
       >
-        <div className="max-w-4xl mx-auto px-4 py-3">
+        {/* Desktop View */}
+        <div className="hidden md:block max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <motion.button
@@ -121,6 +122,64 @@ export default function TopBar() {
                   <span>Settings</span>
                 </motion.button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile View - Compact */}
+        <div className="md:hidden px-3 py-2">
+          <div className="flex items-center justify-between">
+            {/* Left: Navigation Controls */}
+            <div className="flex items-center space-x-2">
+              <motion.button
+                onClick={() => setShowNav(true)}
+                className="btn-touch p-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text rounded-lg border border-theme-border"
+                whileTap={{ scale: 0.95 }}
+                title="Navigate"
+              >
+                <Menu className="w-5 h-5" />
+              </motion.button>
+              
+              <div className="flex items-center space-x-1">
+                <motion.button
+                  onClick={prevChapter}
+                  className="btn-touch p-2 text-theme-text rounded-lg hover:bg-theme-surface-hover"
+                  whileTap={{ scale: 0.9 }}
+                  title="Previous Chapter"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </motion.button>
+                <motion.button
+                  onClick={nextChapter}
+                  className="btn-touch p-2 text-theme-text rounded-lg hover:bg-theme-surface-hover"
+                  whileTap={{ scale: 0.9 }}
+                  title="Next Chapter"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </motion.button>
+              </div>
+            </div>
+
+            {/* Center: Current Book/Chapter */}
+            <motion.h1 
+              className="text-base font-semibold text-theme-text truncate max-w-[40%]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              {book} {chapter}
+            </motion.h1>
+
+            {/* Right: Quick Actions */}
+            <div className="flex items-center space-x-1">
+              <motion.button
+                onClick={() => setShowTranslation(true)}
+                className="btn-touch p-2 text-theme-text rounded-lg hover:bg-theme-surface-hover"
+                whileTap={{ scale: 0.95 }}
+                title="Translation"
+              >
+                <RotateCcw className="w-5 h-5" />
+              </motion.button>
             </div>
           </div>
         </div>

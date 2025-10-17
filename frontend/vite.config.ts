@@ -10,6 +10,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        // Exclude large translation assets from the precache manifest
+        globIgnores: ['translations/**'],
+        // Allow somewhat bigger assets if needed (kept conservative)
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -22,6 +26,21 @@ export default defineConfig({
               },
               cacheableResponse: {
                 statuses: [0, 200]
+              }
+            }
+          },
+          // Cache translation JSON files at runtime instead of precaching
+          {
+            urlPattern: ({ url }) => url.pathname.startsWith('/translations/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'translations-cache',
+              expiration: {
+                maxEntries: 300,
+                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+              },
+              cacheableResponse: {
+                statuses: [200]
               }
             }
           }

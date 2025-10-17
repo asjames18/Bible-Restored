@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { highlightNames, loadHebrewLexicon, stripHighlighting } from '../lib/nameHighlighter';
+import { highlightNames, loadHebrewLexicon, stripHighlighting, formatTranslatorNotes } from '../lib/nameHighlighter';
 import NamePopover from './NamePopover';
 
 interface VerseProps {
@@ -23,7 +23,14 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
       const savedSettings = localStorage.getItem('bible-settings');
       const settings = savedSettings ? JSON.parse(savedSettings) : {};
       
-      const highlighted = highlightNames(text, {
+      // First format translator notes
+      let processedText = text;
+      if (settings.showTranslatorNotes !== false) {
+        processedText = formatTranslatorNotes(text);
+      }
+      
+      // Then highlight Hebrew names
+      const highlighted = highlightNames(processedText, {
         showHebrewBadge: settings.showHebrewBadges || false,
         showTranslitBadge: settings.showTranslitBadges || false,
         enablePopovers: settings.enableNamePopovers !== false

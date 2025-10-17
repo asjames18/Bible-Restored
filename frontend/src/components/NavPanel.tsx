@@ -40,8 +40,9 @@ export default function NavPanel({ isOpen, onClose }: NavPanelProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50" onClick={onClose}>
+      {/* Desktop: Slide from left */}
       <div 
-        className="fixed left-0 top-0 h-full w-80 bg-white dark:bg-gray-800 shadow-lg"
+        className="hidden md:block fixed left-0 top-0 h-full w-80 bg-white dark:bg-gray-800 shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6">
@@ -104,6 +105,92 @@ export default function NavPanel({ isOpen, onClose }: NavPanelProps) {
               <li><kbd className="bg-gray-100 dark:bg-gray-700 px-1 rounded">/</kbd> Search</li>
               <li><kbd className="bg-gray-100 dark:bg-gray-700 px-1 rounded">t</kbd> Translation</li>
             </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile: Bottom sheet */}
+      <div 
+        className="md:hidden fixed left-0 right-0 bottom-0 bg-theme-surface rounded-t-2xl shadow-xl animate-slide-up max-h-[85vh] overflow-hidden flex flex-col pb-safe"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Drag handle */}
+        <div className="flex justify-center py-3">
+          <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+        </div>
+
+        <div className="px-6 pb-6 overflow-y-auto flex-1">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-theme-text">Navigate</h2>
+            <button
+              onClick={onClose}
+              className="btn-touch p-2 text-theme-text/60 hover:text-theme-text rounded-lg"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium mb-2 text-theme-text">Book</label>
+              <select
+                value={selectedBook}
+                onChange={(e) => handleBookChange(e.target.value)}
+                className="w-full btn-touch p-3 text-base border border-theme-border rounded-lg bg-theme-bg text-theme-text"
+              >
+                {books.map((bookName) => (
+                  <option key={bookName} value={bookName}>
+                    {bookName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2 text-theme-text">Chapter</label>
+              <select
+                value={selectedChapter}
+                onChange={(e) => handleChapterChange(e.target.value)}
+                className="w-full btn-touch p-3 text-base border border-theme-border rounded-lg bg-theme-bg text-theme-text"
+              >
+                {chapters.map((chapterNum) => (
+                  <option key={chapterNum} value={chapterNum}>
+                    Chapter {chapterNum}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Chapter Grid - Quick Access */}
+            <div>
+              <label className="block text-sm font-medium mb-2 text-theme-text">Quick Jump to Chapter</label>
+              <div className="grid grid-cols-6 gap-2 max-h-48 overflow-y-auto">
+                {chapters.map((chapterNum) => (
+                  <button
+                    key={chapterNum}
+                    onClick={() => {
+                      setSelectedChapter(chapterNum);
+                      navigate(`/${translationId}/${selectedBook}/${chapterNum}`);
+                      onClose();
+                    }}
+                    className={`btn-touch p-3 rounded-lg text-sm font-medium transition-colors ${
+                      chapterNum === selectedChapter
+                        ? 'bg-theme-accent text-white'
+                        : 'bg-theme-surface text-theme-text border border-theme-border hover:border-theme-accent'
+                    }`}
+                  >
+                    {chapterNum}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={handleGo}
+              className="w-full btn-touch bg-theme-accent hover:bg-theme-accent-dark text-white py-3 px-4 rounded-lg font-medium transition-colors text-base"
+            >
+              Go to Chapter
+            </button>
           </div>
         </div>
       </div>

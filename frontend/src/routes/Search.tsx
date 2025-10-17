@@ -147,26 +147,27 @@ export default function Search() {
   ];
 
   return (
-    <div className="min-h-screen bg-theme-bg text-theme-text">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-theme-bg text-theme-text page-content-mobile">
+      <div className="max-w-4xl mx-auto container-mobile py-4 md:py-8">
+        {/* Sticky search header on mobile */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-6 md:mb-8 sticky top-0 md:static bg-theme-bg z-30 pt-4 md:pt-0"
         >
-          <h1 className="text-3xl font-bold mb-6 text-theme-text">Search Scripture</h1>
+          <h1 className="text-mobile-title md:text-3xl font-bold mb-4 md:mb-6 text-theme-text">Search Scripture</h1>
           
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             {/* Search Input */}
             <div className="relative">
-              <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-theme-text/60" />
+              <SearchIcon className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-theme-text/60" />
               <input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Search verses, names, or topics..."
-                className="w-full pl-12 pr-12 py-4 border border-theme-border rounded-xl bg-theme-surface text-theme-text focus:ring-2 focus:ring-theme-accent focus:border-theme-accent transition-all duration-200 text-lg"
+                className="w-full btn-touch pl-10 md:pl-12 pr-10 md:pr-12 py-3 md:py-4 border border-theme-border rounded-xl bg-theme-surface text-theme-text focus:ring-2 focus:ring-theme-accent focus:border-theme-accent transition-all duration-200 text-base md:text-lg"
                 autoFocus
               />
               {query && (
@@ -174,7 +175,7 @@ export default function Search() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   onClick={() => setQuery('')}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 text-theme-text/60 hover:text-theme-accent transition-colors"
+                  className="absolute right-3 md:right-4 top-1/2 transform -translate-y-1/2 btn-touch p-1 text-theme-text/60 hover:text-theme-accent transition-colors"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
@@ -183,13 +184,13 @@ export default function Search() {
               )}
             </div>
 
-            {/* Category Chips */}
-            <div className="flex flex-wrap gap-2">
+            {/* Category Chips - Scrollable on mobile */}
+            <div className="flex md:flex-wrap gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
               {categories.map((cat) => (
                 <motion.button
                   key={cat.id}
                   onClick={() => setCategory(cat.id as Category)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 whitespace-nowrap btn-touch ${
                     category === cat.id
                       ? 'bg-theme-accent text-white shadow-lg'
                       : 'bg-theme-surface hover:bg-theme-surface-hover text-theme-text border border-theme-border'
@@ -198,7 +199,7 @@ export default function Search() {
                   whileTap={{ scale: 0.95 }}
                 >
                   <cat.icon className="w-4 h-4" />
-                  <span>{cat.label}</span>
+                  <span className="text-sm md:text-base">{cat.label}</span>
                 </motion.button>
               ))}
             </div>
@@ -238,24 +239,24 @@ export default function Search() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ delay: index * 0.05 }}
                   onClick={() => handleResultClick(result.item.book, result.item.chapter, result.item.verse)}
-                  className="p-6 bg-theme-surface hover:bg-theme-surface-hover rounded-xl cursor-pointer transition-all duration-200 border border-theme-border hover:border-theme-accent/50 hover:shadow-lg group"
+                  className="btn-touch p-4 md:p-6 bg-theme-surface hover:bg-theme-surface-hover rounded-xl cursor-pointer transition-all duration-200 border border-theme-border hover:border-theme-accent/50 hover:shadow-lg group"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <div className="flex justify-between items-start mb-3">
+                  <div className="flex justify-between items-start mb-2 md:mb-3">
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-theme-accent rounded-full"></div>
-                      <div className="font-semibold text-theme-accent text-lg">
+                      <div className="font-semibold text-theme-accent text-base md:text-lg">
                         {result.item.book} {result.item.chapter}:{result.item.verse}
                       </div>
                     </div>
                     {result.score && (
-                      <div className="text-xs text-theme-text/60 bg-theme-accent/10 px-2 py-1 rounded">
-                        {Math.round((1 - result.score) * 100)}% match
+                      <div className="text-xs text-theme-text/60 bg-theme-accent/10 px-2 py-1 rounded whitespace-nowrap">
+                        {Math.round((1 - result.score) * 100)}%
                       </div>
                     )}
                   </div>
-                  <div className="text-theme-text leading-relaxed group-hover:text-theme-accent transition-colors">
+                  <div className="text-theme-text leading-relaxed group-hover:text-theme-accent transition-colors text-sm md:text-base">
                     {result.item.text}
                   </div>
                 </motion.div>

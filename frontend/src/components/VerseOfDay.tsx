@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { Sun } from 'lucide-react';
 import { useBibleStore } from '../store/bibleStore';
-import { Sun, RefreshCw } from 'lucide-react';
+import { getVerseOfTheDay } from '../lib/inspirationalVerses';
 
 interface VerseOfDayProps {
   className?: string;
@@ -14,27 +15,30 @@ export default function VerseOfDay({ className = '' }: VerseOfDayProps) {
     chapter: string;
     verse: string;
     text: string;
+    theme?: string;
   } | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // Get a random verse from the Bible
-  const getRandomVerse = () => {
+  // Get the inspirational verse for today
+  const getInspirationalVerse = useCallback(() => {
     if (!bible) return null;
 
-    const books = Object.keys(bible);
-    const randomBook = books[Math.floor(Math.random() * books.length)];
-    const chapters = Object.keys(bible[randomBook]);
-    const randomChapter = chapters[Math.floor(Math.random() * chapters.length)];
-    const verses = Object.keys(bible[randomBook][randomChapter]);
-    const randomVerse = verses[Math.floor(Math.random() * verses.length)];
-
-    return {
-      book: randomBook,
-      chapter: randomChapter,
-      verse: randomVerse,
-      text: bible[randomBook][randomChapter][randomVerse]
-    };
-  };
+    const verseRef = getVerseOfTheDay();
+    
+    // Get the actual text from the Bible
+    if (bible[verseRef.book] && 
+        bible[verseRef.book][verseRef.chapter] && 
+        bible[verseRef.book][verseRef.chapter][verseRef.verse]) {
+      return {
+        book: verseRef.book,
+        chapter: verseRef.chapter,
+        verse: verseRef.verse,
+        text: bible[verseRef.book][verseRef.chapter][verseRef.verse],
+        theme: verseRef.theme
+      };
+    }
+    
+    return null;
+  }, [bible]);
 
   // Load verse of the day from localStorage or generate new one
   useEffect(() => {
@@ -51,7 +55,7 @@ export default function VerseOfDay({ className = '' }: VerseOfDayProps) {
 
     // Generate new verse if none exists or date changed
     if (bible) {
-      const newVerse = getRandomVerse();
+      const newVerse = getInspirationalVerse();
       if (newVerse) {
         setVerseOfDay(newVerse);
         localStorage.setItem('verse-of-day', JSON.stringify({
@@ -60,22 +64,7 @@ export default function VerseOfDay({ className = '' }: VerseOfDayProps) {
         }));
       }
     }
-  }, [bible]);
-
-  const handleRefresh = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const newVerse = getRandomVerse();
-      if (newVerse) {
-        setVerseOfDay(newVerse);
-        localStorage.setItem('verse-of-day', JSON.stringify({
-          date: new Date().toDateString(),
-          verse: newVerse
-        }));
-      }
-      setIsLoading(false);
-    }, 500);
-  };
+  }, [bible, getInspirationalVerse]);
 
   if (!verseOfDay) {
     return (
@@ -103,21 +92,9 @@ export default function VerseOfDay({ className = '' }: VerseOfDayProps) {
       {/* Content */}
       <div className="relative z-10 p-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            <Sun className="w-5 h-5 text-theme-accent" />
-            <h3 className="text-lg font-semibold text-theme-text">Verse of the Day</h3>
-          </div>
-          <motion.button
-            onClick={handleRefresh}
-            disabled={isLoading}
-            className="p-2 rounded-full bg-theme-surface/50 hover:bg-theme-surface transition-colors disabled:opacity-50"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            title="Get new verse"
-          >
-            <RefreshCw className={`w-4 h-4 text-theme-accent ${isLoading ? 'animate-spin' : ''}`} />
-          </motion.button>
+        <div className="flex items-center space-x-2 mb-4">
+          <Sun className="w-5 h-5 text-theme-accent" />
+          <h3 className="text-lg font-semibold text-theme-text">Verse of the Day</h3>
         </div>
 
         {/* Verse Content */}
@@ -128,8 +105,15 @@ export default function VerseOfDay({ className = '' }: VerseOfDayProps) {
           transition={{ duration: 0.3 }}
           className="space-y-3"
         >
-          <div className="text-sm font-medium text-theme-accent">
-            {verseOfDay.book} {verseOfDay.chapter}:{verseOfDay.verse}
+          <div className="flex items-center justify-between">
+            <div className="text-sm font-medium text-theme-accent">
+              {verseOfDay.book} {verseOfDay.chapter}:{verseOfDay.verse}
+            </div>
+            {verseOfDay.theme && (
+              <span className="text-xs px-2 py-1 bg-theme-accent/20 text-theme-accent rounded-full font-medium">
+                {verseOfDay.theme}
+              </span>
+            )}
           </div>
           <blockquote className="text-theme-text leading-relaxed italic">
             "{verseOfDay.text}"
