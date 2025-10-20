@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useBibleStore } from '../store/bibleStore';
 import NavPanel from './NavPanel';
@@ -19,10 +19,36 @@ import {
 
 export default function TopBar() {
   const navigate = useNavigate();
-  const { book, chapter, nextChapter, prevChapter } = useBibleStore();
+  const { translation, book, chapter } = useParams();
+  const { bible } = useBibleStore();
   const [showNav, setShowNav] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
   const [showQuickJump, setShowQuickJump] = useState(false);
+
+  // Navigation functions (same as Reader component)
+  const goToNextChapter = useCallback(() => {
+    if (!bible || !book) return;
+    const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
+    const currentIndex = chapters.indexOf(chapter!);
+    if (currentIndex < chapters.length - 1) {
+      const nextChap = chapters[currentIndex + 1];
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const newPath = `/${translation}/${book}/${nextChap}`;
+      navigate(newPath);
+    }
+  }, [bible, book, chapter, translation, navigate]);
+
+  const goToPrevChapter = useCallback(() => {
+    if (!bible || !book) return;
+    const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
+    const currentIndex = chapters.indexOf(chapter!);
+    if (currentIndex > 0) {
+      const prevChap = chapters[currentIndex - 1];
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const newPath = `/${translation}/${book}/${prevChap}`;
+      navigate(newPath);
+    }
+  }, [bible, book, chapter, translation, navigate]);
 
   // Keyboard shortcuts are handled in Reader component
 
@@ -72,7 +98,7 @@ export default function TopBar() {
               
               <div className="flex items-center space-x-1">
                 <motion.button
-                  onClick={prevChapter}
+                  onClick={goToPrevChapter}
                   className="p-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text rounded-lg transition-all duration-200 border border-theme-border"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -81,7 +107,7 @@ export default function TopBar() {
                   <ChevronLeft className="w-4 h-4" />
                 </motion.button>
                 <motion.button
-                  onClick={nextChapter}
+                  onClick={goToNextChapter}
                   className="p-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text rounded-lg transition-all duration-200 border border-theme-border"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -156,7 +182,7 @@ export default function TopBar() {
               
               <div className="flex items-center space-x-1">
                 <motion.button
-                  onClick={prevChapter}
+                  onClick={goToPrevChapter}
                   className="btn-touch p-2 text-theme-text rounded-lg hover:bg-theme-surface-hover"
                   whileTap={{ scale: 0.9 }}
                   title="Previous Chapter"
@@ -164,7 +190,7 @@ export default function TopBar() {
                   <ChevronLeft className="w-5 h-5" />
                 </motion.button>
                 <motion.button
-                  onClick={nextChapter}
+                  onClick={goToNextChapter}
                   className="btn-touch p-2 text-theme-text rounded-lg hover:bg-theme-surface-hover"
                   whileTap={{ scale: 0.9 }}
                   title="Next Chapter"
