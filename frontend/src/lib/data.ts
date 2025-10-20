@@ -124,11 +124,11 @@ export async function loadFullBible(
   const LOAD_TIMEOUT = 30000; // 30 second timeout
   
   try {
-    // Check cache first
+    // Check both caches (IndexedDB first, then memory cache)
     const cached = await get(`bible-${id}`);
     if (cached) {
       const bookCount = Object.keys(cached).length;
-      console.log(`Loaded ${id} from cache (${bookCount} books)`);
+      console.log(`Loaded ${id} from IndexedDB cache (${bookCount} books)`);
       
       // If cached data is incomplete (less than 66 books), force reload
       if (bookCount < 66) {

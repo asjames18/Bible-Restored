@@ -9,6 +9,8 @@ import Verse from '../components/Verse';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ChapterSummary from '../components/ChapterSummary';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
+import { useScrollRestoration } from '../hooks/useScrollRestoration';
+import { prefetchAdjacentChapters } from '../lib/cacheManager';
 
 export default function Reader() {
   const { translation, book, chapter, verse } = useParams();
@@ -31,6 +33,9 @@ export default function Reader() {
   } = useBibleStore();
   
   const { addToHistory } = useHistoryStore();
+
+  // Scroll restoration
+  useScrollRestoration();
 
   // Swipe gestures for mobile navigation
   useSwipeGesture({
@@ -60,6 +65,20 @@ export default function Reader() {
     
     initializeBible();
   }, [bible, translation, translationId, loadCurrentBible, setTranslation]);
+
+  // Prefetch adjacent chapters for better performance
+  useEffect(() => {
+    if (bible && book && chapter && translation) {
+      // Get total chapters for this book
+      const totalChapters = Object.keys(bible[book] || {}).length;
+      const chapterNum = parseInt(chapter, 10);
+      
+      // Prefetch previous and next chapters in the background
+      setTimeout(() => {
+        prefetchAdjacentChapters(translation, book, chapterNum, totalChapters);
+      }, 1000); // Delay to not interfere with current page load
+    }
+  }, [bible, book, chapter, translation]);
 
   // Update ref when navigating and track history
   useEffect(() => {
@@ -238,9 +257,13 @@ export default function Reader() {
             {verseNumbers.map((verseNum, index) => (
               <motion.div
                 key={verseNum}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.15, delay: index * 0.01 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  duration: 0.4,
+                  delay: Math.min(index * 0.03, 0.5), // Cap max delay at 0.5s
+                  ease: [0.22, 1, 0.36, 1] // Custom easing for smooth entrance
+                }}
                 className="verse-hover mb-3 md:mb-4"
               >
                 <Verse

@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useBibleStore } from './store/bibleStore';
 import { usePWA } from './lib/usePWA';
@@ -9,23 +9,26 @@ import UpdatePrompt from './components/UpdatePrompt';
 import OfflineIndicator from './components/OfflineIndicator';
 import { LoadingProgress } from './components/LoadingProgress';
 import BottomNav from './components/BottomNav';
-import Reader from './routes/Reader';
-import Home from './routes/Home';
-import Search from './routes/Search';
-import Settings from './routes/Settings';
-import Glossary from './routes/Glossary';
-import Bookmarks from './routes/Bookmarks';
-import Notes from './routes/Notes';
-import History from './routes/History';
-import BookOverview from './routes/BookOverview';
-import ParallelViewWrapper from './components/ParallelViewWrapper';
-import ReadingPlans from './routes/ReadingPlans';
-import Progress from './routes/Progress';
-import PrayerList from './routes/PrayerList';
-import Concordance from './routes/Concordance';
-import TopicBrowser from './routes/TopicBrowser';
-import MemoryVerses from './routes/MemoryVerses';
-import Devotional from './routes/Devotional';
+import { PageSkeleton } from './components/SkeletonLoader';
+
+// Lazy load route components for better performance
+const Reader = lazy(() => import('./routes/Reader'));
+const Home = lazy(() => import('./routes/Home'));
+const Search = lazy(() => import('./routes/Search'));
+const Settings = lazy(() => import('./routes/Settings'));
+const Glossary = lazy(() => import('./routes/Glossary'));
+const Bookmarks = lazy(() => import('./routes/Bookmarks'));
+const Notes = lazy(() => import('./routes/Notes'));
+const History = lazy(() => import('./routes/History'));
+const BookOverview = lazy(() => import('./routes/BookOverview'));
+const ParallelViewWrapper = lazy(() => import('./components/ParallelViewWrapper'));
+const ReadingPlans = lazy(() => import('./routes/ReadingPlans'));
+const Progress = lazy(() => import('./routes/Progress'));
+const PrayerList = lazy(() => import('./routes/PrayerList'));
+const Concordance = lazy(() => import('./routes/Concordance'));
+const TopicBrowser = lazy(() => import('./routes/TopicBrowser'));
+const MemoryVerses = lazy(() => import('./routes/MemoryVerses'));
+const Devotional = lazy(() => import('./routes/Devotional'));
 
 // Page transition variants
 const pageVariants = {
@@ -100,7 +103,8 @@ function AppContent() {
           variants={pageVariants}
           transition={pageTransition}
         >
-          <Routes location={location}>
+          <Suspense fallback={<PageSkeleton />}>
+            <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/:translation/:book/:chapter" element={<Reader />} />
             <Route path="/:translation/:book/:chapter/:verse" element={<Reader />} />
@@ -121,6 +125,7 @@ function AppContent() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/glossary" element={<Glossary />} />
           </Routes>
+          </Suspense>
         </motion.div>
       </AnimatePresence>
       
