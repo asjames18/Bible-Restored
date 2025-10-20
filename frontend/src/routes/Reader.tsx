@@ -8,7 +8,7 @@ import TopBar from '../components/TopBar';
 import Verse from '../components/Verse';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ChapterSummary from '../components/ChapterSummary';
-import { useScrollRestoration } from '../hooks/useScrollRestoration';
+// import { useScrollRestoration } from '../hooks/useScrollRestoration';
 import { useReadingStreak } from '../hooks/useReadingStreak';
 import { prefetchAdjacentChapters } from '../lib/cacheManager';
 
@@ -30,31 +30,47 @@ export default function Reader() {
   const { addToHistory } = useHistoryStore();
   const { updateStreak } = useReadingStreak();
 
-  // Scroll restoration
-  useScrollRestoration();
+  // Scroll restoration (temporarily disabled - might be conflicting)
+  // useScrollRestoration();
 
   // Helper functions for navigation without store updates (prevents flash)
   const goToNextChapter = useCallback(() => {
-    if (!bible || !book) return;
+    console.log('goToNextChapter called', { bible: !!bible, book, chapter });
+    if (!bible || !book) {
+      console.log('Missing bible or book');
+      return;
+    }
     const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
     const currentIndex = chapters.indexOf(chapter!);
+    console.log('Chapters:', chapters, 'Current index:', currentIndex);
     if (currentIndex < chapters.length - 1) {
       const nextChap = chapters[currentIndex + 1];
+      console.log('Navigating to next chapter:', nextChap);
       // Scroll to top before navigating
       window.scrollTo({ top: 0, behavior: 'smooth' });
       navigate(`/${translation}/${book}/${nextChap}`);
+    } else {
+      console.log('Already at last chapter');
     }
   }, [bible, book, chapter, translation, navigate]);
 
   const goToPrevChapter = useCallback(() => {
-    if (!bible || !book) return;
+    console.log('goToPrevChapter called', { bible: !!bible, book, chapter });
+    if (!bible || !book) {
+      console.log('Missing bible or book');
+      return;
+    }
     const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
     const currentIndex = chapters.indexOf(chapter!);
+    console.log('Chapters:', chapters, 'Current index:', currentIndex);
     if (currentIndex > 0) {
       const prevChap = chapters[currentIndex - 1];
+      console.log('Navigating to prev chapter:', prevChap);
       // Scroll to top before navigating
       window.scrollTo({ top: 0, behavior: 'smooth' });
       navigate(`/${translation}/${book}/${prevChap}`);
+    } else {
+      console.log('Already at first chapter');
     }
   }, [bible, book, chapter, translation, navigate]);
 
@@ -321,6 +337,29 @@ export default function Reader() {
           </motion.button>
         </motion.div>
         
+        {/* Test Navigation Button */}
+        <motion.div
+          className="mt-4 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.5 }}
+        >
+          <button
+            onClick={() => {
+              console.log('Test button clicked! Current:', { book, chapter, translation });
+              console.log('Bible loaded:', !!bible);
+              if (bible && book) {
+                console.log('Available chapters for', book, ':', Object.keys(bible[book] || {}));
+              }
+              // Test scroll
+              console.log('Testing scroll to top...');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="bg-red-500 text-white px-4 py-2 rounded"
+          >
+            Test Navigation & Scroll
+          </button>
+        </motion.div>
 
         {/* Mobile swipe hint */}
         <motion.div
