@@ -163,9 +163,15 @@ export default function QuickJump({ isOpen, onClose }: QuickJumpProps) {
       const path = parsed.verse
         ? `/${translationId}/${parsed.book}/${parsed.chapter}/${parsed.verse}`
         : `/${translationId}/${parsed.book}/${parsed.chapter}`;
-      navigate(path);
+      
+      // Close modal first to prevent flash
       onClose();
       setInput('');
+      
+      // Navigate after a brief delay to allow modal to close smoothly
+      setTimeout(() => {
+        navigate(path, { replace: false });
+      }, 150);
     }
   };
 
@@ -194,6 +200,7 @@ export default function QuickJump({ isOpen, onClose }: QuickJumpProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             onClick={onClose}
             className="fixed inset-0 bg-black/50 z-50"
           />
@@ -203,6 +210,7 @@ export default function QuickJump({ isOpen, onClose }: QuickJumpProps) {
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            transition={{ duration: 0.15 }}
             className="fixed top-[15%] left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-2xl"
           >
             <div className="bg-theme-surface rounded-2xl shadow-2xl border border-theme-border overflow-hidden">
@@ -250,8 +258,11 @@ export default function QuickJump({ isOpen, onClose }: QuickJumpProps) {
                       <motion.button
                         key={entry.id}
                         onClick={() => {
-                          setInput(entry.verseRef);
-                          handleNavigate();
+                          onClose();
+                          // Navigate after modal closes
+                          setTimeout(() => {
+                            navigate(`/${translationId}/${entry.book}/${entry.chapter}${entry.verse ? `/${entry.verse}` : ''}`, { replace: false });
+                          }, 150);
                         }}
                         className="w-full flex items-center gap-3 px-3 py-2 hover:bg-theme-surface-hover rounded-lg text-left transition-colors"
                         whileHover={{ x: 4 }}
