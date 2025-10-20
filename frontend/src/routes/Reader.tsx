@@ -16,6 +16,9 @@ export default function Reader() {
   const { translation, book, chapter, verse } = useParams();
   const navigate = useNavigate();
   const [isFocusMode, setIsFocusMode] = useState(false);
+
+  // Debug URL parameters
+  console.log('Current URL params:', { translation, book, chapter, verse });
   const [isInitializing, setIsInitializing] = useState(true);
   const { 
     bible, 
@@ -48,7 +51,13 @@ export default function Reader() {
       console.log('Navigating to next chapter:', nextChap);
       // Scroll to top before navigating
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      navigate(`/${translation}/${book}/${nextChap}`);
+      const newPath = `/${translation}/${book}/${nextChap}`;
+      console.log('Navigating to path:', newPath);
+      navigate(newPath);
+      // Check if URL changed after a short delay
+      setTimeout(() => {
+        console.log('URL after navigation:', window.location.pathname);
+      }, 100);
     } else {
       console.log('Already at last chapter');
     }
@@ -68,7 +77,13 @@ export default function Reader() {
       console.log('Navigating to prev chapter:', prevChap);
       // Scroll to top before navigating
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      navigate(`/${translation}/${book}/${prevChap}`);
+      const newPath = `/${translation}/${book}/${prevChap}`;
+      console.log('Navigating to path:', newPath);
+      navigate(newPath);
+      // Check if URL changed after a short delay
+      setTimeout(() => {
+        console.log('URL after navigation:', window.location.pathname);
+      }, 100);
     } else {
       console.log('Already at first chapter');
     }
@@ -258,7 +273,10 @@ export default function Reader() {
   const verseNumbers = Object.keys(verses).sort((a, b) => parseInt(a) - parseInt(b));
 
   return (
-    <div className={`min-h-screen bg-theme-bg text-theme-text page-content-mobile ${isFocusMode ? 'focus-mode' : ''}`}>
+    <div 
+      key={`${book}-${chapter}`}
+      className={`min-h-screen bg-theme-bg text-theme-text page-content-mobile ${isFocusMode ? 'focus-mode' : ''}`}
+    >
       {!isFocusMode && <TopBar />}
       
       {/* Focus Mode Toggle - Repositioned for mobile thumb reach */}
