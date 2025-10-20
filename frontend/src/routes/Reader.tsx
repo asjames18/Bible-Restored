@@ -319,22 +319,24 @@ export default function Reader() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
         >
-          <motion.button
-            onClick={goToPrevChapter}
-            className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto"
-            whileHover={{ scale: 1.02, x: -2 }}
-            whileTap={{ scale: 0.98 }}
+          <button
+            onClick={() => {
+              console.log('Previous button clicked!');
+              goToPrevChapter();
+            }}
+            className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto hover:scale-105 active:scale-95"
           >
             ← Previous Chapter
-          </motion.button>
-          <motion.button
-            onClick={goToNextChapter}
-            className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto"
-            whileHover={{ scale: 1.02, x: 2 }}
-            whileTap={{ scale: 0.98 }}
+          </button>
+          <button
+            onClick={() => {
+              console.log('Next button clicked!');
+              goToNextChapter();
+            }}
+            className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto hover:scale-105 active:scale-95"
           >
             Next Chapter →
-          </motion.button>
+          </button>
         </motion.div>
         
         {/* Test Navigation Button */}
