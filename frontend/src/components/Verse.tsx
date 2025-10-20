@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bookmark, Highlighter, StickyNote, Share2, Heart } from 'lucide-react';
+import { Bookmark, Highlighter, StickyNote, Share2, Heart, Link2 } from 'lucide-react';
 import { highlightNames, loadHebrewLexicon, stripHighlighting, formatTranslatorNotes } from '../lib/nameHighlighter';
 import { useStudyStore } from '../store/studyStore';
 import { useBibleStore } from '../store/bibleStore';
@@ -9,6 +9,7 @@ import HighlightMenu from './HighlightMenu';
 import NoteEditor from './NoteEditor';
 import ShareMenu from './ShareMenu';
 import VerseImageGenerator from './VerseImageGenerator';
+import CrossRefPanel from './CrossRefPanel';
 
 interface VerseProps {
   number: string;
@@ -26,6 +27,7 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
   const [showNoteEditor, setShowNoteEditor] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showImageGenerator, setShowImageGenerator] = useState(false);
+  const [showCrossRefs, setShowCrossRefs] = useState(false);
   const verseRef = useRef<HTMLDivElement>(null);
   
   const { book, chapter } = useBibleStore();
@@ -242,6 +244,19 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
             >
               <Heart className="w-4 h-4" />
             </motion.button>
+
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowCrossRefs(true);
+              }}
+              className="text-theme-text/60 hover:text-theme-accent text-sm transition-colors"
+              title="View cross-references"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Link2 className="w-4 h-4" />
+            </motion.button>
           </div>
         </div>
       </motion.div>
@@ -292,6 +307,13 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
         onClose={() => setShowImageGenerator(false)}
         verseText={stripHighlighting(highlightedText)}
         verseRef={fullVerseRef}
+      />
+
+      {/* Cross References */}
+      <CrossRefPanel
+        verseRef={fullVerseRef}
+        isOpen={showCrossRefs}
+        onClose={() => setShowCrossRefs(false)}
       />
     </>
   );

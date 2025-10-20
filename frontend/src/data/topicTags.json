@@ -1,0 +1,173 @@
+{
+  "topics": [
+    {
+      "id": "love",
+      "name": "Love",
+      "description": "God's love and love for others",
+      "icon": "❤️",
+      "color": "red",
+      "verses": [
+        { "ref": "John 3:16", "text": "For Elohiym so loved the world..." },
+        { "ref": "1 Corinthians 13:4", "text": "Love is patient, love is kind..." },
+        { "ref": "1 John 4:8", "text": "Elohiym is love" },
+        { "ref": "Romans 5:8", "text": "Elohiym demonstrates His own love for us..." },
+        { "ref": "Matthew 22:37", "text": "Love Yahuah your Elohiym with all your heart..." }
+      ]
+    },
+    {
+      "id": "faith",
+      "name": "Faith",
+      "description": "Trust and belief in God",
+      "icon": "✝️",
+      "color": "blue",
+      "verses": [
+        { "ref": "Hebrews 11:1", "text": "Faith is confidence in what we hope for..." },
+        { "ref": "Romans 10:17", "text": "Faith comes from hearing the message..." },
+        { "ref": "James 2:17", "text": "Faith by itself, if not accompanied by action..." },
+        { "ref": "Mark 11:22", "text": "Have faith in Elohiym" },
+        { "ref": "Ephesians 2:8", "text": "For by grace you have been saved through faith..." }
+      ]
+    },
+    {
+      "id": "hope",
+      "name": "Hope",
+      "description": "Confident expectation in God's promises",
+      "icon": "🌟",
+      "color": "yellow",
+      "verses": [
+        { "ref": "Romans 15:13", "text": "May the Elohiym of hope fill you with all joy..." },
+        { "ref": "Jeremiah 29:11", "text": "Plans to give you hope and a future..." },
+        { "ref": "Psalm 42:5", "text": "Put your hope in Elohiym..." },
+        { "ref": "1 Peter 1:3", "text": "Living hope through the resurrection..." },
+        { "ref": "Romans 5:5", "text": "Hope does not put us to shame..." }
+      ]
+    },
+    {
+      "id": "peace",
+      "name": "Peace",
+      "description": "Inner tranquility and harmony",
+      "icon": "🕊️",
+      "color": "green",
+      "verses": [
+        { "ref": "Philippians 4:7", "text": "The peace of Elohiym, which transcends understanding..." },
+        { "ref": "John 14:27", "text": "Peace I leave with you; my peace I give you..." },
+        { "ref": "Isaiah 26:3", "text": "Perfect peace for those whose minds are steadfast..." },
+        { "ref": "Romans 5:1", "text": "We have peace with Elohiym through Yahusha..." },
+        { "ref": "Colossians 3:15", "text": "Let the peace of Messiah rule in your hearts..." }
+      ]
+    },
+    {
+      "id": "joy",
+      "name": "Joy",
+      "description": "Deep gladness from God's presence",
+      "icon": "😊",
+      "color": "orange",
+      "verses": [
+        { "ref": "Nehemiah 8:10", "text": "The joy of Yahuah is your strength..." },
+        { "ref": "Psalm 16:11", "text": "You fill me with joy in your presence..." },
+        { "ref": "John 15:11", "text": "That your joy may be complete..." },
+        { "ref": "Philippians 4:4", "text": "Rejoice in Yahuah always..." },
+        { "ref": "Romans 15:13", "text": "Fill you with all joy and peace..." }
+      ]
+    },
+    {
+      "id": "prayer",
+      "name": "Prayer",
+      "description": "Communication with God",
+      "icon": "🙏",
+      "color": "purple",
+      "verses": [
+        { "ref": "1 Thessalonians 5:17", "text": "Pray continually..." },
+        { "ref": "Philippians 4:6", "text": "In every situation, by prayer and petition..." },
+        { "ref": "Matthew 6:9", "text": "Our Father in heaven, hallowed be your name..." },
+        { "ref": "James 5:16", "text": "The prayer of a righteous person is powerful..." },
+        { "ref": "1 John 5:14", "text": "Confidence in approaching Elohiym..." }
+      ]
+    },
+    {
+      "id": "strength",
+      "name": "Strength",
+      "description": "God's power in our weakness",
+      "icon": "💪",
+      "color": "teal",
+      "verses": [
+        { "ref": "Philippians 4:13", "text": "I can do all things through Him who strengthens me..." },
+        { "ref": "Isaiah 40:31", "text": "They will soar on wings like eagles..." },
+        { "ref": "2 Corinthians 12:9", "text": "My grace is sufficient for you..." },
+        { "ref": "Psalm 46:1", "text": "Elohiym is our refuge and strength..." },
+        { "ref": "Nehemiah 8:10", "text": "The joy of Yahuah is your strength..." }
+      ]
+    },
+    {
+      "id": "forgiveness",
+      "name": "Forgiveness",
+      "description": "God's mercy and pardon",
+      "icon": "🤲",
+      "color": "pink",
+      "verses": [
+        { "ref": "1 John 1:9", "text": "He is faithful and just to forgive us..." },
+        { "ref": "Ephesians 4:32", "text": "Forgiving each other, just as Elohiym forgave you..." },
+        { "ref": "Matthew 6:14", "text": "If you forgive others their trespasses..." },
+        { "ref": "Psalm 103:12", "text": "As far as the east is from the west..." },
+        { "ref": "Colossians 3:13", "text": "Forgive as Yahuah forgave you..." }
+      ]
+    },
+    {
+      "id": "wisdom",
+      "name": "Wisdom",
+      "description": "Divine insight and understanding",
+      "icon": "🦉",
+      "color": "indigo",
+      "verses": [
+        { "ref": "James 1:5", "text": "If any of you lacks wisdom, ask Elohiym..." },
+        { "ref": "Proverbs 3:5", "text": "Trust in Yahuah with all your heart..." },
+        { "ref": "Proverbs 9:10", "text": "The fear of Yahuah is the beginning of wisdom..." },
+        { "ref": "Colossians 2:3", "text": "All the treasures of wisdom and knowledge..." },
+        { "ref": "Proverbs 2:6", "text": "For Yahuah gives wisdom..." }
+      ]
+    },
+    {
+      "id": "salvation",
+      "name": "Salvation",
+      "description": "God's gift of eternal life",
+      "icon": "✨",
+      "color": "gold",
+      "verses": [
+        { "ref": "Ephesians 2:8", "text": "By grace you have been saved through faith..." },
+        { "ref": "Romans 10:9", "text": "If you confess with your mouth..." },
+        { "ref": "John 3:16", "text": "Whoever believes in Him shall not perish..." },
+        { "ref": "Acts 4:12", "text": "Salvation is found in no one else..." },
+        { "ref": "Titus 3:5", "text": "He saved us, not by works..." }
+      ]
+    },
+    {
+      "id": "trust",
+      "name": "Trust",
+      "description": "Relying on God's faithfulness",
+      "icon": "🛡️",
+      "color": "cyan",
+      "verses": [
+        { "ref": "Proverbs 3:5", "text": "Trust in Yahuah with all your heart..." },
+        { "ref": "Psalm 56:3", "text": "When I am afraid, I put my trust in you..." },
+        { "ref": "Isaiah 26:4", "text": "Trust in Yahuah forever..." },
+        { "ref": "Nahum 1:7", "text": "Yahuah is good, a refuge in times of trouble..." },
+        { "ref": "Psalm 37:5", "text": "Commit your way to Yahuah; trust in Him..." }
+      ]
+    },
+    {
+      "id": "guidance",
+      "name": "Guidance",
+      "description": "God's direction for our lives",
+      "icon": "🧭",
+      "color": "emerald",
+      "verses": [
+        { "ref": "Psalm 32:8", "text": "I will instruct you and teach you the way..." },
+        { "ref": "Proverbs 3:6", "text": "In all your ways acknowledge Him..." },
+        { "ref": "Isaiah 30:21", "text": "Your ears will hear a voice behind you..." },
+        { "ref": "John 16:13", "text": "The Spirit will guide you into all truth..." },
+        { "ref": "Psalm 119:105", "text": "Your word is a lamp to my feet..." }
+      ]
+    }
+  ]
+}
+

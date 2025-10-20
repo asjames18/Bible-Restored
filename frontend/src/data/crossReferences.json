@@ -1,0 +1,93 @@
+{
+  "crossReferences": {
+    "Genesis 1:1": [
+      { "ref": "John 1:1", "text": "In the beginning was the Word", "relationship": "parallel" },
+      { "ref": "Hebrews 11:3", "text": "By faith we understand the universe was formed", "relationship": "explanation" },
+      { "ref": "Psalm 33:6", "text": "By the word of Yahuah the heavens were made", "relationship": "support" }
+    ],
+    "Genesis 1:27": [
+      { "ref": "Genesis 5:1", "text": "In the likeness of Elohiym He made them", "relationship": "parallel" },
+      { "ref": "Matthew 19:4", "text": "He made them male and female", "relationship": "quote" },
+      { "ref": "Ephesians 4:24", "text": "Created in righteousness and holiness", "relationship": "explanation" }
+    ],
+    "Genesis 3:15": [
+      { "ref": "Romans 16:20", "text": "Elohiym will soon crush Satan under your feet", "relationship": "fulfillment" },
+      { "ref": "Galatians 4:4", "text": "Born of a woman, born under law", "relationship": "fulfillment" },
+      { "ref": "Revelation 12:9", "text": "The serpent who deceives the whole world", "relationship": "explanation" }
+    ],
+    "Psalm 23:1": [
+      { "ref": "John 10:11", "text": "I am the good shepherd", "relationship": "fulfillment" },
+      { "ref": "Ezekiel 34:23", "text": "I will set up one shepherd over them", "relationship": "prophecy" },
+      { "ref": "1 Peter 5:4", "text": "Chief Shepherd will appear", "relationship": "fulfillment" }
+    ],
+    "Isaiah 53:5": [
+      { "ref": "1 Peter 2:24", "text": "By His wounds you have been healed", "relationship": "quote" },
+      { "ref": "Matthew 8:17", "text": "He took our infirmities", "relationship": "fulfillment" },
+      { "ref": "Romans 4:25", "text": "Delivered over for our trespasses", "relationship": "fulfillment" }
+    ],
+    "Isaiah 7:14": [
+      { "ref": "Matthew 1:23", "text": "Virgin will conceive", "relationship": "fulfillment" },
+      { "ref": "Luke 1:31", "text": "You will conceive and bear a son", "relationship": "fulfillment" }
+    ],
+    "Jeremiah 31:31": [
+      { "ref": "Hebrews 8:8", "text": "I will make a new covenant", "relationship": "quote" },
+      { "ref": "Luke 22:20", "text": "This cup is the new covenant", "relationship": "fulfillment" },
+      { "ref": "2 Corinthians 3:6", "text": "Ministers of a new covenant", "relationship": "explanation" }
+    ],
+    "Matthew 5:3": [
+      { "ref": "Luke 6:20", "text": "Blessed are you who are poor", "relationship": "parallel" },
+      { "ref": "Isaiah 57:15", "text": "I dwell with the contrite and lowly", "relationship": "support" },
+      { "ref": "Psalm 51:17", "text": "Broken and contrite heart", "relationship": "support" }
+    ],
+    "John 3:16": [
+      { "ref": "Romans 5:8", "text": "Elohiym demonstrates His love", "relationship": "explanation" },
+      { "ref": "1 John 4:9", "text": "Elohiym sent His only Son", "relationship": "parallel" },
+      { "ref": "Titus 3:4", "text": "When kindness and love appeared", "relationship": "parallel" }
+    ],
+    "John 14:6": [
+      { "ref": "Acts 4:12", "text": "No other name under heaven", "relationship": "support" },
+      { "ref": "1 Timothy 2:5", "text": "One mediator between Elohiym and men", "relationship": "support" },
+      { "ref": "Hebrews 10:20", "text": "New and living way through the curtain", "relationship": "explanation" }
+    ],
+    "Romans 3:23": [
+      { "ref": "Romans 5:12", "text": "Sin entered the world through one man", "relationship": "explanation" },
+      { "ref": "1 John 1:8", "text": "If we claim to be without sin", "relationship": "support" },
+      { "ref": "Ecclesiastes 7:20", "text": "Not a righteous man on earth", "relationship": "support" }
+    ],
+    "Romans 6:23": [
+      { "ref": "James 1:15", "text": "Sin gives birth to death", "relationship": "explanation" },
+      { "ref": "John 3:36", "text": "Whoever believes has eternal life", "relationship": "parallel" },
+      { "ref": "Ephesians 2:8", "text": "By grace you have been saved", "relationship": "explanation" }
+    ],
+    "Romans 8:28": [
+      { "ref": "Genesis 50:20", "text": "Intended for evil but Elohiym meant it for good", "relationship": "example" },
+      { "ref": "Philippians 1:12", "text": "What happened served to advance the gospel", "relationship": "example" },
+      { "ref": "Jeremiah 29:11", "text": "Plans to prosper you", "relationship": "support" }
+    ],
+    "Ephesians 2:8": [
+      { "ref": "Romans 3:24", "text": "Justified freely by His grace", "relationship": "parallel" },
+      { "ref": "Titus 3:5", "text": "Not by works but by His mercy", "relationship": "parallel" },
+      { "ref": "Romans 11:6", "text": "If by grace, no longer by works", "relationship": "explanation" }
+    ],
+    "Philippians 4:13": [
+      { "ref": "2 Corinthians 12:9", "text": "My grace is sufficient", "relationship": "support" },
+      { "ref": "1 Timothy 1:12", "text": "He strengthens me", "relationship": "parallel" },
+      { "ref": "Colossians 1:11", "text": "Strengthened with all power", "relationship": "support" }
+    ],
+    "Revelation 21:4": [
+      { "ref": "Isaiah 25:8", "text": "He will swallow up death forever", "relationship": "prophecy" },
+      { "ref": "1 Corinthians 15:54", "text": "Death is swallowed up in victory", "relationship": "parallel" },
+      { "ref": "Revelation 7:17", "text": "Elohiym will wipe away every tear", "relationship": "parallel" }
+    ]
+  },
+  "relationshipTypes": {
+    "parallel": { "label": "Parallel Passage", "icon": "↔️", "color": "blue" },
+    "fulfillment": { "label": "Fulfillment", "icon": "✓", "color": "green" },
+    "prophecy": { "label": "Prophecy", "icon": "🔮", "color": "purple" },
+    "quote": { "label": "Direct Quote", "icon": "\"", "color": "orange" },
+    "explanation": { "label": "Explanation", "icon": "💡", "color": "yellow" },
+    "support": { "label": "Supporting Verse", "icon": "🔗", "color": "gray" },
+    "example": { "label": "Example", "icon": "📖", "color": "teal" }
+  }
+}
+
