@@ -15,7 +15,10 @@ import { prefetchAdjacentChapters } from '../lib/cacheManager';
 export default function Reader() {
   const { translation, book, chapter, verse } = useParams();
   const navigate = useNavigate();
-  const [isFocusMode, setIsFocusMode] = useState(false);
+  // Focus mode state - persist across navigation
+  const [isFocusMode, setIsFocusMode] = useState(() => {
+    return localStorage.getItem('bible-focus-mode') === 'true';
+  });
 
   // Debug URL parameters (commented out to reduce console spam)
   // console.log('Current URL params:', { translation, book, chapter, verse });
@@ -168,9 +171,12 @@ export default function Reader() {
       } else if (e.key === '/') {
         navigate('/search');
       } else if (e.key === 'f' || e.key === 'F') {
-        setIsFocusMode(!isFocusMode);
+        const newFocusMode = !isFocusMode;
+        setIsFocusMode(newFocusMode);
+        localStorage.setItem('bible-focus-mode', newFocusMode.toString());
       } else if (e.key === 'Escape') {
         setIsFocusMode(false);
+        localStorage.setItem('bible-focus-mode', 'false');
       }
     };
 
@@ -254,7 +260,11 @@ export default function Reader() {
       
       {/* Focus Mode Toggle - Repositioned for mobile thumb reach */}
       <motion.button
-        onClick={() => setIsFocusMode(!isFocusMode)}
+        onClick={() => {
+          const newFocusMode = !isFocusMode;
+          setIsFocusMode(newFocusMode);
+          localStorage.setItem('bible-focus-mode', newFocusMode.toString());
+        }}
         className={`fixed md:top-4 md:right-4 bottom-24 right-4 md:bottom-auto z-50 btn-touch p-3 rounded-full shadow-lg transition-all duration-200 ${
           isFocusMode ? 'bg-theme-accent text-white' : 'bg-theme-surface text-theme-text'
         }`}
