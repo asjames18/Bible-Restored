@@ -8,7 +8,6 @@ import TopBar from '../components/TopBar';
 import Verse from '../components/Verse';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ChapterSummary from '../components/ChapterSummary';
-import { useSwipeGesture } from '../hooks/useSwipeGesture';
 import { useScrollRestoration } from '../hooks/useScrollRestoration';
 import { useReadingStreak } from '../hooks/useReadingStreak';
 import { prefetchAdjacentChapters } from '../lib/cacheManager';
@@ -55,12 +54,13 @@ export default function Reader() {
     }
   }, [bible, book, chapter, translation, navigate]);
 
-  // Swipe gestures for mobile navigation
-  useSwipeGesture({
-    onSwipeLeft: () => goToNextChapter(),
-    onSwipeRight: () => goToPrevChapter(),
-    threshold: 75,
-  });
+  // Swipe gestures for mobile navigation (disabled - was blocking scroll)
+  // useSwipeGesture({
+  //   onSwipeLeft: () => goToNextChapter(),
+  //   onSwipeRight: () => goToPrevChapter(),
+  //   threshold: 75,
+  //   preventDefault: false,
+  // });
 
   // Initialize Bible on mount (run only once)
   useEffect(() => {
