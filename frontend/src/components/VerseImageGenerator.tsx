@@ -166,10 +166,8 @@ export default function VerseImageGenerator({
                       className="w-full h-16 rounded-lg mb-2"
                       style={{
                         background: typeof theme.background === 'string' 
-                          ? theme.background.includes('gradient') 
-                            ? theme.background.replace('linear-gradient', 'linear-gradient')
-                            : theme.background
-                          : theme.background,
+                          ? theme.background
+                          : undefined,
                       }}
                     />
                     <p className="text-sm font-medium text-theme-text">{theme.name}</p>
@@ -200,7 +198,7 @@ export default function VerseImageGenerator({
                 Download
               </motion.button>
 
-              {navigator.share && (
+              {typeof navigator !== 'undefined' && navigator.share && (
                 <motion.button
                   onClick={handleShare}
                   disabled={!generatedImage}

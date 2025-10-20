@@ -15,7 +15,7 @@ interface SearchResult {
 
 export default function Concordance() {
   const navigate = useNavigate();
-  const { bibleData, translationId, setRef } = useBibleStore();
+  const { bible, translationId, setRef } = useBibleStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -23,7 +23,7 @@ export default function Concordance() {
   const [searchPerformed, setSearchPerformed] = useState(false);
 
   const handleSearch = () => {
-    if (!searchTerm.trim() || !bibleData) return;
+    if (!searchTerm.trim() || !bible) return;
 
     setIsSearching(true);
     setSearchPerformed(true);
@@ -31,7 +31,7 @@ export default function Concordance() {
     let totalCount = 0;
 
     // Search through all books
-    Object.entries(bibleData).forEach(([bookName, chapters]: [string, any]) => {
+    Object.entries(bible).forEach(([bookName, chapters]: [string, any]) => {
       if (bookName === 'metadata') return;
 
       Object.entries(chapters).forEach(([chapterNum, verses]: [string, any]) => {
