@@ -10,6 +10,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ChapterSummary from '../components/ChapterSummary';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
 import { useScrollRestoration } from '../hooks/useScrollRestoration';
+import { useReadingStreak } from '../hooks/useReadingStreak';
 import { prefetchAdjacentChapters } from '../lib/cacheManager';
 
 export default function Reader() {
@@ -33,6 +34,7 @@ export default function Reader() {
   } = useBibleStore();
   
   const { addToHistory } = useHistoryStore();
+  const { updateStreak } = useReadingStreak();
 
   // Scroll restoration
   useScrollRestoration();
@@ -86,8 +88,10 @@ export default function Reader() {
       setRef(book, chapter, verse);
       // Track reading history
       addToHistory(book, chapter, verse);
+      // Update reading streak
+      updateStreak();
     }
-  }, [translation, book, chapter, verse, bible, setRef, addToHistory]);
+  }, [translation, book, chapter, verse, bible, setRef, addToHistory, updateStreak]);
 
   // Navigate when store chapter/book changes (from nextChapter/prevChapter)
   useEffect(() => {
