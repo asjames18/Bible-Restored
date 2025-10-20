@@ -1,11 +1,13 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useBibleStore } from '../store/bibleStore';
+import { useHistoryStore } from '../store/historyStore';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Focus, X } from 'lucide-react';
+import { Focus, X, Info } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import Verse from '../components/Verse';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ChapterSummary from '../components/ChapterSummary';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
 
 export default function Reader() {
@@ -27,6 +29,8 @@ export default function Reader() {
     verse: storeVerse,
     translationId
   } = useBibleStore();
+  
+  const { addToHistory } = useHistoryStore();
 
   // Swipe gestures for mobile navigation
   useSwipeGesture({
@@ -57,12 +61,14 @@ export default function Reader() {
     initializeBible();
   }, [bible, translation, translationId, loadCurrentBible, setTranslation]);
 
-  // Update ref when navigating
+  // Update ref when navigating and track history
   useEffect(() => {
     if (translation && book && chapter && bible) {
       setRef(book, chapter, verse);
+      // Track reading history
+      addToHistory(book, chapter, verse);
     }
-  }, [translation, book, chapter, verse, bible, setRef]);
+  }, [translation, book, chapter, verse, bible, setRef, addToHistory]);
 
   // Navigate when store chapter/book changes (from nextChapter/prevChapter)
   useEffect(() => {
@@ -204,7 +210,19 @@ export default function Reader() {
           {verse && (
             <p className="text-theme-accent font-medium text-sm md:text-base">Verse {verse}</p>
           )}
+          <motion.button
+            onClick={() => navigate(`/book-overview/${book}`)}
+            className="mt-2 text-sm text-theme-text/60 hover:text-theme-accent transition-colors flex items-center gap-1 mx-auto"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Info className="w-4 h-4" />
+            View Book Overview
+          </motion.button>
         </motion.div>
+
+        {/* Chapter Summary */}
+        <ChapterSummary book={book!} chapter={chapter!} />
 
         {/* Verses with Chapter Transition */}
         <AnimatePresence mode="wait">

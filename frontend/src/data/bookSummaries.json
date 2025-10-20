@@ -1,0 +1,597 @@
+{
+  "Genesis": {
+    "author": "Moses",
+    "date": "c. 1445-1405 BC",
+    "purpose": "To record Elohiym's creation of the world and His desire to have a people set apart to worship Him",
+    "overview": "Genesis (meaning 'beginnings') chronicles creation, the fall of humanity, the flood, and the patriarchs Abraham, Isaac, Jacob, and Joseph. It establishes the covenant relationship between Elohiym and His chosen people.",
+    "keyThemes": ["Creation", "Fall", "Covenant", "Promise", "Providence"],
+    "chapters": 50,
+    "testament": "Old"
+  },
+  "Exodus": {
+    "author": "Moses",
+    "date": "c. 1445-1405 BC",
+    "purpose": "To record Israel's deliverance from Egypt and the establishment of the covenant at Sinai",
+    "overview": "Exodus tells of Israel's slavery in Egypt, Moses' leadership, the plagues, the Passover, the Red Sea crossing, and the giving of the Law at Mount Sinai including the Tabernacle instructions.",
+    "keyThemes": ["Redemption", "Law", "Covenant", "Worship", "Divine Presence"],
+    "chapters": 40,
+    "testament": "Old"
+  },
+  "Leviticus": {
+    "author": "Moses",
+    "date": "c. 1445-1405 BC",
+    "purpose": "To provide instructions for worship and living as Yahuah's holy people",
+    "overview": "Leviticus details the sacrificial system, priesthood regulations, ceremonial laws, and holiness code. It emphasizes that Elohiym's people must be holy because He is holy.",
+    "keyThemes": ["Holiness", "Sacrifice", "Priesthood", "Purity", "Worship"],
+    "chapters": 27,
+    "testament": "Old"
+  },
+  "Numbers": {
+    "author": "Moses",
+    "date": "c. 1445-1405 BC",
+    "purpose": "To record Israel's wilderness wanderings and Elohiym's faithfulness despite their rebellion",
+    "overview": "Numbers chronicles Israel's journey from Sinai to the edge of the Promised Land, including census counts, rebellions, and the consequences of unbelief.",
+    "keyThemes": ["Faithfulness", "Rebellion", "Judgment", "Wandering", "Second Chances"],
+    "chapters": 36,
+    "testament": "Old"
+  },
+  "Deuteronomy": {
+    "author": "Moses",
+    "date": "c. 1405 BC",
+    "purpose": "To remind the new generation of Elohiym's covenant and prepare them to enter Canaan",
+    "overview": "Moses' farewell addresses restating the law, warning against idolatry, and calling Israel to love and obey Yahuah. Emphasizes the Shema and covenant renewal.",
+    "keyThemes": ["Love", "Obedience", "Covenant Renewal", "Blessing and Curse", "Loyalty"],
+    "chapters": 34,
+    "testament": "Old"
+  },
+  "Joshua": {
+    "author": "Unknown (possibly Joshua)",
+    "date": "c. 1400-1370 BC",
+    "purpose": "To demonstrate Yahuah's faithfulness in giving Israel the Promised Land",
+    "overview": "Under Joshua's leadership, Israel conquers Canaan, divides the land among the tribes, and renews their covenant with Yahuah at Shechem.",
+    "keyThemes": ["Conquest", "Obedience", "Courage", "Faithfulness", "Inheritance"],
+    "chapters": 24,
+    "testament": "Old"
+  },
+  "Judges": {
+    "author": "Unknown (possibly Samuel)",
+    "date": "c. 1050-1000 BC",
+    "purpose": "To show the consequences of Israel's unfaithfulness and the cycle of sin, judgment, and deliverance",
+    "overview": "Chronicles the period between Joshua and Samuel when Israel repeatedly fell into idolatry and was delivered by judges whom Elohiym raised up.",
+    "keyThemes": ["Apostasy", "Deliverance", "Cycle of Sin", "Leadership", "Consequences"],
+    "chapters": 21,
+    "testament": "Old"
+  },
+  "Ruth": {
+    "author": "Unknown (possibly Samuel)",
+    "date": "c. 1050-1000 BC",
+    "purpose": "To demonstrate Elohiym's providence and sovereign care through loyal love",
+    "overview": "The beautiful story of Ruth, a Moabite woman who shows covenant loyalty to her mother-in-law and becomes an ancestor of David and the Messiah.",
+    "keyThemes": ["Loyalty", "Providence", "Redemption", "Faith", "Kinsman-Redeemer"],
+    "chapters": 4,
+    "testament": "Old"
+  },
+  "1 Samuel": {
+    "author": "Unknown (possibly Samuel, Nathan, Gad)",
+    "date": "c. 1050-930 BC",
+    "purpose": "To record Israel's transition from judges to kingship under Samuel, Saul, and David",
+    "overview": "Chronicles Samuel's ministry, Saul's rise and fall, and David's anointing and rise to power, emphasizing that Yahuah seeks a heart fully devoted to Him.",
+    "keyThemes": ["Leadership", "Obedience", "Heart Devotion", "Kingship", "Anointing"],
+    "chapters": 31,
+    "testament": "Old"
+  },
+  "2 Samuel": {
+    "author": "Unknown (possibly Nathan, Gad)",
+    "date": "c. 1050-930 BC",
+    "purpose": "To record David's reign as king and establish the Davidic covenant",
+    "overview": "David's successes and failures as king, including his sin with Bathsheba, and Elohiym's covenant promise of an eternal dynasty.",
+    "keyThemes": ["Covenant", "Kingdom", "Sin and Consequences", "Repentance", "Messiah's Lineage"],
+    "chapters": 24,
+    "testament": "Old"
+  },
+  "1 Kings": {
+    "author": "Unknown",
+    "date": "c. 560-540 BC",
+    "purpose": "To explain the division of Israel and Judah's decline through unfaithfulness",
+    "overview": "Chronicles Solomon's reign, temple construction, the kingdom's division, and the ministries of Elijah and other prophets during a time of increasing idolatry.",
+    "keyThemes": ["Wisdom", "Apostasy", "Division", "Temple", "Prophetic Ministry"],
+    "chapters": 22,
+    "testament": "Old"
+  },
+  "2 Kings": {
+    "author": "Unknown",
+    "date": "c. 560-540 BC",
+    "purpose": "To record the exile of both kingdoms as judgment for persistent sin",
+    "overview": "Continues the history of the divided kingdom, featuring Elisha's ministry, the fall of Israel to Assyria, and Judah's fall to Babylon.",
+    "keyThemes": ["Judgment", "Exile", "Prophetic Warnings", "Apostasy", "Consequences"],
+    "chapters": 25,
+    "testament": "Old"
+  },
+  "1 Chronicles": {
+    "author": "Ezra (traditional)",
+    "date": "c. 450-430 BC",
+    "purpose": "To encourage post-exilic Israel by recounting Elohiym's faithfulness and the importance of proper worship",
+    "overview": "Genealogies from Adam to David, David's reign with emphasis on preparations for the temple, establishing proper worship.",
+    "keyThemes": ["Genealogy", "Worship", "Temple", "Davidic Line", "Faithfulness"],
+    "chapters": 29,
+    "testament": "Old"
+  },
+  "2 Chronicles": {
+    "author": "Ezra (traditional)",
+    "date": "c. 450-430 BC",
+    "purpose": "To emphasize Judah's spiritual history and the centrality of the temple",
+    "overview": "Focuses on Judah's kings, temple history, and the nation's relationship with Yahuah, ending with Cyrus's decree to rebuild the temple.",
+    "keyThemes": ["Temple", "Reform", "Prayer", "Revival", "Restoration"],
+    "chapters": 36,
+    "testament": "Old"
+  },
+  "Ezra": {
+    "author": "Ezra",
+    "date": "c. 450-430 BC",
+    "purpose": "To record the return from exile and the rebuilding of the temple",
+    "overview": "Chronicles the first returns from Babylonian exile, temple reconstruction, and Ezra's reforms emphasizing separation from pagan practices and return to the Law.",
+    "keyThemes": ["Return", "Restoration", "Reform", "Scripture", "Separation"],
+    "chapters": 10,
+    "testament": "Old"
+  },
+  "Nehemiah": {
+    "author": "Nehemiah",
+    "date": "c. 445-430 BC",
+    "purpose": "To record the rebuilding of Jerusalem's walls and spiritual renewal",
+    "overview": "Nehemiah leads the rebuilding of Jerusalem's walls despite opposition, followed by spiritual renewal through public reading of the Law and covenant renewal.",
+    "keyThemes": ["Leadership", "Opposition", "Prayer", "Renewal", "Perseverance"],
+    "chapters": 13,
+    "testament": "Old"
+  },
+  "Esther": {
+    "author": "Unknown",
+    "date": "c. 465-424 BC",
+    "purpose": "To demonstrate Elohiym's providence in protecting His people",
+    "overview": "The story of Esther, a Jewish queen in Persia, who risks her life to save her people from genocide, revealing Elohiym's hidden providence.",
+    "keyThemes": ["Providence", "Courage", "Deliverance", "Divine Timing", "Identity"],
+    "chapters": 10,
+    "testament": "Old"
+  },
+  "Job": {
+    "author": "Unknown",
+    "date": "Unknown (patriarchal period?)",
+    "purpose": "To address the problem of innocent suffering and Elohiym's sovereignty",
+    "overview": "Job's story of extreme suffering, his dialogues with friends about suffering's meaning, and Elohiym's revelation of His wisdom and sovereignty.",
+    "keyThemes": ["Suffering", "Sovereignty", "Faith", "Wisdom", "Divine Justice"],
+    "chapters": 42,
+    "testament": "Old"
+  },
+  "Psalms": {
+    "author": "Multiple (David, Asaph, Sons of Korah, etc.)",
+    "date": "c. 1410-430 BC",
+    "purpose": "To provide a hymnal and prayer book for Israel's worship",
+    "overview": "A collection of 150 songs and prayers expressing praise, lament, thanksgiving, and wisdom. Central to Israel's worship and rich in Messianic prophecy.",
+    "keyThemes": ["Worship", "Prayer", "Praise", "Lament", "Trust"],
+    "chapters": 150,
+    "testament": "Old"
+  },
+  "Proverbs": {
+    "author": "Solomon (primarily)",
+    "date": "c. 971-686 BC",
+    "purpose": "To provide practical wisdom for godly living",
+    "overview": "A collection of wise sayings and instructions emphasizing the fear of Yahuah as the beginning of wisdom and offering guidance for all areas of life.",
+    "keyThemes": ["Wisdom", "Fear of Yahuah", "Character", "Discipline", "Righteousness"],
+    "chapters": 31,
+    "testament": "Old"
+  },
+  "Ecclesiastes": {
+    "author": "Solomon (traditional)",
+    "date": "c. 935 BC",
+    "purpose": "To demonstrate the futility of life without Elohiym",
+    "overview": "Solomon's reflection on life's meaning, concluding that apart from fearing Elohiym and keeping His commandments, everything is meaningless.",
+    "keyThemes": ["Meaninglessness", "Purpose", "Fear of Elohiym", "Wisdom", "Eternity"],
+    "chapters": 12,
+    "testament": "Old"
+  },
+  "Song of Solomon": {
+    "author": "Solomon (traditional)",
+    "date": "c. 971-931 BC",
+    "purpose": "To celebrate marital love as Elohiym's gift and picture His love for His people",
+    "overview": "A poetic dialogue celebrating romantic love between bride and groom, often interpreted as picturing Messiah's love for His bride, the assembly.",
+    "keyThemes": ["Love", "Romance", "Marriage", "Beauty", "Covenant Relationship"],
+    "chapters": 8,
+    "testament": "Old"
+  },
+  "Isaiah": {
+    "author": "Isaiah",
+    "date": "c. 740-680 BC",
+    "purpose": "To call Judah to faithfulness and proclaim both judgment and future restoration through Messiah",
+    "overview": "Prophecies of judgment on Judah and nations, comfort for the exiles, and detailed Messianic prophecies including the Suffering Servant.",
+    "keyThemes": ["Holiness", "Salvation", "Messiah", "Judgment", "Restoration"],
+    "chapters": 66,
+    "testament": "Old"
+  },
+  "Jeremiah": {
+    "author": "Jeremiah",
+    "date": "c. 627-585 BC",
+    "purpose": "To warn Judah of coming judgment and call for repentance",
+    "overview": "The 'weeping prophet' warns of Babylon's invasion, laments Judah's sin, and promises a new covenant and future restoration.",
+    "keyThemes": ["Judgment", "Repentance", "New Covenant", "Faithfulness", "Lament"],
+    "chapters": 52,
+    "testament": "Old"
+  },
+  "Lamentations": {
+    "author": "Jeremiah (traditional)",
+    "date": "c. 586 BC",
+    "purpose": "To mourn Jerusalem's destruction and affirm Yahuah's faithfulness despite judgment",
+    "overview": "Five poetic laments over Jerusalem's fall, expressing deep grief while affirming Elohiym's steadfast love and sovereignty.",
+    "keyThemes": ["Grief", "Judgment", "Faithfulness", "Hope", "Suffering"],
+    "chapters": 5,
+    "testament": "Old"
+  },
+  "Ezekiel": {
+    "author": "Ezekiel",
+    "date": "c. 593-571 BC",
+    "purpose": "To announce judgment on Jerusalem and promise future restoration",
+    "overview": "Visionary prophecies from exile in Babylon, including the valley of dry bones and the vision of a restored temple and renewed people.",
+    "keyThemes": ["Glory of Elohiym", "Judgment", "Restoration", "New Heart", "Visions"],
+    "chapters": 48,
+    "testament": "Old"
+  },
+  "Daniel": {
+    "author": "Daniel",
+    "date": "c. 605-535 BC",
+    "purpose": "To encourage exiles with Elohiym's sovereignty over world kingdoms",
+    "overview": "Daniel and friends' faithfulness in Babylon, and prophetic visions of successive kingdoms and the coming eternal kingdom of Elohiym.",
+    "keyThemes": ["Faithfulness", "Sovereignty", "Prophecy", "Kingdom", "Courage"],
+    "chapters": 12,
+    "testament": "Old"
+  },
+  "Hosea": {
+    "author": "Hosea",
+    "date": "c. 755-715 BC",
+    "purpose": "To illustrate Elohiym's faithful love despite Israel's spiritual adultery",
+    "overview": "Hosea's marriage to unfaithful Gomer pictures Israel's unfaithfulness and Yahuah's persistent, covenant love and call to return.",
+    "keyThemes": ["Covenant Love", "Unfaithfulness", "Restoration", "Knowledge of Elohiym", "Return"],
+    "chapters": 14,
+    "testament": "Old"
+  },
+  "Joel": {
+    "author": "Joel",
+    "date": "c. 835-800 BC (uncertain)",
+    "purpose": "To call for repentance and announce the Day of Yahuah",
+    "overview": "A locust plague pictures coming judgment, followed by promises of restoration and the outpouring of the Ruach on all flesh.",
+    "keyThemes": ["Day of Yahuah", "Repentance", "Judgment", "Restoration", "Spirit Outpouring"],
+    "chapters": 3,
+    "testament": "Old"
+  },
+  "Amos": {
+    "author": "Amos",
+    "date": "c. 760-750 BC",
+    "purpose": "To proclaim judgment on Israel for social injustice and empty religiosity",
+    "overview": "The shepherd-prophet denounces Israel's oppression of the poor and warns of exile, while promising future restoration of David's fallen tent.",
+    "keyThemes": ["Justice", "Judgment", "Social Righteousness", "True Worship", "Restoration"],
+    "chapters": 9,
+    "testament": "Old"
+  },
+  "Obadiah": {
+    "author": "Obadiah",
+    "date": "c. 586 BC (uncertain)",
+    "purpose": "To announce judgment on Edom for violence against Judah",
+    "overview": "The shortest Old Testament book pronounces judgment on Edom for pride and violence against Israel, promising Yahuah's kingdom will prevail.",
+    "keyThemes": ["Judgment", "Pride", "Violence", "Kingdom", "Justice"],
+    "chapters": 1,
+    "testament": "Old"
+  },
+  "Jonah": {
+    "author": "Jonah",
+    "date": "c. 760 BC",
+    "purpose": "To demonstrate Elohiym's mercy extends even to Israel's enemies",
+    "overview": "Jonah's reluctant mission to Nineveh reveals Elohiym's compassion for all nations and challenges narrow nationalism and self-righteousness.",
+    "keyThemes": ["Mercy", "Compassion", "Obedience", "Repentance", "Universal Love"],
+    "chapters": 4,
+    "testament": "Old"
+  },
+  "Micah": {
+    "author": "Micah",
+    "date": "c. 735-700 BC",
+    "purpose": "To denounce injustice and predict judgment, while promising a coming ruler from Bethlehem",
+    "overview": "Alternates between pronouncements of judgment for sin and promises of restoration, including the famous Bethlehem prophecy of Messiah's birthplace.",
+    "keyThemes": ["Justice", "Judgment", "Messiah", "Humility", "Restoration"],
+    "chapters": 7,
+    "testament": "Old"
+  },
+  "Nahum": {
+    "author": "Nahum",
+    "date": "c. 663-612 BC",
+    "purpose": "To announce Nineveh's destruction as judgment for cruelty",
+    "overview": "Proclaims judgment on Assyria's capital Nineveh for its violence, assuring Judah of Yahuah's justice and care for His people.",
+    "keyThemes": ["Judgment", "Justice", "Vengeance", "Elohiym's Goodness", "Wrath"],
+    "chapters": 3,
+    "testament": "Old"
+  },
+  "Habakkuk": {
+    "author": "Habakkuk",
+    "date": "c. 609-605 BC",
+    "purpose": "To address the problem of evil and affirm that the righteous will live by faith",
+    "overview": "The prophet questions why Elohiym allows evil and will use wicked Babylon as His instrument, learning to trust in Yahuah's sovereign plan.",
+    "keyThemes": ["Faith", "Justice", "Sovereignty", "Trust", "Theodicy"],
+    "chapters": 3,
+    "testament": "Old"
+  },
+  "Zephaniah": {
+    "author": "Zephaniah",
+    "date": "c. 640-627 BC",
+    "purpose": "To warn of the Day of Yahuah and call for humble seeking of Elohiym",
+    "overview": "Announces the coming Day of Yahuah with universal judgment, calling Judah to seek righteousness and promising future blessing for a remnant.",
+    "keyThemes": ["Day of Yahuah", "Judgment", "Remnant", "Restoration", "Seeking Elohiym"],
+    "chapters": 3,
+    "testament": "Old"
+  },
+  "Haggai": {
+    "author": "Haggai",
+    "date": "c. 520 BC",
+    "purpose": "To motivate the returned exiles to rebuild the temple",
+    "overview": "Calls the people to prioritize rebuilding Yahuah's house, promising His presence and blessing for obedience.",
+    "keyThemes": ["Priorities", "Temple", "Blessing", "Obedience", "Encouragement"],
+    "chapters": 2,
+    "testament": "Old"
+  },
+  "Zechariah": {
+    "author": "Zechariah",
+    "date": "c. 520-480 BC",
+    "purpose": "To encourage temple rebuilding and reveal future Messianic kingdom",
+    "overview": "Eight night visions encourage temple rebuilding, followed by prophecies of Messiah's first and second comings and final restoration.",
+    "keyThemes": ["Restoration", "Messiah", "Temple", "Kingdom", "Divine Warrior"],
+    "chapters": 14,
+    "testament": "Old"
+  },
+  "Malachi": {
+    "author": "Malachi",
+    "date": "c. 433-424 BC",
+    "purpose": "To confront post-exilic spiritual apathy and promise the messenger who will prepare Messiah's way",
+    "overview": "The final Old Testament book rebukes priests and people for corruption while promising Elijah's return and the coming Day of Yahuah.",
+    "keyThemes": ["Covenant Love", "Worship", "Tithes", "Elijah", "Day of Yahuah"],
+    "chapters": 4,
+    "testament": "Old"
+  },
+  "Matthew": {
+    "author": "Matthew",
+    "date": "c. AD 50-70",
+    "purpose": "To present Yahusha as the Messiah, King of the Jews, and fulfill Old Testament prophecy",
+    "overview": "Emphasizes Yahusha's fulfillment of Messianic prophecy, His teachings (including the Sermon on the Mount), and His rightful claim as Israel's King.",
+    "keyThemes": ["Messiah", "Kingdom", "Fulfillment", "Teachings", "King"],
+    "chapters": 28,
+    "testament": "New"
+  },
+  "Mark": {
+    "author": "John Mark",
+    "date": "c. AD 55-65",
+    "purpose": "To present Yahusha as the Suffering Servant who came to serve and give His life",
+    "overview": "The shortest Gospel emphasizes Yahusha's actions and servanthood, moving rapidly through His ministry to His sacrificial death and resurrection.",
+    "keyThemes": ["Servant", "Action", "Sacrifice", "Discipleship", "Suffering"],
+    "chapters": 16,
+    "testament": "New"
+  },
+  "Luke": {
+    "author": "Luke",
+    "date": "c. AD 60-62",
+    "purpose": "To provide an orderly account of Yahusha's life for Gentile audiences",
+    "overview": "The most comprehensive Gospel account, emphasizing Yahusha's humanity, compassion for outcasts, and prayer life. Companion to Acts.",
+    "keyThemes": ["Savior", "Compassion", "Prayer", "Joy", "Universal Salvation"],
+    "chapters": 24,
+    "testament": "New"
+  },
+  "John": {
+    "author": "John",
+    "date": "c. AD 85-95",
+    "purpose": "To prove that Yahusha is the Son of Elohiym so that readers might believe and have life",
+    "overview": "The theological Gospel emphasizes Yahusha's deity through seven signs and seven 'I AM' statements, culminating in His death and resurrection.",
+    "keyThemes": ["Deity", "Belief", "Life", "Light", "Love"],
+    "chapters": 21,
+    "testament": "New"
+  },
+  "Acts": {
+    "author": "Luke",
+    "date": "c. AD 62",
+    "purpose": "To record the birth and growth of the early assembly through the Holy Spirit's power",
+    "overview": "Chronicles the Ruach's empowerment at Pentecost, the spread of the gospel from Jerusalem to Rome, and the ministries of Peter and Paul.",
+    "keyThemes": ["Holy Spirit", "Mission", "Church Growth", "Witness", "Persecution"],
+    "chapters": 28,
+    "testament": "New"
+  },
+  "Romans": {
+    "author": "Paul",
+    "date": "c. AD 57",
+    "purpose": "To present the gospel systematically: justification by faith and righteous living",
+    "overview": "Paul's most systematic theological treatise explaining salvation, sanctification, and Israel's place in Elohiym's plan.",
+    "keyThemes": ["Justification", "Faith", "Righteousness", "Grace", "Salvation"],
+    "chapters": 16,
+    "testament": "New"
+  },
+  "1 Corinthians": {
+    "author": "Paul",
+    "date": "c. AD 55",
+    "purpose": "To address divisions and moral problems in the Corinthian assembly",
+    "overview": "Corrects factionalism, sexual immorality, misuse of spiritual gifts, and confusion about resurrection while emphasizing love's supremacy.",
+    "keyThemes": ["Unity", "Purity", "Love", "Spiritual Gifts", "Resurrection"],
+    "chapters": 16,
+    "testament": "New"
+  },
+  "2 Corinthians": {
+    "author": "Paul",
+    "date": "c. AD 56",
+    "purpose": "To defend Paul's apostolic ministry and encourage generous giving",
+    "overview": "Paul defends his ministry, describes the new covenant's glory, and encourages the Corinthians in generous giving and reconciliation.",
+    "keyThemes": ["Ministry", "Suffering", "Comfort", "New Covenant", "Generosity"],
+    "chapters": 13,
+    "testament": "New"
+  },
+  "Galatians": {
+    "author": "Paul",
+    "date": "c. AD 49-55",
+    "purpose": "To defend the gospel of grace against legalism",
+    "overview": "Paul's passionate defense of justification by faith alone, warning against adding works to grace and calling believers to walk in the Spirit.",
+    "keyThemes": ["Grace", "Freedom", "Faith", "Spirit vs. Flesh", "Justification"],
+    "chapters": 6,
+    "testament": "New"
+  },
+  "Ephesians": {
+    "author": "Paul",
+    "date": "c. AD 60-62",
+    "purpose": "To explain the mystery of the assembly and believers' identity in Messiah",
+    "overview": "Describes the assembly's spiritual blessings, unity, and calling, with practical instructions for Spirit-filled living.",
+    "keyThemes": ["Unity", "Church", "Mystery", "Spiritual Blessings", "Spiritual Warfare"],
+    "chapters": 6,
+    "testament": "New"
+  },
+  "Philippians": {
+    "author": "Paul",
+    "date": "c. AD 61",
+    "purpose": "To express gratitude and encourage joy despite circumstances",
+    "overview": "Paul's joyful letter from prison encouraging humility, unity, and rejoicing, featuring the great Christ hymn.",
+    "keyThemes": ["Joy", "Humility", "Partnership", "Contentment", "Christ's Example"],
+    "chapters": 4,
+    "testament": "New"
+  },
+  "Colossians": {
+    "author": "Paul",
+    "date": "c. AD 60-62",
+    "purpose": "To combat false teaching by affirming Messiah's supremacy",
+    "overview": "Exalts Yahusha's preeminence over all creation and philosophy, warning against legalism and encouraging godly living.",
+    "keyThemes": ["Supremacy of Christ", "Fullness", "False Teaching", "New Life", "Wisdom"],
+    "chapters": 4,
+    "testament": "New"
+  },
+  "1 Thessalonians": {
+    "author": "Paul",
+    "date": "c. AD 51",
+    "purpose": "To encourage the young assembly and teach about Messiah's return",
+    "overview": "Paul commends the Thessalonians' faith, addresses concerns about deceased believers, and teaches about the Day of the Master.",
+    "keyThemes": ["Second Coming", "Hope", "Sanctification", "Perseverance", "Encouragement"],
+    "chapters": 5,
+    "testament": "New"
+  },
+  "2 Thessalonians": {
+    "author": "Paul",
+    "date": "c. AD 51-52",
+    "purpose": "To correct misunderstandings about the Day of the Master and encourage perseverance",
+    "overview": "Clarifies events preceding Messiah's return, encourages the persecuted believers, and addresses idleness in the assembly.",
+    "keyThemes": ["Second Coming", "Persecution", "Man of Lawlessness", "Perseverance", "Work Ethic"],
+    "chapters": 3,
+    "testament": "New"
+  },
+  "1 Timothy": {
+    "author": "Paul",
+    "date": "c. AD 62-64",
+    "purpose": "To instruct Timothy in pastoral leadership and combat false teaching",
+    "overview": "Paul's pastoral letter giving instructions for assembly leadership, qualifications for elders and deacons, and combating false doctrine.",
+    "keyThemes": ["Leadership", "Sound Doctrine", "Church Order", "Pastoral Care", "Godliness"],
+    "chapters": 6,
+    "testament": "New"
+  },
+  "2 Timothy": {
+    "author": "Paul",
+    "date": "c. AD 67",
+    "purpose": "To encourage Timothy to remain faithful and continue Paul's work",
+    "overview": "Paul's final letter urging Timothy to guard the gospel, endure suffering, and preach the Word faithfully.",
+    "keyThemes": ["Faithfulness", "Endurance", "Scripture", "Legacy", "Courage"],
+    "chapters": 4,
+    "testament": "New"
+  },
+  "Titus": {
+    "author": "Paul",
+    "date": "c. AD 62-64",
+    "purpose": "To guide Titus in establishing leadership and promoting sound doctrine in Crete",
+    "overview": "Instructions for appointing elders, combating false teaching, and living out the gospel in good works.",
+    "keyThemes": ["Leadership", "Sound Doctrine", "Good Works", "Grace", "Church Organization"],
+    "chapters": 3,
+    "testament": "New"
+  },
+  "Philemon": {
+    "author": "Paul",
+    "date": "c. AD 60-62",
+    "purpose": "To appeal for forgiveness and reconciliation for Onesimus, a runaway slave",
+    "overview": "A personal letter demonstrating Christian brotherhood, forgiveness, and the transforming power of the gospel in relationships.",
+    "keyThemes": ["Forgiveness", "Brotherhood", "Reconciliation", "Grace", "Transformation"],
+    "chapters": 1,
+    "testament": "New"
+  },
+  "Hebrews": {
+    "author": "Unknown",
+    "date": "c. AD 64-68",
+    "purpose": "To demonstrate Messiah's superiority and encourage perseverance in faith",
+    "overview": "Shows Yahusha's supremacy over angels, Moses, and the Levitical priesthood, warning against apostasy and encouraging faithful endurance.",
+    "keyThemes": ["Superiority of Christ", "Faith", "Endurance", "New Covenant", "Priesthood"],
+    "chapters": 13,
+    "testament": "New"
+  },
+  "James": {
+    "author": "James (Jesus' brother)",
+    "date": "c. AD 45-50",
+    "purpose": "To call believers to genuine faith demonstrated by works",
+    "overview": "Practical wisdom on living out faith through trials, taming the tongue, caring for the poor, and patient endurance.",
+    "keyThemes": ["Faith and Works", "Trials", "Wisdom", "Tongue", "Practical Religion"],
+    "chapters": 5,
+    "testament": "New"
+  },
+  "1 Peter": {
+    "author": "Peter",
+    "date": "c. AD 62-64",
+    "purpose": "To encourage suffering believers to remain faithful as strangers and exiles",
+    "overview": "Encourages persecuted believers with their living hope, calling them to holy living and faithful witness amid suffering.",
+    "keyThemes": ["Suffering", "Hope", "Holiness", "Submission", "Living Stones"],
+    "chapters": 5,
+    "testament": "New"
+  },
+  "2 Peter": {
+    "author": "Peter",
+    "date": "c. AD 65-68",
+    "purpose": "To warn against false teachers and encourage growth in grace",
+    "overview": "Peter's final letter warning against false teachers, defending the certainty of Messiah's return, and encouraging spiritual growth.",
+    "keyThemes": ["False Teachers", "Second Coming", "Growth", "Scripture", "Knowledge"],
+    "chapters": 3,
+    "testament": "New"
+  },
+  "1 John": {
+    "author": "John",
+    "date": "c. AD 85-95",
+    "purpose": "To combat false teaching and assure believers of eternal life",
+    "overview": "Tests of genuine faith: believing in Yahusha, loving others, and obeying Elohiym's commands. Emphasizes that Elohiym is love.",
+    "keyThemes": ["Love", "Truth", "Fellowship", "Assurance", "Light"],
+    "chapters": 5,
+    "testament": "New"
+  },
+  "2 John": {
+    "author": "John",
+    "date": "c. AD 85-95",
+    "purpose": "To warn against welcoming false teachers who deny Messiah's incarnation",
+    "overview": "A brief letter emphasizing love and truth while warning against showing hospitality to those who deny Messiah.",
+    "keyThemes": ["Love", "Truth", "False Teachers", "Discernment", "Obedience"],
+    "chapters": 1,
+    "testament": "New"
+  },
+  "3 John": {
+    "author": "John",
+    "date": "c. AD 85-95",
+    "purpose": "To commend Gaius's hospitality and rebuke Diotrephes's prideful leadership",
+    "overview": "Personal encouragement to Gaius for supporting traveling teachers, contrasted with Diotrephes's selfish behavior.",
+    "keyThemes": ["Hospitality", "Truth", "Leadership", "Example", "Fellowship"],
+    "chapters": 1,
+    "testament": "New"
+  },
+  "Jude": {
+    "author": "Jude (Jesus' brother)",
+    "date": "c. AD 65-80",
+    "purpose": "To warn against false teachers and call believers to contend for the faith",
+    "overview": "Urgent warning against false teachers who deny Master Yahusha, calling believers to remain faithful and build themselves up in the faith.",
+    "keyThemes": ["False Teachers", "Apostasy", "Judgment", "Perseverance", "Doxology"],
+    "chapters": 1,
+    "testament": "New"
+  },
+  "Revelation": {
+    "author": "John",
+    "date": "c. AD 95",
+    "purpose": "To reveal Messiah's glory and assure believers of His ultimate victory",
+    "overview": "Apocalyptic visions of Messiah's glory, judgment on evil, and the establishment of the new heaven and earth where Elohiym dwells with His people.",
+    "keyThemes": ["Victory", "Judgment", "Worship", "Second Coming", "New Creation"],
+    "chapters": 22,
+    "testament": "New"
+  }
+}
+

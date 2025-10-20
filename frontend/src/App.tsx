@@ -16,6 +16,8 @@ import Settings from './routes/Settings';
 import Glossary from './routes/Glossary';
 import Bookmarks from './routes/Bookmarks';
 import Notes from './routes/Notes';
+import History from './routes/History';
+import BookOverview from './routes/BookOverview';
 import ParallelViewWrapper from './components/ParallelViewWrapper';
 
 // Page transition variants
@@ -100,6 +102,8 @@ function AppContent() {
             <Route path="/search" element={<Search />} />
             <Route path="/bookmarks" element={<Bookmarks />} />
             <Route path="/notes" element={<Notes />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/book-overview/:book" element={<BookOverview />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/glossary" element={<Glossary />} />
           </Routes>

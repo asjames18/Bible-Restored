@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useBibleStore } from '../store/bibleStore';
 import NavPanel from './NavPanel';
 import TranslationPicker from './TranslationPicker';
+import QuickJump from './QuickJump';
 import { 
   Home, 
   BookOpen, 
@@ -12,7 +13,8 @@ import {
   Search, 
   RotateCcw, 
   Settings,
-  Menu
+  Menu,
+  Zap
 } from 'lucide-react';
 
 export default function TopBar() {
@@ -20,6 +22,7 @@ export default function TopBar() {
   const { book, chapter, nextChapter, prevChapter } = useBibleStore();
   const [showNav, setShowNav] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
+  const [showQuickJump, setShowQuickJump] = useState(false);
 
   // Keyboard shortcuts are handled in Reader component
 
@@ -54,6 +57,17 @@ export default function TopBar() {
               >
                 <Menu className="w-4 h-4" />
                 <span>Navigate</span>
+              </motion.button>
+              
+              <motion.button
+                onClick={() => setShowQuickJump(true)}
+                className="flex items-center space-x-2 bg-theme-accent/10 hover:bg-theme-accent/20 text-theme-accent px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-theme-accent/20"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title="Quick Jump (type verse reference)"
+              >
+                <Zap className="w-4 h-4" />
+                <span>Quick Jump</span>
               </motion.button>
               
               <div className="flex items-center space-x-1">
@@ -187,6 +201,7 @@ export default function TopBar() {
 
       <NavPanel isOpen={showNav} onClose={() => setShowNav(false)} />
       <TranslationPicker isOpen={showTranslation} onClose={() => setShowTranslation(false)} />
+      <QuickJump isOpen={showQuickJump} onClose={() => setShowQuickJump(false)} />
     </>
   );
 }
