@@ -46,27 +46,37 @@ export default function Reader() {
     threshold: 75,
   });
 
-  // Initialize Bible on mount
+  // Initialize Bible on mount (run only once)
   useEffect(() => {
+    let isMounted = true;
+    
     const initializeBible = async () => {
       try {
         if (!bible) {
           console.log('Bible not loaded, loading current Bible...');
           await loadCurrentBible();
         }
-        if (translation && translationId !== translation) {
+        if (isMounted && translation && translationId !== translation) {
           console.log(`Translation mismatch: ${translationId} vs ${translation}, loading ${translation}...`);
           await setTranslation(translation);
         }
       } catch (err) {
         console.error('Failed to initialize Bible:', err);
       } finally {
-        setIsInitializing(false);
+        if (isMounted) {
+          setIsInitializing(false);
+        }
       }
     };
     
-    initializeBible();
-  }, [bible, translation, translationId, loadCurrentBible, setTranslation]);
+    if (isInitializing) {
+      initializeBible();
+    }
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [isInitializing, bible, translation, translationId, loadCurrentBible, setTranslation]);
 
   // Prefetch adjacent chapters for better performance
   useEffect(() => {
@@ -82,24 +92,34 @@ export default function Reader() {
     }
   }, [bible, book, chapter, translation]);
 
-  // Update ref when navigating and track history
+  // Update ref when navigating and track history (debounced)
   useEffect(() => {
-    if (translation && book && chapter && bible) {
+    if (!translation || !book || !chapter || !bible) return;
+    
+    // Use setTimeout to debounce rapid changes
+    const timeoutId = setTimeout(() => {
       setRef(book, chapter, verse);
       // Track reading history
       addToHistory(book, chapter, verse);
-      // Update reading streak
+      // Update reading streak (only once per day)
       updateStreak();
-    }
-  }, [translation, book, chapter, verse, bible, setRef, addToHistory, updateStreak]);
+    }, 100);
+    
+    return () => clearTimeout(timeoutId);
+  }, [translation, book, chapter, verse, bible]);
 
   // Navigate when store chapter/book changes (from nextChapter/prevChapter)
   useEffect(() => {
-    if (storeBook && storeChapter && (storeBook !== book || storeChapter !== chapter || storeVerse !== verse)) {
+    if (!storeBook || !storeChapter) return;
+    
+    // Only navigate if there's an actual change to prevent loops
+    const isDifferent = storeBook !== book || storeChapter !== chapter || storeVerse !== verse;
+    
+    if (isDifferent) {
       const newPath = `/${translation}/${storeBook}/${storeChapter}${storeVerse ? `/${storeVerse}` : ''}`;
-      navigate(newPath);
+      navigate(newPath, { replace: true }); // Use replace to avoid history pollution
     }
-  }, [storeBook, storeChapter, storeVerse, book, chapter, verse, translation, navigate]);
+  }, [storeBook, storeChapter, storeVerse]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -188,17 +208,17 @@ export default function Reader() {
   const verses = bible[book!][chapter!];
   const verseNumbers = Object.keys(verses).sort((a, b) => parseInt(a) - parseInt(b));
 
-  // Chapter transition variants - faster and smoother
+  // Chapter transition variants - optimized for smooth transitions
   const chapterVariants = {
-    initial: { opacity: 0, x: 30 },
-    in: { opacity: 1, x: 0 },
-    out: { opacity: 0, x: -30 }
+    initial: { opacity: 0 },
+    in: { opacity: 1 },
+    out: { opacity: 0 }
   };
 
   const chapterTransition = {
     type: 'tween' as const,
     ease: 'easeInOut' as const,
-    duration: 0.2
+    duration: 0.15
   };
 
   return (
@@ -261,12 +281,12 @@ export default function Reader() {
             {verseNumbers.map((verseNum, index) => (
               <motion.div
                 key={verseNum}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ 
-                  duration: 0.4,
-                  delay: Math.min(index * 0.03, 0.5), // Cap max delay at 0.5s
-                  ease: [0.22, 1, 0.36, 1] // Custom easing for smooth entrance
+                  duration: 0.2,
+                  delay: Math.min(index * 0.015, 0.3), // Reduced delay and cap
+                  ease: [0.22, 1, 0.36, 1]
                 }}
                 className="verse-hover mb-3 md:mb-4"
               >
