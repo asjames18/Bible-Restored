@@ -17,8 +17,8 @@ export default function Reader() {
   const navigate = useNavigate();
   const [isFocusMode, setIsFocusMode] = useState(false);
 
-  // Debug URL parameters
-  console.log('Current URL params:', { translation, book, chapter, verse });
+  // Debug URL parameters (commented out to reduce console spam)
+  // console.log('Current URL params:', { translation, book, chapter, verse });
   const [isInitializing, setIsInitializing] = useState(true);
   const { 
     bible, 
@@ -52,12 +52,7 @@ export default function Reader() {
       // Scroll to top before navigating
       window.scrollTo({ top: 0, behavior: 'smooth' });
       const newPath = `/${translation}/${book}/${nextChap}`;
-      console.log('Navigating to path:', newPath);
       navigate(newPath);
-      // Check if URL changed after a short delay
-      setTimeout(() => {
-        console.log('URL after navigation:', window.location.pathname);
-      }, 100);
     } else {
       console.log('Already at last chapter');
     }
@@ -78,12 +73,7 @@ export default function Reader() {
       // Scroll to top before navigating
       window.scrollTo({ top: 0, behavior: 'smooth' });
       const newPath = `/${translation}/${book}/${prevChap}`;
-      console.log('Navigating to path:', newPath);
       navigate(newPath);
-      // Check if URL changed after a short delay
-      setTimeout(() => {
-        console.log('URL after navigation:', window.location.pathname);
-      }, 100);
     } else {
       console.log('Already at first chapter');
     }
@@ -296,14 +286,17 @@ export default function Reader() {
         {/* Chapter Title with Animation */}
         <motion.div
           key={`title-${book}-${chapter}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.15 }}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
           className="mb-6 md:mb-8 text-center"
         >
           <h1 className="text-mobile-title md:text-3xl font-bold text-theme-text mb-2">
             {book} {chapter}
           </h1>
+          <div className="text-sm text-theme-accent font-medium">
+            Chapter {chapter} of {Object.keys(bible[book!] || {}).length}
+          </div>
           {verse && (
             <p className="text-theme-accent font-medium text-sm md:text-base">Verse {verse}</p>
           )}
@@ -323,17 +316,24 @@ export default function Reader() {
 
         {/* Verses */}
         <div className="prose prose-sm md:prose-lg max-w-none reading-area">
-            {verseNumbers.map((verseNum) => (
-              <div
+            {verseNumbers.map((verseNum, index) => (
+              <motion.div
                 key={`${book}-${chapter}-${verseNum}`}
                 className="verse-hover mb-3 md:mb-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  duration: 0.2, 
+                  delay: index * 0.02,
+                  ease: "easeOut"
+                }}
               >
                 <Verse
                   number={verseNum}
                   text={verses[verseNum]}
                   isHighlighted={verse === verseNum}
                 />
-              </div>
+              </motion.div>
             ))}
         </div>
 
