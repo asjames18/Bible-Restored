@@ -248,7 +248,6 @@ export default function Reader() {
 
   return (
     <div 
-      key={`${book}-${chapter}`}
       className={`min-h-screen bg-theme-bg text-theme-text page-content-mobile ${isFocusMode ? 'focus-mode' : ''}`}
     >
       {!isFocusMode && <TopBar />}
@@ -300,54 +299,37 @@ export default function Reader() {
 
         {/* Verses */}
         <div className="prose prose-sm md:prose-lg max-w-none reading-area">
-            {verseNumbers.map((verseNum, index) => (
-              <motion.div
+            {verseNumbers.map((verseNum) => (
+              <div
                 key={`${book}-${chapter}-${verseNum}`}
                 className="verse-hover mb-3 md:mb-4"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.2, 
-                  delay: index * 0.02,
-                  ease: "easeOut"
-                }}
               >
                 <Verse
                   number={verseNum}
                   text={verses[verseNum]}
                   isHighlighted={verse === verseNum}
                 />
-              </motion.div>
+              </div>
             ))}
         </div>
 
         {/* Navigation with Enhanced Styling */}
         <div className="mt-8 flex flex-col sm:flex-row gap-4 sm:gap-6">
-          <motion.button
+          <button
             onClick={goToPrevChapter}
             className="flex-1 bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-4 rounded-xl font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent hover:shadow-md flex items-center justify-center gap-2 group"
-            whileHover={{ scale: 1.02, y: -2 }}
-            whileTap={{ scale: 0.98 }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
           >
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200" />
             <span>Previous Chapter</span>
-          </motion.button>
+          </button>
           
-          <motion.button
+          <button
             onClick={goToNextChapter}
             className="flex-1 bg-theme-accent hover:bg-theme-accent-dark text-white px-6 py-4 rounded-xl font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 group"
-            whileHover={{ scale: 1.02, y: -2 }}
-            whileTap={{ scale: 0.98 }}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
           >
             <span>Next Chapter</span>
             <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
-          </motion.button>
+          </button>
         </div>
         
 
