@@ -21,6 +21,7 @@ import BookOverview from './routes/BookOverview';
 import ParallelViewWrapper from './components/ParallelViewWrapper';
 import ReadingPlans from './routes/ReadingPlans';
 import Progress from './routes/Progress';
+import PrayerList from './routes/PrayerList';
 
 // Page transition variants
 const pageVariants = {
@@ -106,6 +107,7 @@ function AppContent() {
             <Route path="/notes" element={<Notes />} />
             <Route path="/plans" element={<ReadingPlans />} />
             <Route path="/progress" element={<Progress />} />
+            <Route path="/prayers" element={<PrayerList />} />
             <Route path="/history" element={<History />} />
             <Route path="/book-overview/:book" element={<BookOverview />} />
             <Route path="/settings" element={<Settings />} />

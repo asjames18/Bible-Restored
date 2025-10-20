@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bookmark, Highlighter, StickyNote } from 'lucide-react';
+import { Bookmark, Highlighter, StickyNote, Share2, Heart } from 'lucide-react';
 import { highlightNames, loadHebrewLexicon, stripHighlighting, formatTranslatorNotes } from '../lib/nameHighlighter';
 import { useStudyStore } from '../store/studyStore';
 import { useBibleStore } from '../store/bibleStore';
 import NamePopover from './NamePopover';
 import HighlightMenu from './HighlightMenu';
 import NoteEditor from './NoteEditor';
+import ShareMenu from './ShareMenu';
+import VerseImageGenerator from './VerseImageGenerator';
 
 interface VerseProps {
   number: string;
@@ -22,6 +24,8 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
   const [showActions, setShowActions] = useState(false);
   const [showHighlightMenu, setShowHighlightMenu] = useState(false);
   const [showNoteEditor, setShowNoteEditor] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const [showImageGenerator, setShowImageGenerator] = useState(false);
   const verseRef = useRef<HTMLDivElement>(null);
   
   const { book, chapter } = useBibleStore();
@@ -215,14 +219,28 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
             <motion.button
               onClick={(e) => {
                 e.stopPropagation();
-                handleCopyVerse();
+                setShowShareMenu(true);
               }}
               className="text-theme-text/60 hover:text-theme-accent text-sm transition-colors"
-              title="Copy verse"
+              title="Share verse"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
-              📋
+              <Share2 className="w-4 h-4" />
+            </motion.button>
+
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                // Navigate to prayer list (will be implemented when form is added)
+                alert('Add to prayer list feature coming soon!');
+              }}
+              className="text-theme-text/60 hover:text-theme-accent text-sm transition-colors"
+              title="Add to prayer list"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Heart className="w-4 h-4" />
             </motion.button>
           </div>
         </div>
@@ -255,6 +273,26 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
           />
         )}
       </AnimatePresence>
+
+      {/* Share Menu */}
+      <ShareMenu
+        isOpen={showShareMenu}
+        onClose={() => setShowShareMenu(false)}
+        verseText={stripHighlighting(highlightedText)}
+        verseRef={fullVerseRef}
+        onGenerateImage={() => {
+          setShowShareMenu(false);
+          setShowImageGenerator(true);
+        }}
+      />
+
+      {/* Verse Image Generator */}
+      <VerseImageGenerator
+        isOpen={showImageGenerator}
+        onClose={() => setShowImageGenerator(false)}
+        verseText={stripHighlighting(highlightedText)}
+        verseRef={fullVerseRef}
+      />
     </>
   );
 }
