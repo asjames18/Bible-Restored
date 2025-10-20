@@ -3,16 +3,21 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useBibleStore } from '../store/bibleStore';
 import { useReadingStreak } from '../hooks/useReadingStreak';
+import { useReadingPlanStore } from '../store/readingPlanStore';
 import TopBar from '../components/TopBar';
 import VerseOfDay from '../components/VerseOfDay';
 import { getFactOfTheDay } from '../lib/didYouKnow';
 import type { DidYouKnowFact } from '../lib/didYouKnow';
-import { BookOpen, Search, Settings, Book, Flame, Star, Bookmark, StickyNote } from 'lucide-react';
+import { BookOpen, Search, Settings, Book, Flame, Star, Bookmark, StickyNote, Target, Calendar } from 'lucide-react';
 
 export default function Home() {
   const { translationId, book, chapter } = useBibleStore();
   const { streakData, getStreakMessage } = useReadingStreak();
+  const { getActivePlan, getDayProgress } = useReadingPlanStore();
   const [currentFact, setCurrentFact] = useState<DidYouKnowFact>(getFactOfTheDay());
+  
+  const activePlan = getActivePlan();
+  const planProgress = activePlan ? getDayProgress(activePlan.id) : null;
 
   // Load fact of the day on mount
   useEffect(() => {
@@ -97,6 +102,79 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
+
+        {/* Reading Plan Widget */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.35 }}
+          className="mb-8 md:mb-12"
+        >
+          {activePlan && planProgress ? (
+            <div className="bg-gradient-to-r from-theme-accent/10 to-theme-accent/5 rounded-xl p-4 md:p-6 border-2 border-theme-accent/30">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-theme-accent rounded-lg flex items-center justify-center">
+                    <Target className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-base md:text-lg font-bold text-theme-text">{activePlan.name}</h3>
+                    <p className="text-xs md:text-sm text-theme-text/70">
+                      Day {activePlan.currentDay || 1} of {activePlan.duration}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-3">
+                <div className="flex items-center justify-between text-xs text-theme-text/60 mb-1">
+                  <span>Progress</span>
+                  <span className="font-semibold text-theme-accent">{planProgress.percentage}%</span>
+                </div>
+                <div className="h-2 bg-theme-bg/50 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${planProgress.percentage}%` }}
+                    transition={{ duration: 0.8, delay: 0.5 }}
+                    className="h-full bg-theme-accent"
+                  />
+                </div>
+              </div>
+
+              <Link
+                to="/progress"
+                className="w-full bg-theme-accent hover:bg-theme-accent/90 text-white px-4 py-2.5 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
+              >
+                <Calendar className="w-4 h-4" />
+                Continue Plan
+              </Link>
+            </div>
+          ) : (
+            <div className="bg-theme-surface rounded-xl p-4 md:p-6 border border-theme-border">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-theme-accent/10 rounded-lg flex items-center justify-center">
+                    <Target className="w-5 h-5 md:w-6 md:h-6 text-theme-accent" />
+                  </div>
+                  <div>
+                    <h3 className="text-base md:text-lg font-bold text-theme-text">Reading Plans</h3>
+                    <p className="text-xs md:text-sm text-theme-text/70">
+                      Stay consistent with a guided plan
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <Link
+                to="/plans"
+                className="w-full bg-theme-accent/10 hover:bg-theme-accent/20 text-theme-accent px-4 py-2.5 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
+              >
+                <BookOpen className="w-4 h-4" />
+                Browse Plans
+              </Link>
+            </div>
+          )}
+        </motion.div>
 
         {/* Action Buttons */}
         <motion.div
