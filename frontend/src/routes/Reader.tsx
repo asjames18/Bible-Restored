@@ -74,12 +74,12 @@ export default function Reader() {
     }
   }, [bible, book, chapter, translation, navigate]);
 
-  // Debug: Log function availability
-  console.log('Navigation functions available:', { 
-    goToNextChapter: typeof goToNextChapter, 
-    goToPrevChapter: typeof goToPrevChapter,
-    navigate: typeof navigate 
-  });
+  // Debug: Log function availability (only once)
+  // console.log('Navigation functions available:', { 
+  //   goToNextChapter: typeof goToNextChapter, 
+  //   goToPrevChapter: typeof goToPrevChapter,
+  //   navigate: typeof navigate 
+  // });
 
   // Swipe gestures for mobile navigation (disabled - was blocking scroll)
   // useSwipeGesture({
@@ -324,34 +324,41 @@ export default function Reader() {
           className="mt-8 flex flex-col md:flex-row gap-3 md:gap-0 md:justify-between"
         >
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log('Previous button clicked!', { book, chapter, translation });
-              try {
-                goToPrevChapter();
-              } catch (error) {
-                console.error('Error in goToPrevChapter:', error);
-              }
+            onClick={() => {
+              console.log('Previous button clicked!');
+              goToPrevChapter();
             }}
-            className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto hover:scale-105 active:scale-95"
-            style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#ffffff',
+              color: '#000000',
+              border: '1px solid #e5e5e5',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: '500',
+              width: '100%',
+              marginBottom: '12px'
+            }}
           >
             ← Previous Chapter
           </button>
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log('Next button clicked!', { book, chapter, translation });
-              try {
-                goToNextChapter();
-              } catch (error) {
-                console.error('Error in goToNextChapter:', error);
-              }
+            onClick={() => {
+              console.log('Next button clicked!');
+              goToNextChapter();
             }}
-            className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto hover:scale-105 active:scale-95"
-            style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#ffffff',
+              color: '#000000',
+              border: '1px solid #e5e5e5',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: '500',
+              width: '100%'
+            }}
           >
             Next Chapter →
           </button>
