@@ -3,7 +3,7 @@ import { useBibleStore } from '../store/bibleStore';
 import { useHistoryStore } from '../store/historyStore';
 import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Focus, X, Info } from 'lucide-react';
+import { Focus, X, Info, ChevronLeft, ChevronRight } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import Verse from '../components/Verse';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -321,43 +321,33 @@ export default function Reader() {
             ))}
         </div>
 
-        {/* Navigation with Enhanced Styling - Stacked on mobile */}
-        <div 
-          className="mt-8 flex flex-col md:flex-row gap-3 md:gap-0 md:justify-between"
-        >
-          <button
+        {/* Navigation with Enhanced Styling */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 sm:gap-6">
+          <motion.button
             onClick={goToPrevChapter}
-            style={{
-              padding: '12px 24px',
-              backgroundColor: '#ffffff',
-              color: '#000000',
-              border: '1px solid #e5e5e5',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '16px',
-              fontWeight: '500',
-              width: '100%',
-              marginBottom: '12px'
-            }}
+            className="flex-1 bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-4 rounded-xl font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent hover:shadow-md flex items-center justify-center gap-2 group"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
           >
-            ← Previous Chapter
-          </button>
-          <button
+            <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200" />
+            <span>Previous Chapter</span>
+          </motion.button>
+          
+          <motion.button
             onClick={goToNextChapter}
-            style={{
-              padding: '12px 24px',
-              backgroundColor: '#ffffff',
-              color: '#000000',
-              border: '1px solid #e5e5e5',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontSize: '16px',
-              fontWeight: '500',
-              width: '100%'
-            }}
+            className="flex-1 bg-theme-accent hover:bg-theme-accent-dark text-white px-6 py-4 rounded-xl font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 group"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
           >
-            Next Chapter →
-          </button>
+            <span>Next Chapter</span>
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+          </motion.button>
         </div>
         
 
