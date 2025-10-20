@@ -8,7 +8,7 @@ import TopBar from '../components/TopBar';
 import Verse from '../components/Verse';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ChapterSummary from '../components/ChapterSummary';
-// import { useScrollRestoration } from '../hooks/useScrollRestoration';
+import { useScrollRestoration } from '../hooks/useScrollRestoration';
 import { useReadingStreak } from '../hooks/useReadingStreak';
 import { prefetchAdjacentChapters } from '../lib/cacheManager';
 
@@ -30,43 +30,31 @@ export default function Reader() {
   const { addToHistory } = useHistoryStore();
   const { updateStreak } = useReadingStreak();
 
-  // Scroll restoration (temporarily disabled for debugging)
-  // useScrollRestoration();
+  // Scroll restoration
+  useScrollRestoration();
 
   // Helper functions for navigation without store updates (prevents flash)
   const goToNextChapter = useCallback(() => {
-    console.log('goToNextChapter called', { bible: !!bible, book, chapter });
-    if (!bible || !book) {
-      console.log('Missing bible or book');
-      return;
-    }
+    if (!bible || !book) return;
     const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
     const currentIndex = chapters.indexOf(chapter!);
-    console.log('Chapters:', chapters, 'Current index:', currentIndex);
     if (currentIndex < chapters.length - 1) {
       const nextChap = chapters[currentIndex + 1];
-      console.log('Navigating to next chapter:', nextChap);
+      // Scroll to top before navigating
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       navigate(`/${translation}/${book}/${nextChap}`);
-    } else {
-      console.log('Already at last chapter');
     }
   }, [bible, book, chapter, translation, navigate]);
 
   const goToPrevChapter = useCallback(() => {
-    console.log('goToPrevChapter called', { bible: !!bible, book, chapter });
-    if (!bible || !book) {
-      console.log('Missing bible or book');
-      return;
-    }
+    if (!bible || !book) return;
     const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
     const currentIndex = chapters.indexOf(chapter!);
-    console.log('Chapters:', chapters, 'Current index:', currentIndex);
     if (currentIndex > 0) {
       const prevChap = chapters[currentIndex - 1];
-      console.log('Navigating to prev chapter:', prevChap);
+      // Scroll to top before navigating
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       navigate(`/${translation}/${book}/${prevChap}`);
-    } else {
-      console.log('Already at first chapter');
     }
   }, [bible, book, chapter, translation, navigate]);
 
@@ -135,6 +123,16 @@ export default function Reader() {
       updateStreak();
     });
   }, [translation, book, chapter, verse, bible, setRef, addToHistory, updateStreak]);
+
+  // Scroll to top when chapter changes
+  useEffect(() => {
+    if (book && chapter) {
+      // Small delay to ensure content is rendered
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    }
+  }, [book, chapter]);
 
   // Navigate when store chapter/book changes (from nextChapter/prevChapter)
   // Disabled - causes remount flashing. URL params already handle navigation.
@@ -306,10 +304,7 @@ export default function Reader() {
           transition={{ duration: 0.2 }}
         >
           <motion.button
-            onClick={() => {
-              console.log('Previous button clicked!');
-              goToPrevChapter();
-            }}
+            onClick={goToPrevChapter}
             className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto"
             whileHover={{ scale: 1.02, x: -2 }}
             whileTap={{ scale: 0.98 }}
@@ -317,10 +312,7 @@ export default function Reader() {
             ← Previous Chapter
           </motion.button>
           <motion.button
-            onClick={() => {
-              console.log('Next button clicked!');
-              goToNextChapter();
-            }}
+            onClick={goToNextChapter}
             className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto"
             whileHover={{ scale: 1.02, x: 2 }}
             whileTap={{ scale: 0.98 }}
@@ -329,26 +321,6 @@ export default function Reader() {
           </motion.button>
         </motion.div>
         
-        {/* Test Navigation Button */}
-        <motion.div
-          className="mt-4 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
-        >
-          <button
-            onClick={() => {
-              console.log('Test button clicked! Current:', { book, chapter, translation });
-              console.log('Bible loaded:', !!bible);
-              if (bible && book) {
-                console.log('Available chapters for', book, ':', Object.keys(bible[book] || {}));
-              }
-            }}
-            className="bg-red-500 text-white px-4 py-2 rounded"
-          >
-            Test Navigation Debug
-          </button>
-        </motion.div>
 
         {/* Mobile swipe hint */}
         <motion.div
