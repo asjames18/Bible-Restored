@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useBibleStore } from '../store/bibleStore';
 import { useHistoryStore } from '../store/historyStore';
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { Focus, X, Info } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import Verse from '../components/Verse';
@@ -24,12 +24,7 @@ export default function Reader() {
     isLoading,
     loadCurrentBible,
     setTranslation, 
-    setRef, 
-    nextChapter, 
-    prevChapter,
-    book: storeBook,
-    chapter: storeChapter,
-    verse: storeVerse,
+    setRef,
     translationId
   } = useBibleStore();
   
@@ -39,10 +34,31 @@ export default function Reader() {
   // Scroll restoration
   useScrollRestoration();
 
+  // Helper functions for navigation without store updates (prevents flash)
+  const goToNextChapter = useCallback(() => {
+    if (!bible || !book) return;
+    const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
+    const currentIndex = chapters.indexOf(chapter!);
+    if (currentIndex < chapters.length - 1) {
+      const nextChap = chapters[currentIndex + 1];
+      navigate(`/${translation}/${book}/${nextChap}`);
+    }
+  }, [bible, book, chapter, translation, navigate]);
+
+  const goToPrevChapter = useCallback(() => {
+    if (!bible || !book) return;
+    const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
+    const currentIndex = chapters.indexOf(chapter!);
+    if (currentIndex > 0) {
+      const prevChap = chapters[currentIndex - 1];
+      navigate(`/${translation}/${book}/${prevChap}`);
+    }
+  }, [bible, book, chapter, translation, navigate]);
+
   // Swipe gestures for mobile navigation
   useSwipeGesture({
-    onSwipeLeft: () => nextChapter(),
-    onSwipeRight: () => prevChapter(),
+    onSwipeLeft: () => goToNextChapter(),
+    onSwipeRight: () => goToPrevChapter(),
     threshold: 75,
   });
 
@@ -105,24 +121,24 @@ export default function Reader() {
   }, [translation, book, chapter, verse, bible, setRef, addToHistory, updateStreak]);
 
   // Navigate when store chapter/book changes (from nextChapter/prevChapter)
-  useEffect(() => {
-    if (!storeBook || !storeChapter) return;
-    
-    // Only navigate if there's an actual change to prevent loops
-    const isDifferent = storeBook !== book || storeChapter !== chapter || storeVerse !== verse;
-    
-    if (isDifferent) {
-      const newPath = `/${translation}/${storeBook}/${storeChapter}${storeVerse ? `/${storeVerse}` : ''}`;
-      navigate(newPath, { replace: true }); // Use replace to avoid history pollution
-    }
-  }, [storeBook, storeChapter, storeVerse]);
+  // Disabled - causes remount flashing. URL params already handle navigation.
+  // useEffect(() => {
+  //   if (!storeBook || !storeChapter) return;
+  //   
+  //   const isDifferent = storeBook !== book || storeChapter !== chapter || storeVerse !== verse;
+  //   
+  //   if (isDifferent) {
+  //     const newPath = `/${translation}/${storeBook}/${storeChapter}${storeVerse ? `/${storeVerse}` : ''}`;
+  //     navigate(newPath, { replace: true });
+  //   }
+  // }, [storeBook, storeChapter, storeVerse]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === '[') {
-        prevChapter();
+        goToPrevChapter();
       } else if (e.key === ']') {
-        nextChapter();
+        goToNextChapter();
       } else if (e.key === '/') {
         navigate('/search');
       } else if (e.key === 'f' || e.key === 'F') {
@@ -134,7 +150,7 @@ export default function Reader() {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [prevChapter, nextChapter, navigate, isFocusMode]);
+  }, [goToPrevChapter, goToNextChapter, navigate, isFocusMode]);
 
   // Show loading screen during initialization or when Bible is loading
   if (isInitializing || isLoading || !bible) {
@@ -274,7 +290,7 @@ export default function Reader() {
           transition={{ duration: 0.2 }}
         >
           <motion.button
-            onClick={prevChapter}
+            onClick={goToPrevChapter}
             className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto"
             whileHover={{ scale: 1.02, x: -2 }}
             whileTap={{ scale: 0.98 }}
@@ -282,7 +298,7 @@ export default function Reader() {
             ← Previous Chapter
           </motion.button>
           <motion.button
-            onClick={nextChapter}
+            onClick={goToNextChapter}
             className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto"
             whileHover={{ scale: 1.02, x: 2 }}
             whileTap={{ scale: 0.98 }}
