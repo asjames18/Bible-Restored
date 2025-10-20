@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bookmark, Highlighter, StickyNote, Share2, Heart, Link2 } from 'lucide-react';
+import { Bookmark, Highlighter, StickyNote, Share2, Heart, Link2, Languages } from 'lucide-react';
 import { highlightNames, loadHebrewLexicon, stripHighlighting, formatTranslatorNotes } from '../lib/nameHighlighter';
 import { useStudyStore } from '../store/studyStore';
 import { useBibleStore } from '../store/bibleStore';
@@ -10,6 +10,7 @@ import NoteEditor from './NoteEditor';
 import ShareMenu from './ShareMenu';
 import VerseImageGenerator from './VerseImageGenerator';
 import CrossRefPanel from './CrossRefPanel';
+import ComparisonWidget from './ComparisonWidget';
 
 interface VerseProps {
   number: string;
@@ -28,6 +29,7 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showImageGenerator, setShowImageGenerator] = useState(false);
   const [showCrossRefs, setShowCrossRefs] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
   const verseRef = useRef<HTMLDivElement>(null);
   
   const { book, chapter } = useBibleStore();
@@ -257,6 +259,19 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
             >
               <Link2 className="w-4 h-4" />
             </motion.button>
+
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowComparison(true);
+              }}
+              className="text-theme-text/60 hover:text-theme-accent text-sm transition-colors"
+              title="Compare translations"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Languages className="w-4 h-4" />
+            </motion.button>
           </div>
         </div>
       </motion.div>
@@ -315,6 +330,14 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
         isOpen={showCrossRefs}
         onClose={() => setShowCrossRefs(false)}
       />
+
+      {/* Translation Comparison */}
+      {showComparison && (
+        <ComparisonWidget
+          verseRef={fullVerseRef}
+          onClose={() => setShowComparison(false)}
+        />
+      )}
     </>
   );
 }

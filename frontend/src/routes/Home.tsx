@@ -8,7 +8,8 @@ import TopBar from '../components/TopBar';
 import VerseOfDay from '../components/VerseOfDay';
 import { getFactOfTheDay } from '../lib/didYouKnow';
 import type { DidYouKnowFact } from '../lib/didYouKnow';
-import { BookOpen, Search, Settings, Book, Flame, Star, Bookmark, StickyNote, Target, Calendar } from 'lucide-react';
+import devotionalsData from '../data/devotionals.json';
+import { BookOpen, Search, Settings, Book, Flame, Star, Bookmark, StickyNote, Target, Calendar, Heart } from 'lucide-react';
 
 export default function Home() {
   const { translationId, book, chapter } = useBibleStore();
@@ -18,6 +19,11 @@ export default function Home() {
   
   const activePlan = getActivePlan();
   const planProgress = activePlan ? getDayProgress(activePlan.id) : null;
+  
+  // Get today's devotional
+  const today = new Date();
+  const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
+  const todayDevotional = devotionalsData.devotionals[dayOfYear % devotionalsData.devotionals.length];
 
   // Load fact of the day on mount
   useEffect(() => {
@@ -176,11 +182,56 @@ export default function Home() {
           )}
         </motion.div>
 
-        {/* Action Buttons */}
+        {/* Daily Devotional Widget */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
+          className="mb-8 md:mb-12"
+        >
+          <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-4 md:p-6 border-2 border-purple-500/30">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-600 rounded-lg flex items-center justify-center">
+                  <Heart className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-base md:text-lg font-bold text-theme-text">Today's Devotional</h3>
+                  <p className="text-xs md:text-sm text-theme-text/70">
+                    {todayDevotional.title} • {todayDevotional.theme}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-3 bg-white/50 dark:bg-black/20 rounded-lg p-3">
+              <p className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-1">
+                {todayDevotional.passage.ref}
+              </p>
+              <p className="text-xs md:text-sm text-theme-text/80 italic line-clamp-2">
+                "{todayDevotional.passage.text}"
+              </p>
+            </div>
+
+            <p className="text-xs md:text-sm text-theme-text/80 line-clamp-3 mb-3">
+              {todayDevotional.reflection}
+            </p>
+
+            <Link
+              to="/devotional"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
+            >
+              <BookOpen className="w-4 h-4" />
+              Read Full Devotional
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
           className="text-center space-y-4 md:space-y-6"
         >
           <div className="space-y-3 md:space-y-4">

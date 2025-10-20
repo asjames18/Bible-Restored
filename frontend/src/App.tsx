@@ -24,6 +24,8 @@ import Progress from './routes/Progress';
 import PrayerList from './routes/PrayerList';
 import Concordance from './routes/Concordance';
 import TopicBrowser from './routes/TopicBrowser';
+import MemoryVerses from './routes/MemoryVerses';
+import Devotional from './routes/Devotional';
 
 // Page transition variants
 const pageVariants = {
@@ -112,6 +114,8 @@ function AppContent() {
             <Route path="/prayers" element={<PrayerList />} />
             <Route path="/concordance" element={<Concordance />} />
             <Route path="/topics" element={<TopicBrowser />} />
+            <Route path="/memory" element={<MemoryVerses />} />
+            <Route path="/devotional" element={<Devotional />} />
             <Route path="/history" element={<History />} />
             <Route path="/book-overview/:book" element={<BookOverview />} />
             <Route path="/settings" element={<Settings />} />
