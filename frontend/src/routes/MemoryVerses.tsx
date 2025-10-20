@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Target, Flame, Trophy, Filter, Search, Trash2 } from 'lucide-react';
 import TopBar from '../components/TopBar';
 import Flashcard from '../components/Flashcard';
-import { useMemoryStore, MemoryVerse } from '../store/memoryStore';
+import { useMemoryStore } from '../store/memoryStore';
+import type { MemoryVerse } from '../store/memoryStore';
 import { useBibleStore } from '../store/bibleStore';
 
 type ViewMode = 'practice' | 'library' | 'add';

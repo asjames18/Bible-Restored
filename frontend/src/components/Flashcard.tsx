@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RotateCcw, Check, X, Star, Eye, EyeOff } from 'lucide-react';
-import { MemoryVerse } from '../store/memoryStore';
+import type { MemoryVerse } from '../store/memoryStore';
 
 interface FlashcardProps {
   verse: MemoryVerse;

@@ -100,7 +100,7 @@ export default function Devotional() {
   const handleShare = async () => {
     const shareText = `${currentDevotional.title}\n\n${currentDevotional.passage.ref}\n"${currentDevotional.passage.text}"\n\n${currentDevotional.reflection}`;
     
-    if ('share' in navigator) {
+    if ('share' in navigator && navigator.share) {
       try {
         await navigator.share({
           title: currentDevotional.title,
@@ -109,10 +109,14 @@ export default function Devotional() {
       } catch (error) {
         console.error('Share failed:', error);
       }
-    } else {
+    } else if (navigator.clipboard) {
       // Fallback: copy to clipboard
-      navigator.clipboard.writeText(shareText);
-      alert('Devotional copied to clipboard!');
+      try {
+        await navigator.clipboard.writeText(shareText);
+        alert('Devotional copied to clipboard!');
+      } catch (error) {
+        console.error('Copy failed:', error);
+      }
     }
   };
 
