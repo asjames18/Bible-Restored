@@ -119,7 +119,7 @@
   .swipe-container {
     -webkit-user-select: none;
     user-select: none;
-    touch-action: pan-y;
+    /* Removed touch-action: pan-y to allow normal scrolling */
   }
   
   /* Loading shimmer animation */

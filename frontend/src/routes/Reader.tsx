@@ -35,22 +35,38 @@ export default function Reader() {
 
   // Helper functions for navigation without store updates (prevents flash)
   const goToNextChapter = useCallback(() => {
-    if (!bible || !book) return;
+    console.log('goToNextChapter called', { bible: !!bible, book, chapter });
+    if (!bible || !book) {
+      console.log('Missing bible or book');
+      return;
+    }
     const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
     const currentIndex = chapters.indexOf(chapter!);
+    console.log('Chapters:', chapters, 'Current index:', currentIndex);
     if (currentIndex < chapters.length - 1) {
       const nextChap = chapters[currentIndex + 1];
+      console.log('Navigating to next chapter:', nextChap);
       navigate(`/${translation}/${book}/${nextChap}`);
+    } else {
+      console.log('Already at last chapter');
     }
   }, [bible, book, chapter, translation, navigate]);
 
   const goToPrevChapter = useCallback(() => {
-    if (!bible || !book) return;
+    console.log('goToPrevChapter called', { bible: !!bible, book, chapter });
+    if (!bible || !book) {
+      console.log('Missing bible or book');
+      return;
+    }
     const chapters = Object.keys(bible[book]).sort((a, b) => parseInt(a) - parseInt(b));
     const currentIndex = chapters.indexOf(chapter!);
+    console.log('Chapters:', chapters, 'Current index:', currentIndex);
     if (currentIndex > 0) {
       const prevChap = chapters[currentIndex - 1];
+      console.log('Navigating to prev chapter:', prevChap);
       navigate(`/${translation}/${book}/${prevChap}`);
+    } else {
+      console.log('Already at first chapter');
     }
   }, [bible, book, chapter, translation, navigate]);
 
