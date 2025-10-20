@@ -74,6 +74,13 @@ export default function Reader() {
     }
   }, [bible, book, chapter, translation, navigate]);
 
+  // Debug: Log function availability
+  console.log('Navigation functions available:', { 
+    goToNextChapter: typeof goToNextChapter, 
+    goToPrevChapter: typeof goToPrevChapter,
+    navigate: typeof navigate 
+  });
+
   // Swipe gestures for mobile navigation (disabled - was blocking scroll)
   // useSwipeGesture({
   //   onSwipeLeft: () => goToNextChapter(),
@@ -313,31 +320,42 @@ export default function Reader() {
         </div>
 
         {/* Navigation with Enhanced Styling - Stacked on mobile */}
-        <motion.div 
+        <div 
           className="mt-8 flex flex-col md:flex-row gap-3 md:gap-0 md:justify-between"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
         >
           <button
-            onClick={() => {
-              console.log('Previous button clicked!');
-              goToPrevChapter();
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('Previous button clicked!', { book, chapter, translation });
+              try {
+                goToPrevChapter();
+              } catch (error) {
+                console.error('Error in goToPrevChapter:', error);
+              }
             }}
             className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto hover:scale-105 active:scale-95"
+            style={{ pointerEvents: 'auto', cursor: 'pointer' }}
           >
             ← Previous Chapter
           </button>
           <button
-            onClick={() => {
-              console.log('Next button clicked!');
-              goToNextChapter();
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('Next button clicked!', { book, chapter, translation });
+              try {
+                goToNextChapter();
+              } catch (error) {
+                console.error('Error in goToNextChapter:', error);
+              }
             }}
             className="btn-touch bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-6 py-3 md:py-3 rounded-lg font-medium transition-all duration-200 border border-theme-border hover:border-theme-accent w-full md:w-auto hover:scale-105 active:scale-95"
+            style={{ pointerEvents: 'auto', cursor: 'pointer' }}
           >
             Next Chapter →
           </button>
-        </motion.div>
+        </div>
         
         {/* Test Navigation Button */}
         <motion.div
