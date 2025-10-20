@@ -7,7 +7,7 @@ import TopBar from '../components/TopBar';
 import VerseOfDay from '../components/VerseOfDay';
 import { getFactOfTheDay } from '../lib/didYouKnow';
 import type { DidYouKnowFact } from '../lib/didYouKnow';
-import { BookOpen, Search, Settings, Book, Flame, Star } from 'lucide-react';
+import { BookOpen, Search, Settings, Book, Flame, Star, Bookmark, StickyNote } from 'lucide-react';
 
 export default function Home() {
   const { translationId, book, chapter } = useBibleStore();
@@ -144,6 +144,26 @@ export default function Home() {
               >
                 <Search className="w-4 h-4" />
                 <span className="text-sm md:text-base">Search</span>
+              </Link>
+            </motion.div>
+            
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/bookmarks"
+                className="btn-touch inline-flex items-center justify-center space-x-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-4 md:px-6 py-3 rounded-lg transition-all duration-200 border border-theme-border w-full md:w-auto"
+              >
+                <Bookmark className="w-4 h-4" />
+                <span className="text-sm md:text-base">Bookmarks</span>
+              </Link>
+            </motion.div>
+            
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/notes"
+                className="btn-touch inline-flex items-center justify-center space-x-2 bg-theme-surface hover:bg-theme-surface-hover text-theme-text px-4 md:px-6 py-3 rounded-lg transition-all duration-200 border border-theme-border w-full md:w-auto"
+              >
+                <StickyNote className="w-4 h-4" />
+                <span className="text-sm md:text-base">Notes</span>
               </Link>
             </motion.div>
             

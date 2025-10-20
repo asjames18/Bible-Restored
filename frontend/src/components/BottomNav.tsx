@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, BookOpen, Search, Settings } from 'lucide-react';
+import { Home, BookOpen, Search, Settings, Bookmark } from 'lucide-react';
 import { useBibleStore } from '../store/bibleStore';
 
 export default function BottomNav() {
@@ -16,11 +16,18 @@ export default function BottomNav() {
       icon: BookOpen, 
       path: `/${translationId}/${book}/${chapter}` 
     },
+    { id: 'study', label: 'Study', icon: Bookmark, path: '/bookmarks' },
     { id: 'search', label: 'Search', icon: Search, path: '/search' },
     { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    // Special handling for study tab (bookmarks/notes)
+    if (path === '/bookmarks') {
+      return location.pathname === '/bookmarks' || location.pathname === '/notes';
+    }
+    return location.pathname === path;
+  };
 
   return (
     <nav className="bottom-nav fixed bottom-0 left-0 right-0 bg-theme-surface border-t border-theme-border md:hidden z-40 pb-safe overflow-hidden">

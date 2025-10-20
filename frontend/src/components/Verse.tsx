@@ -1,7 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bookmark, Highlighter, StickyNote } from 'lucide-react';
 import { highlightNames, loadHebrewLexicon, stripHighlighting, formatTranslatorNotes } from '../lib/nameHighlighter';
+import { useStudyStore } from '../store/studyStore';
+import { useBibleStore } from '../store/bibleStore';
 import NamePopover from './NamePopover';
+import HighlightMenu from './HighlightMenu';
+import NoteEditor from './NoteEditor';
 
 interface VerseProps {
   number: string;
@@ -14,7 +19,26 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
   const [showPopover, setShowPopover] = useState(false);
   const [popoverName, setPopoverName] = useState('');
   const [hebrewLexicon, setHebrewLexicon] = useState<any>(null);
+  const [showActions, setShowActions] = useState(false);
+  const [showHighlightMenu, setShowHighlightMenu] = useState(false);
+  const [showNoteEditor, setShowNoteEditor] = useState(false);
   const verseRef = useRef<HTMLDivElement>(null);
+  
+  const { book, chapter } = useBibleStore();
+  const {
+    isBookmarked,
+    addBookmark,
+    removeBookmark,
+    getHighlight,
+    addHighlight,
+    removeHighlight,
+    getNote,
+  } = useStudyStore();
+  
+  const fullVerseRef = `${book} ${chapter}:${number}`;
+  const bookmarked = isBookmarked(fullVerseRef);
+  const highlight = getHighlight(fullVerseRef);
+  const note = getNote(fullVerseRef);
 
   useEffect(() => {
     loadHebrewLexicon().then((lexicon) => {
@@ -59,7 +83,34 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
 
   const handleCopyVerse = () => {
     const plainText = stripHighlighting(highlightedText);
-    navigator.clipboard.writeText(`${number} ${plainText}`);
+    navigator.clipboard.writeText(`${fullVerseRef} ${plainText}`);
+  };
+
+  const handleBookmarkToggle = () => {
+    const plainText = stripHighlighting(highlightedText);
+    if (bookmarked) {
+      const bookmark = useStudyStore.getState().bookmarks.find(b => b.verseRef === fullVerseRef);
+      if (bookmark) removeBookmark(bookmark.id);
+    } else {
+      addBookmark(fullVerseRef, plainText);
+    }
+  };
+
+  const handleLongPress = () => {
+    setShowActions(true);
+  };
+
+  // Get highlight background color
+  const getHighlightBg = () => {
+    if (!highlight) return '';
+    const colorMap = {
+      yellow: 'bg-yellow-200/50 dark:bg-yellow-900/30',
+      green: 'bg-green-200/50 dark:bg-green-900/30',
+      blue: 'bg-blue-200/50 dark:bg-blue-900/30',
+      pink: 'bg-pink-200/50 dark:bg-pink-900/30',
+      orange: 'bg-orange-200/50 dark:bg-orange-900/30',
+    };
+    return colorMap[highlight.color];
   };
 
   const hebrewNameData = popoverName ? getHebrewNameData(popoverName) : null;
@@ -68,12 +119,18 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
     <>
       <motion.div 
         ref={verseRef}
-        className={`mb-4 p-4 rounded-lg cursor-pointer transition-all duration-200 ${
+        className={`mb-4 p-4 rounded-lg cursor-pointer transition-all duration-200 relative ${
+          highlight ? getHighlightBg() : ''
+        } ${
           isHighlighted 
-            ? 'bg-theme-accent/10 border-l-4 border-theme-accent' 
-            : 'hover:bg-theme-surface-hover'
-        }`}
+            ? 'border-l-4 border-theme-accent' 
+            : ''
+        } hover:bg-theme-surface-hover`}
         onClick={handleNameClick}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          handleLongPress();
+        }}
         role="button"
         tabIndex={0}
         aria-label={`Verse ${number}`}
@@ -86,26 +143,88 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}
       >
+        {/* Note Indicator */}
+        {note && (
+          <div className="absolute top-2 left-2">
+            <StickyNote className="w-4 h-4 text-theme-accent fill-theme-accent/20" />
+          </div>
+        )}
+
         <div className="flex justify-between items-start">
           <div className="flex-1">
-            <span className="verse-number text-theme-accent font-medium">{number}</span>
+            <span className="verse-number text-theme-accent font-medium mr-2">{number}</span>
             <span 
               className="text-theme-text leading-relaxed"
               dangerouslySetInnerHTML={{ __html: highlightedText }}
             />
           </div>
-          <motion.button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleCopyVerse();
-            }}
-            className="ml-2 text-theme-text/60 hover:text-theme-accent text-sm transition-colors"
-            title="Copy verse"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            📋
-          </motion.button>
+          
+          {/* Action Buttons */}
+          <div className="flex items-center gap-1 ml-2">
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleBookmarkToggle();
+              }}
+              className={`text-sm transition-colors ${
+                bookmarked 
+                  ? 'text-theme-accent' 
+                  : 'text-theme-text/60 hover:text-theme-accent'
+              }`}
+              title={bookmarked ? 'Remove bookmark' : 'Add bookmark'}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Bookmark className={`w-4 h-4 ${bookmarked ? 'fill-theme-accent' : ''}`} />
+            </motion.button>
+            
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowHighlightMenu(true);
+              }}
+              className={`text-sm transition-colors ${
+                highlight 
+                  ? 'text-theme-accent' 
+                  : 'text-theme-text/60 hover:text-theme-accent'
+              }`}
+              title="Highlight verse"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Highlighter className="w-4 h-4" />
+            </motion.button>
+            
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowNoteEditor(true);
+              }}
+              className={`text-sm transition-colors ${
+                note 
+                  ? 'text-theme-accent' 
+                  : 'text-theme-text/60 hover:text-theme-accent'
+              }`}
+              title={note ? 'Edit note' : 'Add note'}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <StickyNote className={`w-4 h-4 ${note ? 'fill-theme-accent/20' : ''}`} />
+            </motion.button>
+            
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCopyVerse();
+              }}
+              className="text-theme-text/60 hover:text-theme-accent text-sm transition-colors"
+              title="Copy verse"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              📋
+            </motion.button>
+          </div>
         </div>
       </motion.div>
 
@@ -116,6 +235,26 @@ export default function Verse({ number, text, isHighlighted }: VerseProps) {
           <div></div>
         </NamePopover>
       )}
+
+      {/* Highlight Menu */}
+      <HighlightMenu
+        isOpen={showHighlightMenu}
+        onClose={() => setShowHighlightMenu(false)}
+        onSelectColor={(color) => addHighlight(fullVerseRef, color)}
+        currentColor={highlight?.color}
+        onRemove={() => removeHighlight(fullVerseRef)}
+      />
+
+      {/* Note Editor */}
+      <AnimatePresence>
+        {showNoteEditor && (
+          <NoteEditor
+            verseRef={fullVerseRef}
+            existingNote={note}
+            onClose={() => setShowNoteEditor(false)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }
