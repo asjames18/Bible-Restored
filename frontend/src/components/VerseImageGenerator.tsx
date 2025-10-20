@@ -198,7 +198,7 @@ export default function VerseImageGenerator({
                 Download
               </motion.button>
 
-              {typeof navigator !== 'undefined' && navigator.share && (
+              {typeof navigator !== 'undefined' && 'share' in navigator && (
                 <motion.button
                   onClick={handleShare}
                   disabled={!generatedImage}
