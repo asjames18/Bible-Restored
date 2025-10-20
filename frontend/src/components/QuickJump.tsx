@@ -164,14 +164,12 @@ export default function QuickJump({ isOpen, onClose }: QuickJumpProps) {
         ? `/${translationId}/${parsed.book}/${parsed.chapter}/${parsed.verse}`
         : `/${translationId}/${parsed.book}/${parsed.chapter}`;
       
-      // Close modal first to prevent flash
-      onClose();
+      // Close modal and clear input
       setInput('');
+      onClose();
       
-      // Navigate after a brief delay to allow modal to close smoothly
-      setTimeout(() => {
-        navigate(path, { replace: false });
-      }, 150);
+      // Navigate immediately - Reader now handles this smoothly
+      navigate(path, { replace: false });
     }
   };
 

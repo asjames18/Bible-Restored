@@ -92,21 +92,21 @@ export default function Reader() {
     }
   }, [bible, book, chapter, translation]);
 
-  // Update ref when navigating and track history (debounced)
+  // Update ref when navigating and track history
   useEffect(() => {
     if (!translation || !book || !chapter || !bible) return;
     
-    // Use setTimeout to debounce rapid changes
+    // Update store immediately to prevent flash
+    setRef(book, chapter, verse);
+    
+    // Debounce only the history and streak tracking (non-critical)
     const timeoutId = setTimeout(() => {
-      setRef(book, chapter, verse);
-      // Track reading history
       addToHistory(book, chapter, verse);
-      // Update reading streak (only once per day)
       updateStreak();
     }, 100);
     
     return () => clearTimeout(timeoutId);
-  }, [translation, book, chapter, verse, bible]);
+  }, [translation, book, chapter, verse, bible, setRef, addToHistory, updateStreak]);
 
   // Navigate when store chapter/book changes (from nextChapter/prevChapter)
   useEffect(() => {
@@ -208,19 +208,6 @@ export default function Reader() {
   const verses = bible[book!][chapter!];
   const verseNumbers = Object.keys(verses).sort((a, b) => parseInt(a) - parseInt(b));
 
-  // Chapter transition variants - optimized for smooth transitions
-  const chapterVariants = {
-    initial: { opacity: 0 },
-    in: { opacity: 1 },
-    out: { opacity: 0 }
-  };
-
-  const chapterTransition = {
-    type: 'tween' as const,
-    ease: 'easeInOut' as const,
-    duration: 0.15
-  };
-
   return (
     <div className={`min-h-screen bg-theme-bg text-theme-text page-content-mobile ${isFocusMode ? 'focus-mode' : ''}`}>
       {!isFocusMode && <TopBar />}
@@ -267,27 +254,11 @@ export default function Reader() {
         {/* Chapter Summary */}
         <ChapterSummary book={book!} chapter={chapter!} />
 
-        {/* Verses with Chapter Transition */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${book}-${chapter}`}
-            initial="initial"
-            animate="in"
-            exit="out"
-            variants={chapterVariants}
-            transition={chapterTransition}
-            className="prose prose-sm md:prose-lg max-w-none reading-area"
-          >
-            {verseNumbers.map((verseNum, index) => (
-              <motion.div
-                key={verseNum}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.2,
-                  delay: Math.min(index * 0.015, 0.3), // Reduced delay and cap
-                  ease: [0.22, 1, 0.36, 1]
-                }}
+        {/* Verses */}
+        <div className="prose prose-sm md:prose-lg max-w-none reading-area">
+            {verseNumbers.map((verseNum) => (
+              <div
+                key={`${book}-${chapter}-${verseNum}`}
                 className="verse-hover mb-3 md:mb-4"
               >
                 <Verse
@@ -295,10 +266,9 @@ export default function Reader() {
                   text={verses[verseNum]}
                   isHighlighted={verse === verseNum}
                 />
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
-        </AnimatePresence>
+        </div>
 
         {/* Navigation with Enhanced Styling - Stacked on mobile */}
         <motion.div 
