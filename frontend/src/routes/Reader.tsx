@@ -96,16 +96,12 @@ export default function Reader() {
   useEffect(() => {
     if (!translation || !book || !chapter || !bible) return;
     
-    // Update store immediately to prevent flash
-    setRef(book, chapter, verse);
-    
-    // Debounce only the history and streak tracking (non-critical)
-    const timeoutId = setTimeout(() => {
+    // Use requestAnimationFrame to avoid state updates during render
+    requestAnimationFrame(() => {
+      setRef(book, chapter, verse);
       addToHistory(book, chapter, verse);
       updateStreak();
-    }, 100);
-    
-    return () => clearTimeout(timeoutId);
+    });
   }, [translation, book, chapter, verse, bible, setRef, addToHistory, updateStreak]);
 
   // Navigate when store chapter/book changes (from nextChapter/prevChapter)
