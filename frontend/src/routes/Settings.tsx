@@ -13,6 +13,9 @@ interface Settings {
   showTranslitBadges: boolean;
   enableNamePopovers: boolean;
   showTranslatorNotes: boolean;
+  dyslexiaMode: boolean;
+  focusMode: boolean;
+  nightLightMode: boolean;
 }
 
 export default function Settings() {
@@ -27,6 +30,9 @@ export default function Settings() {
     showTranslitBadges: false,
     enableNamePopovers: true,
     showTranslatorNotes: true,
+    dyslexiaMode: false,
+    focusMode: false,
+    nightLightMode: false,
   });
   
   const stats = getBibleStats();
@@ -65,6 +71,25 @@ export default function Settings() {
     document.documentElement.style.fontSize = 
       newSettings.fontSize === 'small' ? '14px' :
       newSettings.fontSize === 'large' ? '18px' : '16px';
+
+    // Apply accessibility modes
+    if (newSettings.dyslexiaMode) {
+      document.body.classList.add('dyslexia-mode');
+    } else {
+      document.body.classList.remove('dyslexia-mode');
+    }
+
+    if (newSettings.focusMode) {
+      document.body.classList.add('focus-mode-active');
+    } else {
+      document.body.classList.remove('focus-mode-active');
+    }
+
+    if (newSettings.nightLightMode) {
+      document.body.classList.add('night-light-mode');
+    } else {
+      document.body.classList.remove('night-light-mode');
+    }
   };
 
   const handleThemeChange = (theme: 'light' | 'dark' | 'system') => {
@@ -322,6 +347,66 @@ export default function Settings() {
                   <br/>• Literal Hebrew translations
                   <br/>• Alternative renderings
                   <br/>Hover over the ℹ️ icon to see explanations.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Accessibility Settings */}
+          <div>
+            <h2 className="text-lg font-semibold mb-3">Accessibility</h2>
+            <div className="space-y-3">
+              <label className="flex items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                <input
+                  type="checkbox"
+                  checked={settings.dyslexiaMode}
+                  onChange={(e) => saveSettings({ ...settings, dyslexiaMode: e.target.checked })}
+                  className="mr-3"
+                />
+                <div>
+                  <div className="font-medium">Dyslexia-Friendly Mode</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Enhanced readability with increased spacing, larger text, and clearer fonts
+                  </div>
+                </div>
+              </label>
+
+              <label className="flex items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                <input
+                  type="checkbox"
+                  checked={settings.focusMode}
+                  onChange={(e) => saveSettings({ ...settings, focusMode: e.target.checked })}
+                  className="mr-3"
+                />
+                <div>
+                  <div className="font-medium">Enhanced Focus Mode</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Dim surrounding content to highlight the reading area
+                  </div>
+                </div>
+              </label>
+
+              <label className="flex items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
+                <input
+                  type="checkbox"
+                  checked={settings.nightLightMode}
+                  onChange={(e) => saveSettings({ ...settings, nightLightMode: e.target.checked })}
+                  className="mr-3"
+                />
+                <div>
+                  <div className="font-medium">Night Light Mode</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    Warm color temperature for comfortable bedtime reading
+                  </div>
+                </div>
+              </label>
+
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <p className="text-xs text-blue-800 dark:text-blue-200 leading-relaxed">
+                  <strong>Accessibility Features:</strong>
+                  <br/>• Dyslexia mode improves readability with optimized spacing
+                  <br/>• Focus mode helps concentrate on current reading
+                  <br/>• Night light reduces eye strain in low-light conditions
                 </p>
               </div>
             </div>

@@ -202,3 +202,187 @@
   animation: underline-sweep 0.3s ease-out;
 }
 
+/* ========================================
+   ACCESSIBILITY MODES
+   ======================================== */
+
+/* Dyslexia-Friendly Mode */
+.dyslexia-mode {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  letter-spacing: 0.15em;
+  word-spacing: 0.3em;
+  line-height: 2.0;
+}
+
+.dyslexia-mode p,
+.dyslexia-mode .verse-text {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.dyslexia-mode .verse-number {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+/* Increased contrast for dyslexia mode */
+.dyslexia-mode {
+  --theme-text: #000000;
+  --theme-bg: #FFFEF7;
+}
+
+.dark .dyslexia-mode {
+  --theme-text: #FFFFFF;
+  --theme-bg: #1A1A1A;
+}
+
+/* Focus Mode - Highlight reading area */
+.focus-mode-active {
+  position: relative;
+}
+
+.focus-mode-active::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  z-index: 999;
+  transition: opacity 0.3s ease;
+}
+
+.focus-mode-highlight {
+  position: relative;
+  z-index: 1000;
+  background: var(--theme-surface);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+  margin: 2rem 0;
+}
+
+/* Sentence Highlighting for Focus Mode */
+.sentence-highlight {
+  background: linear-gradient(
+    180deg,
+    transparent 40%,
+    rgba(var(--theme-accent-rgb, 245, 197, 66), 0.2) 40%,
+    rgba(var(--theme-accent-rgb, 245, 197, 66), 0.2) 80%,
+    transparent 80%
+  );
+  padding: 0.1em 0;
+  transition: background 0.3s ease;
+}
+
+/* Reading Guide Line for Focus Mode */
+.reading-guide {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--theme-accent);
+  pointer-events: none;
+  z-index: 1001;
+  box-shadow: 0 0 10px var(--theme-accent);
+  transition: top 0.2s ease;
+}
+
+/* Night Light Mode - Warm Color Filter */
+.night-light-mode {
+  filter: sepia(0.3) hue-rotate(-10deg) saturate(1.2);
+  transition: filter 0.5s ease;
+}
+
+.night-light-mode::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 200, 150, 0.1) 0%,
+    rgba(255, 180, 120, 0.15) 100%
+  );
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: multiply;
+}
+
+/* Adjust colors for night light mode */
+.night-light-mode {
+  --theme-bg: #FFF8F0;
+  --theme-surface: #FFF4E6;
+  --theme-text: #4A3020;
+  --theme-accent: #D97706;
+}
+
+.dark.night-light-mode {
+  --theme-bg: #1A1410;
+  --theme-surface: #2A1F18;
+  --theme-text: #F5E6D3;
+  --theme-accent: #F59E0B;
+}
+
+/* Enhanced Spacing Options */
+.spacing-comfortable {
+  line-height: 2.0;
+  letter-spacing: 0.02em;
+}
+
+.spacing-comfortable p,
+.spacing-comfortable .verse-text {
+  margin-bottom: 2rem;
+}
+
+.spacing-relaxed {
+  line-height: 2.5;
+  letter-spacing: 0.05em;
+}
+
+.spacing-relaxed p,
+.spacing-relaxed .verse-text {
+  margin-bottom: 2.5rem;
+}
+
+/* Smooth scrolling for focus mode */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .smooth-scroll {
+    scroll-behavior: auto;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --theme-text: #000000;
+    --theme-bg: #FFFFFF;
+    --theme-accent: #0000FF;
+    --theme-border: #000000;
+  }
+  
+  .dark {
+    --theme-text: #FFFFFF;
+    --theme-bg: #000000;
+    --theme-accent: #00FFFF;
+    --theme-border: #FFFFFF;
+  }
+}
+
