@@ -10,17 +10,7 @@ interface QuickJumpProps {
   onClose: () => void;
 }
 
-const BIBLE_BOOKS = [
-  'Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth',
-  '1 Samuel', '2 Samuel', '1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles',
-  'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalms', 'Proverbs', 'Ecclesiastes', 'Song of Solomon',
-  'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah',
-  'Jonah', 'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi',
-  'Matthew', 'Mark', 'Luke', 'John', 'Acts', 'Romans', '1 Corinthians', '2 Corinthians',
-  'Galatians', 'Ephesians', 'Philippians', 'Colossians', '1 Thessalonians', '2 Thessalonians',
-  '1 Timothy', '2 Timothy', 'Titus', 'Philemon', 'Hebrews', 'James', '1 Peter', '2 Peter',
-  '1 John', '2 John', '3 John', 'Jude', 'Revelation'
-];
+// Abbreviation map below plus dynamic book list from loaded Bible
 
 const BOOK_ABBREVIATIONS: Record<string, string> = {
   'gen': 'Genesis', 'ge': 'Genesis', 'gn': 'Genesis',
@@ -88,6 +78,8 @@ const BOOK_ABBREVIATIONS: Record<string, string> = {
   '3jn': '3 John', '3jo': '3 John',
   'jud': 'Jude', 'jd': 'Jude',
   'rev': 'Revelation', 're': 'Revelation', 'rv': 'Revelation',
+  // Extras support
+  'enoch': 'Book of Enoch', '1enoch': 'Book of Enoch', 'bofenoch': 'Book of Enoch', 'boe': 'Book of Enoch'
 };
 
 export default function QuickJump({ isOpen, onClose }: QuickJumpProps) {
@@ -95,7 +87,7 @@ export default function QuickJump({ isOpen, onClose }: QuickJumpProps) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  const { translationId } = useBibleStore();
+  const { translationId, bible } = useBibleStore();
   const { getHistory } = useHistoryStore();
 
   useEffect(() => {
@@ -107,8 +99,11 @@ export default function QuickJump({ isOpen, onClose }: QuickJumpProps) {
   const parseVerseReference = (text: string): { book: string; chapter: string; verse?: string } | null => {
     text = text.trim().toLowerCase();
     
-    // Try full book names first
-    for (const book of BIBLE_BOOKS) {
+    const dynamicBooks = bible ? Object.keys(bible) : [];
+    const bookPool = dynamicBooks.length ? dynamicBooks : [];
+
+    // Try full book names first (dynamic)
+    for (const book of bookPool) {
       const bookLower = book.toLowerCase();
       if (text.startsWith(bookLower)) {
         const rest = text.slice(bookLower.length).trim();
@@ -150,9 +145,10 @@ export default function QuickJump({ isOpen, onClose }: QuickJumpProps) {
     }
 
     const lowerInput = value.toLowerCase();
-    const bookSuggestions = BIBLE_BOOKS.filter(book =>
-      book.toLowerCase().startsWith(lowerInput)
-    ).slice(0, 5);
+    const dynamicBooks = bible ? Object.keys(bible) : [];
+    const bookSuggestions = dynamicBooks
+      .filter(book => book.toLowerCase().startsWith(lowerInput))
+      .slice(0, 5);
 
     setSuggestions(bookSuggestions);
   };

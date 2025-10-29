@@ -1,8 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useBibleStore } from '../store/bibleStore';
 import { clearCache } from '../lib/data';
-import { Palette, Sun, Moon, Scroll, Star } from 'lucide-react';
+import { Palette, Sun, Moon, Scroll, Star, Download, Upload, Info, Mail } from 'lucide-react';
+import { 
+  downloadExportedData, 
+  importUserData, 
+  parseImportFile, 
+  getExportSummary, 
+  getExportSize 
+} from '../lib/export';
 
 interface Settings {
   theme: 'light' | 'dark' | 'system';
@@ -21,6 +28,8 @@ interface Settings {
 export default function Settings() {
   const { translationId, setTranslation, getBibleStats, bible } = useBibleStore();
   const [isReloading, setIsReloading] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [settings, setSettings] = useState<Settings>({
     theme: 'system',
     themePreset: 'classic',
@@ -36,6 +45,7 @@ export default function Settings() {
   });
   
   const stats = getBibleStats();
+  const exportSummary = getExportSummary();
 
   // Load settings from localStorage
   useEffect(() => {
@@ -107,6 +117,14 @@ export default function Settings() {
   const handleTranslationChange = async (translationId: string) => {
     await setTranslation(translationId);
     saveSettings({ ...settings, defaultTranslation: translationId });
+  };
+
+  const handleEmailSupport = () => {
+    const subject = encodeURIComponent('Bible App Support');
+    const body = encodeURIComponent(
+      `Hello James,\n\nI need help with the Bible app.\n\n---\nURL: ${window.location.href}\nUser-Agent: ${navigator.userAgent}`
+    );
+    window.location.href = `mailto:asjames18@proton.me?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -438,7 +456,7 @@ export default function Settings() {
                     <>
                       <div>
                         <div className="text-gray-600 dark:text-gray-400">Books</div>
-                        <div className="font-semibold">{stats.books} / 66</div>
+                        <div className="font-semibold">{stats.books}</div>
                       </div>
                       <div>
                         <div className="text-gray-600 dark:text-gray-400">Verses</div>
@@ -464,6 +482,101 @@ export default function Settings() {
                 >
                   {isReloading ? 'Reloading...' : 'Reload Bible Data'}
                 </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Data Export/Import */}
+          <div>
+            <h2 className="text-lg font-semibold mb-3">Backup & Restore</h2>
+            <div className="space-y-3">
+              {/* Export Section */}
+              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <Info className="w-5 h-5 text-blue-500 mt-0.5" />
+                    <div className="flex-1">
+                      <div className="font-medium">Export Your Data</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Save bookmarks, notes, highlights, reading plans, prayers, and memory verses
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        {exportSummary.bookmarks} bookmarks • {exportSummary.notes} notes • {exportSummary.highlights} highlights • {exportSummary.plans} plans • {exportSummary.prayers} prayers • {exportSummary.memoryVerses} memory verses (~{getExportSize()})
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      downloadExportedData();
+                      alert('Data exported successfully!');
+                    }}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    Export Data
+                  </button>
+                </div>
+              </div>
+
+              {/* Import Section */}
+              <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <Info className="w-5 h-5 text-green-500 mt-0.5" />
+                    <div className="flex-1">
+                      <div className="font-medium">Import Your Data</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Restore from a previously exported backup file
+                      </div>
+                    </div>
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".json"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+
+                      setIsImporting(true);
+                      try {
+                        const data = await parseImportFile(file);
+                        const result = importUserData(data);
+                        
+                        if (result.success) {
+                          const counts = result.imported.reduce((acc, item) => {
+                            acc[item] = (acc[item] || 0) + 1;
+                            return acc;
+                          }, {} as Record<string, number>);
+                          
+                          const summary = Object.entries(counts)
+                            .map(([key, value]) => `${value} ${key}${value > 1 ? 's' : ''}`)
+                            .join(', ');
+                          
+                          alert(`Successfully imported: ${summary}`);
+                        } else {
+                          alert(`Import completed with errors:\n${result.errors.join('\n')}`);
+                        }
+                      } catch (error) {
+                        alert(`Failed to import: ${error}`);
+                      } finally {
+                        setIsImporting(false);
+                        if (fileInputRef.current) {
+                          fileInputRef.current.value = '';
+                        }
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isImporting}
+                    className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded font-medium transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Upload className="w-4 h-4" />
+                    {isImporting ? 'Importing...' : 'Import Data'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -518,6 +631,23 @@ export default function Settings() {
                   <kbd className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">t</kbd>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h2 className="text-lg font-semibold mb-3">Support</h2>
+            <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <button
+                onClick={handleEmailSupport}
+                className="w-full bg-theme-accent hover:bg-theme-accent-dark text-white px-4 py-2 rounded font-medium transition-colors flex items-center justify-center gap-2"
+              >
+                <Mail className="w-4 h-4" />
+                Email Support
+              </button>
+              <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                Opens your email client with helpful context like your current page and device info.
+              </p>
             </div>
           </div>
         </div>

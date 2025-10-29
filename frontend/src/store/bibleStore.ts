@@ -41,7 +41,6 @@ export const useBibleStore = create<BibleState & BibleActions>()(
         
         // If already loading this translation and Bible exists, don't reload
         if (translationId === id && bible) {
-          console.log(`Translation ${id} already loaded`);
           return;
         }
         

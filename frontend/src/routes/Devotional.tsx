@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, BookOpen, Heart, Share2, Bookmark } from 'lucide-react';
 import TopBar from '../components/TopBar';
+import { toPlainText } from '../lib/text';
 import devotionalsData from '../data/devotionals.json';
 import { useBibleStore } from '../store/bibleStore';
 
@@ -98,7 +99,7 @@ export default function Devotional() {
   };
 
   const handleShare = async () => {
-    const shareText = `${currentDevotional.title}\n\n${currentDevotional.passage.ref}\n"${currentDevotional.passage.text}"\n\n${currentDevotional.reflection}`;
+    const shareText = `${currentDevotional.title}\n\n${currentDevotional.passage.ref}\n"${toPlainText(currentDevotional.passage.text)}"\n\n${toPlainText(currentDevotional.reflection)}`;
     
     if ('share' in navigator && navigator.share) {
       try {

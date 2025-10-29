@@ -13,6 +13,7 @@ import {
   Link as LinkIcon,
   CheckCircle,
 } from 'lucide-react';
+import { toPlainText } from '../lib/text';
 
 interface ShareMenuProps {
   isOpen: boolean;
@@ -33,7 +34,7 @@ export default function ShareMenu({
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const shareTitle = `${verseRef} - The Restored Word`;
-  const shareText = `"${verseText}" - ${verseRef}`;
+  const shareText = `"${toPlainText(verseText)}" - ${verseRef}`;
 
   const handleCopyText = async () => {
     try {

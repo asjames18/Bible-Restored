@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBibleStore } from '../store/bibleStore';
-import { booksOrder } from '../lib/data';
+import { orderedBooksFrom, booksOrder } from '../lib/data';
 
 interface NavPanelProps {
   isOpen: boolean;
@@ -14,7 +14,7 @@ export default function NavPanel({ isOpen, onClose }: NavPanelProps) {
   const [selectedBook, setSelectedBook] = useState(book);
   const [selectedChapter, setSelectedChapter] = useState(chapter);
 
-  const books = booksOrder();
+  const books = bible ? orderedBooksFrom(bible) : booksOrder();
   const chapters = bible && bible[selectedBook] 
     ? Object.keys(bible[selectedBook]).sort((a, b) => parseInt(a) - parseInt(b))
     : [];

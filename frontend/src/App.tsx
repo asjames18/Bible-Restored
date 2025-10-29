@@ -10,6 +10,9 @@ import OfflineIndicator from './components/OfflineIndicator';
 import { LoadingProgress } from './components/LoadingProgress';
 import BottomNav from './components/BottomNav';
 import { PageSkeleton } from './components/SkeletonLoader';
+import { initAnalytics, trackPageview, reportWebVitals } from './lib/analytics';
+import FeedbackButton from './components/FeedbackButton';
+import OnboardingModal from './components/OnboardingModal';
 
 // Lazy load route components for better performance
 const Reader = lazy(() => import('./routes/Reader'));
@@ -49,6 +52,11 @@ function AppContent() {
   const { isOnline, updateAvailable, handleUpdate, handleDismiss } = usePWA();
 
   // Load and apply saved settings on app start
+  useEffect(() => {
+    // Analytics pageview on route change
+    trackPageview(location.pathname + location.search);
+  }, [location.pathname, location.search]);
+
   useEffect(() => {
     const savedSettings = localStorage.getItem('bible-settings');
     if (savedSettings) {
@@ -105,30 +113,33 @@ function AppContent() {
         >
           <Suspense fallback={<PageSkeleton />}>
             <Routes location={location}>
-            <Route path="/" element={<Home />} />
-            <Route path="/:translation/:book/:chapter" element={<Reader />} />
-            <Route path="/:translation/:book/:chapter/:verse" element={<Reader />} />
-            <Route path="/parallel/:book/:chapter" element={<ParallelViewWrapper />} />
-            <Route path="/parallel/:book/:chapter/:verse" element={<ParallelViewWrapper />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/bookmarks" element={<Bookmarks />} />
-            <Route path="/notes" element={<Notes />} />
-            <Route path="/plans" element={<ReadingPlans />} />
-            <Route path="/progress" element={<Progress />} />
-            <Route path="/prayers" element={<PrayerList />} />
-            <Route path="/concordance" element={<Concordance />} />
-            <Route path="/topics" element={<TopicBrowser />} />
-            <Route path="/memory" element={<MemoryVerses />} />
-            <Route path="/devotional" element={<Devotional />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/book-overview/:book" element={<BookOverview />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/glossary" element={<Glossary />} />
-          </Routes>
+              <Route path="/" element={<ErrorBoundary><Home /></ErrorBoundary>} />
+              <Route path="/:translation/:book/:chapter" element={<ErrorBoundary><Reader /></ErrorBoundary>} />
+              <Route path="/:translation/:book/:chapter/:verse" element={<ErrorBoundary><Reader /></ErrorBoundary>} />
+              <Route path="/parallel/:book/:chapter" element={<ErrorBoundary><ParallelViewWrapper /></ErrorBoundary>} />
+              <Route path="/parallel/:book/:chapter/:verse" element={<ErrorBoundary><ParallelViewWrapper /></ErrorBoundary>} />
+              <Route path="/search" element={<ErrorBoundary><Search /></ErrorBoundary>} />
+              <Route path="/bookmarks" element={<ErrorBoundary><Bookmarks /></ErrorBoundary>} />
+              <Route path="/notes" element={<ErrorBoundary><Notes /></ErrorBoundary>} />
+              <Route path="/plans" element={<ErrorBoundary><ReadingPlans /></ErrorBoundary>} />
+              <Route path="/progress" element={<ErrorBoundary><Progress /></ErrorBoundary>} />
+              <Route path="/prayers" element={<ErrorBoundary><PrayerList /></ErrorBoundary>} />
+              <Route path="/concordance" element={<ErrorBoundary><Concordance /></ErrorBoundary>} />
+              <Route path="/topics" element={<ErrorBoundary><TopicBrowser /></ErrorBoundary>} />
+              <Route path="/memory" element={<ErrorBoundary><MemoryVerses /></ErrorBoundary>} />
+              <Route path="/devotional" element={<ErrorBoundary><Devotional /></ErrorBoundary>} />
+              <Route path="/history" element={<ErrorBoundary><History /></ErrorBoundary>} />
+              <Route path="/book-overview/:book" element={<ErrorBoundary><BookOverview /></ErrorBoundary>} />
+              <Route path="/settings" element={<ErrorBoundary><Settings /></ErrorBoundary>} />
+              <Route path="/glossary" element={<ErrorBoundary><Glossary /></ErrorBoundary>} />
+            </Routes>
           </Suspense>
         </motion.div>
       </AnimatePresence>
       
+      {/* Spacer for fixed bottom nav on mobile to prevent content jump/overlap */}
+      <div className="h-16 md:hidden" />
+
       {/* Loading Progress */}
       {isLoading && loadingProgress < 100 && (
         <LoadingProgress percent={loadingProgress} />
@@ -136,6 +147,7 @@ function AppContent() {
       
       {/* Mobile Bottom Navigation */}
       <BottomNav />
+      <FeedbackButton />
       
       {/* PWA Components */}
       <OfflineIndicator isOnline={isOnline} />
@@ -144,6 +156,7 @@ function AppContent() {
         onUpdate={handleUpdate} 
         onDismiss={handleDismiss} 
       />
+      <OnboardingModal />
     </div>
   );
 }
@@ -152,10 +165,20 @@ function App() {
   return (
     <ErrorBoundary>
       <Router>
-        <AppContent />
+        <AppInitializer>
+          <AppContent />
+        </AppInitializer>
       </Router>
     </ErrorBoundary>
   );
 }
 
 export default App;
+
+function AppInitializer({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    initAnalytics();
+    reportWebVitals();
+  }, []);
+  return children as any;
+}

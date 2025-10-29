@@ -88,11 +88,9 @@ export default function Reader() {
     const initializeBible = async () => {
       try {
         if (!bible) {
-          console.log('Bible not loaded, loading current Bible...');
           await loadCurrentBible();
         }
         if (isMounted && translation && translationId !== translation) {
-          console.log(`Translation mismatch: ${translationId} vs ${translation}, loading ${translation}...`);
           await setTranslation(translation);
         }
       } catch (err) {

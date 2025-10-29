@@ -16,15 +16,25 @@ interface SearchResult {
 }
 
 type Category = 'all' | 'old-testament' | 'new-testament' | 'names';
+type Scope = 'all' | 'book' | 'chapter';
 
 export default function Search() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { bible, translationId } = useBibleStore();
+  const { bible, translationId, book: currentBook, chapter: currentChapter } = useBibleStore();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [category, setCategory] = useState<Category>('all');
   const [isSearching, setIsSearching] = useState(false);
+  const [scope, setScope] = useState<Scope>('all');
+  const [recent, setRecent] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('recent-searches');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
   // Handle pre-filled search from glossary
   useEffect(() => {
@@ -67,7 +77,7 @@ export default function Search() {
   const debouncedSearch = useCallback(
     (() => {
       let timeoutId: NodeJS.Timeout;
-      return (searchQuery: string, searchCategory: Category) => {
+      return (searchQuery: string, searchCategory: Category, searchScope: Scope) => {
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
           if (!fuse || !searchQuery.trim()) {
@@ -116,18 +126,33 @@ export default function Search() {
             );
           }
 
+          // Apply scope filters
+          if (searchScope === 'book' && currentBook) {
+            searchResults = searchResults.filter(r => r.item.book === currentBook);
+          } else if (searchScope === 'chapter' && currentBook && currentChapter) {
+            searchResults = searchResults.filter(r => r.item.book === currentBook && r.item.chapter === currentChapter);
+          }
+
           setResults(searchResults);
           setIsSearching(false);
         }, 300);
       };
     })(),
-    [fuse]
+    [fuse, currentBook, currentChapter]
   );
 
   // Search when query or category changes
   useEffect(() => {
-    debouncedSearch(query, category);
-  }, [query, category, debouncedSearch]);
+    debouncedSearch(query, category, scope);
+  }, [query, category, scope, debouncedSearch]);
+
+  const saveRecent = useCallback((q: string) => {
+    const trimmed = q.trim();
+    if (!trimmed) return;
+    const next = [trimmed, ...recent.filter(r => r.toLowerCase() !== trimmed.toLowerCase())].slice(0, 8);
+    setRecent(next);
+    try { localStorage.setItem('recent-searches', JSON.stringify(next)); } catch {}
+  }, [recent]);
 
   const handleResultClick = (book: string, chapter: string, verse: string) => {
     navigate(`/${translationId}/${book}/${chapter}/${verse}`);
@@ -145,6 +170,28 @@ export default function Search() {
     { id: 'new-testament', label: 'New Testament', icon: Flame },
     { id: 'names', label: 'Names', icon: Star },
   ];
+
+  const scopes = [
+    { id: 'all', label: 'All' },
+    { id: 'book', label: currentBook ? `Book (${currentBook})` : 'Book' },
+    { id: 'chapter', label: currentChapter ? `Chapter (${currentChapter})` : 'Chapter' },
+  ];
+
+  const highlight = (text: string, q: string) => {
+    if (!q.trim()) return text;
+    const idx = text.toLowerCase().indexOf(q.toLowerCase());
+    if (idx === -1) return text;
+    const before = text.slice(0, idx);
+    const match = text.slice(idx, idx + q.length);
+    const after = text.slice(idx + q.length);
+    return (
+      <>
+        {before}
+        <span className="bg-theme-accent/20 text-theme-accent font-semibold">{match}</span>
+        {after}
+      </>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-theme-bg text-theme-text page-content-mobile">
@@ -204,6 +251,25 @@ export default function Search() {
               ))}
             </div>
 
+            {/* Scope Chips */}
+            <div className="flex md:flex-wrap gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+              {scopes.map((s) => (
+                <motion.button
+                  key={s.id}
+                  onClick={() => setScope(s.id as Scope)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 whitespace-nowrap btn-touch ${
+                    scope === s.id
+                      ? 'bg-theme-accent text-white shadow-lg'
+                      : 'bg-theme-surface hover:bg-theme-surface-hover text-theme-text border border-theme-border'
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <span className="text-sm md:text-base">{s.label}</span>
+                </motion.button>
+              ))}
+            </div>
+
             {/* Search Status */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
@@ -221,6 +287,25 @@ export default function Search() {
             </div>
           </div>
         </motion.div>
+
+        {/* Recent Searches */}
+        {!query && recent.length > 0 && (
+          <div className="mb-4">
+            <div className="text-sm text-theme-text/60 mb-2">Recent searches</div>
+            <div className="flex flex-wrap gap-2">
+              {recent.map((r) => (
+                <button key={r} onClick={() => setQuery(r)} className="px-3 py-1.5 rounded-full bg-theme-surface border border-theme-border hover:border-theme-accent">
+                  {r}
+                </button>
+              ))}
+              {recent.length > 0 && (
+                <button onClick={() => { setRecent([]); try { localStorage.removeItem('recent-searches'); } catch {} }} className="px-3 py-1.5 rounded-full bg-theme-surface border border-theme-border hover:border-theme-accent text-theme-text/60">
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Search Results */}
         <AnimatePresence>
@@ -257,7 +342,7 @@ export default function Search() {
                     )}
                   </div>
                   <div className="text-theme-text leading-relaxed group-hover:text-theme-accent transition-colors text-sm md:text-base">
-                    {result.item.text}
+                    {highlight(result.item.text, query)}
                   </div>
                 </motion.div>
               ))}

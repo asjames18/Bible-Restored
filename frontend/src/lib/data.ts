@@ -34,13 +34,13 @@ export function listTranslations(): Translation[] {
 }
 
 import { get, set } from 'idb-keyval';
+import { logger } from './logger';
 
 export async function loadTranslation(id: string): Promise<BibleData> {
   try {
     // Try to load from IndexedDB first (offline-first)
     const cached = await get(`bible-${id}`);
     if (cached) {
-      console.log(`Loaded ${id} from cache`);
       return cached;
     }
 
@@ -56,11 +56,10 @@ export async function loadTranslation(id: string): Promise<BibleData> {
         
         // Cache the data for offline use
         await set(`bible-${id}`, data);
-        console.log(`Cached ${id} for offline use`);
         
         return data;
-      } catch (networkError) {
-        console.warn(`Network fetch failed for ${id}, checking for any cached version:`, networkError);
+      } catch {
+        // Silent fail, will try cache next
       }
     }
 
@@ -74,31 +73,27 @@ export async function loadTranslation(id: string): Promise<BibleData> {
         await set(`bible-${id}`, data);
         return data;
       }
-    } catch (cacheError) {
-      console.warn(`Cache fetch also failed for ${id}:`, cacheError);
+    } catch {
+      // Silent fail
     }
 
     throw new Error(`No cached version of ${id} available and network is offline`);
-  } catch (error) {
-    console.error(`Failed to load translation ${id}:`, error);
-    throw error;
+  } catch (_error) {
+    console.error(`Failed to load translation ${id}:`, _error);
+    throw _error;
   }
 }
 
 export async function preloadTranslations(): Promise<void> {
-  console.log('Preloading translations for offline use...');
-  
   const loadPromises = listTranslations().map(async (translation) => {
     try {
       await loadTranslation(translation.id);
-      console.log(`Preloaded ${translation.id}`);
-    } catch (error) {
-      console.warn(`Failed to preload ${translation.id}:`, error);
+    } catch {
+      // Silent preload failure
     }
   });
 
   await Promise.allSettled(loadPromises);
-  console.log('Translation preloading complete');
 }
 
 export async function clearCache(): Promise<void> {
@@ -109,11 +104,23 @@ export async function clearCache(): Promise<void> {
     await set(key, null);
   }
   
-  console.log('Bible cache cleared');
+  logger.info('Bible cache cleared');
 }
 
 export function booksOrder(): string[] {
   return BOOKS_ORDER;
+}
+
+// Derive ordered list of books from a loaded Bible, preserving canonical order
+// and appending any non-canonical (extra) books alphabetically at the end.
+export function orderedBooksFrom(bible?: BibleData): string[] {
+  if (!bible) return BOOKS_ORDER;
+  const present = new Set(Object.keys(bible));
+  const canonical = BOOKS_ORDER.filter((b) => present.has(b));
+  const extras = Array.from(present).filter((b) => BOOKS_ORDER.indexOf(b) === -1);
+  const uniqueExtras = Array.from(new Set(extras));
+  uniqueExtras.sort((a, b) => a.localeCompare(b));
+  return [...canonical, ...uniqueExtras];
 }
 
 // Progressive loading with progress callback
@@ -124,20 +131,27 @@ export async function loadFullBible(
   const LOAD_TIMEOUT = 30000; // 30 second timeout
   
   try {
-    // Check both caches (IndexedDB first, then memory cache)
+    // Check cache (IndexedDB)
     const cached = await get(`bible-${id}`);
     if (cached) {
-      const bookCount = Object.keys(cached).length;
-      console.log(`Loaded ${id} from IndexedDB cache (${bookCount} books)`);
-      
-      // If cached data is incomplete (less than 66 books), force reload
-      if (bookCount < 66) {
-        console.warn(`Cached data incomplete (${bookCount}/66 books), reloading...`);
-        await set(`bible-${id}`, null); // Clear bad cache
-      } else {
-        onProgress?.(100);
-        return cached;
+      // Attempt to merge extras into cached data
+      try {
+        const extrasResponse = await fetch(`/translations/${id}.extras.json`, { cache: 'no-cache' });
+        if (extrasResponse.ok) {
+          const extras = await extrasResponse.json();
+          if (extras && typeof extras === 'object') {
+            const target = cached as Record<string, unknown>;
+            for (const [bookName, chapters] of Object.entries(extras)) {
+              target[bookName] = chapters as unknown;
+            }
+            await set(`bible-${id}`, cached);
+          }
+        }
+      } catch {
+        // ignore
       }
+      onProgress?.(100);
+      return cached;
     }
 
     // Fetch with progress tracking and timeout
@@ -198,7 +212,6 @@ export async function loadFullBible(
     
     // Decode and parse
     const text = new TextDecoder('utf-8').decode(chunksAll);
-    console.log(`Parsing Bible data... size: ${text.length} chars`);
     
     let data;
     try {
@@ -213,20 +226,28 @@ export async function loadFullBible(
       throw new Error('Invalid Bible data format');
     }
     
-    const bookCount = Object.keys(data).length;
-    console.log(`Parsed Bible data: ${bookCount} books`);
-    
-    if (bookCount === 0) {
+    if (Object.keys(data).length === 0) {
       throw new Error('Bible data is empty - please try reloading');
     }
-    
-    if (bookCount < 66) {
-      console.warn(`Bible data incomplete: only ${bookCount} books loaded`);
+
+    // Attempt to load optional extras file and merge if present
+    try {
+      const extrasResponse = await fetch(`/translations/${id}.extras.json`, { cache: 'no-cache' });
+      if (extrasResponse.ok) {
+        const extras = await extrasResponse.json();
+        if (extras && typeof extras === 'object') {
+          const target = data as Record<string, unknown>;
+          for (const [bookName, chapters] of Object.entries(extras)) {
+            target[bookName] = chapters as unknown;
+          }
+        }
+      }
+    } catch {
+      // Ignore if no extras available
     }
     
     // Cache the data
     await set(`bible-${id}`, data);
-    console.log(`Cached ${id} for offline use (${bookCount} books)`);
     
     onProgress?.(100);
     return data;
@@ -239,6 +260,7 @@ export async function loadFullBible(
 
 // Preload priority books (Genesis + Matthew)
 export async function preloadPriorityBooks(_id: string): Promise<Partial<BibleData>> {
+  void _id;
   try {
     const priorityBooks = ['Genesis', 'Matthew'];
     const result: Partial<BibleData> = {};
@@ -249,10 +271,10 @@ export async function preloadPriorityBooks(_id: string): Promise<Partial<BibleDa
         if (response.ok) {
           const bookData = await response.json();
           result[book] = bookData;
-          console.log(`Preloaded ${book}`);
+          logger.info(`Preloaded ${book}`);
         }
       } catch (error) {
-        console.warn(`Failed to preload ${book}:`, error);
+        logger.warn(`Failed to preload ${book}:`, error);
       }
     }
     
